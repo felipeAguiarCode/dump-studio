@@ -1,0 +1,20 @@
+appId: me.dio.noirdumpstudio
+productName: Noir Dump Studio
+directories:
+  buildResources: build
+  output: dist
+files:
+  - out/**
+  - package.json
+asarUnpack:
+  - "**/*.node"
+  - resources/**
+win:
+  target:
+    - nsis
+  artifactName: ${productName}-${version}-setup.${ext}
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+npmRebuild: false

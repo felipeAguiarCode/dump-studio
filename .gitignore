@@ -1,0 +1,11 @@
+node_modules
+out
+dist
+*.log
+.DS_Store
+.vite
+.electron-vite
+
+# Reference / inspiration assets (not part of the app source)
+fx-inspo
+polaroid_layouts
