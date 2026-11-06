@@ -370,6 +370,12 @@ export type PhotoFilterName =
   | 'vint_sepia'
   | 'vint_kodachrome'
   | 'vint_cross_process'
+  // Sessão Nostalgic (cor) — fotos antigas lavadas, estética VSCO / anos 90
+  | 'nost_faded_90s'
+  | 'nost_washed_film'
+  | 'nost_disposable'
+  | 'nost_muted_vsco'
+  | 'nost_sun_faded'
 
 export interface PhotoFilter {
   name: PhotoFilterName | null

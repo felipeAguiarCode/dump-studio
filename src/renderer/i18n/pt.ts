@@ -144,7 +144,8 @@ export const pt: Dictionary = {
       fujifilm: { label: 'Fujifilm', description: 'Simulações de filme' },
       cinematic: { label: 'Cinematográfico', description: 'Looks de cinema' },
       aesthetic: { label: 'Aesthetic', description: 'Estética para redes' },
-      vintage: { label: 'Vintage', description: 'Filmes retrô' }
+      vintage: { label: 'Vintage', description: 'Filmes retrô' },
+      nostalgic: { label: 'Nostalgic', description: 'Fotos antigas lavadas' }
     },
     items: {
       high_contrast_bw: { label: 'Preto e Branco Alto Contraste', description: 'Contraste intenso com pretos profundos e brancos brilhantes.' },
@@ -177,7 +178,12 @@ export const pt: Dictionary = {
       vint_polaroid: { label: 'Polaroid', description: 'Lavado e levemente esverdeado, com luzes amareladas instantâneas.' },
       vint_sepia: { label: 'Sépia', description: 'Monocromático marrom quente, com nostalgia de fotografia antiga.' },
       vint_kodachrome: { label: 'Kodachrome', description: 'Cores ricas e saturadas, com vermelhos e azuis vibrantes de slide.' },
-      vint_cross_process: { label: 'Cross Process', description: 'Sombras ciano e luzes amareladas, com o erro químico dos anos 90.' }
+      vint_cross_process: { label: 'Cross Process', description: 'Sombras ciano e luzes amareladas, com o erro químico dos anos 90.' },
+      nost_faded_90s: { label: 'Anos 90 Lavado', description: 'Cor dessaturada, pretos levantados e leve dominante quente — o desbotado dos anos 90.' },
+      nost_washed_film: { label: 'Filme Lavado', description: 'Fade frio com sombras azuladas e luzes suaves, no estilo VSCO analógico.' },
+      nost_disposable: { label: 'Câmera Descartável', description: 'Flash direto dos anos 90: sombras esverdeadas, luzes amareladas e leve punch.' },
+      nost_muted_vsco: { label: 'Suave Fosco', description: 'Bem dessaturado e fosco, com um toque magenta — o mínimo aesthetic do VSCO.' },
+      nost_sun_faded: { label: 'Desbotado ao Sol', description: 'Fade extremo com realces âmbar e sombras magenta, como foto esquecida ao sol.' }
     }
   },
 
@@ -534,15 +540,21 @@ export const pt: Dictionary = {
       grid3x3: '3×3',
       grid2x3: '2×3',
       grid3x2: '3×2',
+      grid2x4: '2×4',
       '2v': '2 verticais',
       '2h': '2 horizontais',
       triptych: '3 verticais',
       strip3h: '3 horizontais',
+      strip4h: '4 horizontais',
       strip4v: '4 verticais',
       'big-left': '1 + 2 (direita)',
       'big-top': '1 + 2 (baixo)',
       'big-left-3': '1 + 3 (direita)',
       'big-top-3': '1 + 3 (baixo)',
+      'big-right': '1 + 2 (esq.)',
+      'big-bottom': '1 + 2 (cima)',
+      'big-right-3': '1 + 3 (esq.)',
+      'big-bottom-3': '1 + 3 (cima)',
       'hero-6': 'Destaque 6',
       'hero-23-top': 'Hero 2/3 (cima)',
       'hero-23-bottom': 'Hero 2/3 (baixo)',
@@ -551,6 +563,7 @@ export const pt: Dictionary = {
       editorial: 'Editorial',
       'editorial-3': 'Editorial 3',
       'editorial-mag': 'Revista',
+      'editorial-pinwheel': 'Cata-vento',
       'st-2v': '2 lado a lado',
       'st-2h': '2 empilhadas',
       'st-3h': '3 faixas',
@@ -580,6 +593,10 @@ export const pt: Dictionary = {
       'p5-hero-tilt': '1 inclinada',
       'p5-vs': 'Confronto (2)',
       'p5-diag-2': '2 paralelas',
+      'p5-diag-3': '3 diagonais',
+      'p5-diag-3-rev': '3 diagonais (esp.)',
+      'p5-split-2': 'Corte diagonal (2)',
+      'p5-diag-4': '4 diagonais',
       'p5-slash-3': '1 + 2 corte',
       'p5-zigzag-3': 'Zigue-zague (3)',
       'p5-shards-4': 'Estilhaços (4)',
@@ -668,5 +685,12 @@ export const pt: Dictionary = {
 
   shortcuts: {
     saved: 'Salvo'
+  },
+
+  license: {
+    expiredTitle: 'Licença expirada',
+    expiredBody:
+      'Seu acesso ao Noir Dump Studio terminou em {date}. Para continuar usando o app, adquira uma licença.',
+    buy: 'Comprar licença'
   }
 }

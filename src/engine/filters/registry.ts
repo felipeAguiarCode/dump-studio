@@ -203,6 +203,38 @@ export const FILTER_SESSIONS: FilterSession[] = [
         description: 'Sombras ciano e luzes amareladas, com o erro químico dos anos 90.'
       }
     ]
+  },
+  {
+    id: 'nostalgic',
+    label: 'Nostalgic',
+    description: 'Fotos antigas lavadas',
+    filters: [
+      {
+        name: 'nost_faded_90s',
+        label: 'Anos 90 Lavado',
+        description: 'Cor dessaturada, pretos levantados e leve dominante quente — o desbotado dos anos 90.'
+      },
+      {
+        name: 'nost_washed_film',
+        label: 'Filme Lavado',
+        description: 'Fade frio com sombras azuladas e luzes suaves, no estilo VSCO analógico.'
+      },
+      {
+        name: 'nost_disposable',
+        label: 'Câmera Descartável',
+        description: 'Flash direto dos anos 90: sombras esverdeadas, luzes amareladas e leve punch.'
+      },
+      {
+        name: 'nost_muted_vsco',
+        label: 'Suave Fosco',
+        description: 'Bem dessaturado e fosco, com um toque magenta — o mínimo aesthetic do VSCO.'
+      },
+      {
+        name: 'nost_sun_faded',
+        label: 'Desbotado ao Sol',
+        description: 'Fade extremo com realces âmbar e sombras magenta, como foto esquecida ao sol.'
+      }
+    ]
   }
 ]
 

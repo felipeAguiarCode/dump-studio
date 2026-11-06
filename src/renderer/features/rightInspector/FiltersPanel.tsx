@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Check, Ban, Contrast, Film, Clapperboard, Palette, Camera } from 'lucide-react'
+import { Check, Ban, Contrast, Film, Clapperboard, Palette, Camera, Sunset } from 'lucide-react'
 import type { Layer, ImageLayerData, PhotoFilterName } from '@shared/types'
 import { DEFAULT_ADJUSTMENTS } from '@shared/defaults'
 import { FILTER_SESSIONS } from '../../../engine/filters/registry'
@@ -21,7 +21,8 @@ const SESSION_ICONS: Record<string, JSX.Element> = {
   fujifilm: <Film size={13} />,
   cinematic: <Clapperboard size={13} />,
   aesthetic: <Palette size={13} />,
-  vintage: <Camera size={13} />
+  vintage: <Camera size={13} />,
+  nostalgic: <Sunset size={13} />
 }
 
 export function FiltersPanel({ layer }: { layer: Layer }): JSX.Element {

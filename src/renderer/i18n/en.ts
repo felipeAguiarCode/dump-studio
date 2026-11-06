@@ -157,7 +157,8 @@ export const en = {
       fujifilm: { label: 'Fujifilm', description: 'Film simulations' },
       cinematic: { label: 'Cinematic', description: 'Cinema looks' },
       aesthetic: { label: 'Aesthetic', description: 'Social-ready aesthetics' },
-      vintage: { label: 'Vintage', description: 'Retro films' }
+      vintage: { label: 'Vintage', description: 'Retro films' },
+      nostalgic: { label: 'Nostalgic', description: 'Washed-out old photos' }
     },
     items: {
       high_contrast_bw: { label: 'High Contrast B&W', description: 'Intense contrast with deep blacks and bright whites.' },
@@ -190,7 +191,12 @@ export const en = {
       vint_polaroid: { label: 'Polaroid', description: 'Washed-out and slightly green, with instant yellowed highlights.' },
       vint_sepia: { label: 'Sepia', description: 'Warm brown monochrome, with the nostalgia of old photography.' },
       vint_kodachrome: { label: 'Kodachrome', description: 'Rich, saturated colors with vibrant slide-film reds and blues.' },
-      vint_cross_process: { label: 'Cross Process', description: 'Cyan shadows and yellowed highlights, with the ’90s chemical error.' }
+      vint_cross_process: { label: 'Cross Process', description: 'Cyan shadows and yellowed highlights, with the ’90s chemical error.' },
+      nost_faded_90s: { label: 'Faded ’90s', description: 'Desaturated color, lifted blacks and a warm cast — that washed-out ’90s fade.' },
+      nost_washed_film: { label: 'Washed Film', description: 'Cool fade with bluish shadows and soft highlights, VSCO analog style.' },
+      nost_disposable: { label: 'Disposable', description: 'Direct ’90s flash: greenish shadows, yellowed highlights and a slight punch.' },
+      nost_muted_vsco: { label: 'Muted', description: 'Very desaturated and matte, with a magenta touch — VSCO’s minimal aesthetic.' },
+      nost_sun_faded: { label: 'Sun-Faded', description: 'Extreme fade with amber highlights and magenta shadows, like a photo left in the sun.' }
     }
   },
 
@@ -549,15 +555,21 @@ export const en = {
       grid3x3: '3×3',
       grid2x3: '2×3',
       grid3x2: '3×2',
+      grid2x4: '2×4',
       '2v': '2 vertical',
       '2h': '2 horizontal',
       triptych: '3 vertical',
       strip3h: '3 horizontal',
+      strip4h: '4 horizontal',
       strip4v: '4 vertical',
       'big-left': '1 + 2 (right)',
       'big-top': '1 + 2 (bottom)',
       'big-left-3': '1 + 3 (right)',
       'big-top-3': '1 + 3 (bottom)',
+      'big-right': '1 + 2 (left)',
+      'big-bottom': '1 + 2 (top)',
+      'big-right-3': '1 + 3 (left)',
+      'big-bottom-3': '1 + 3 (top)',
       'hero-6': 'Hero 6',
       'hero-23-top': 'Hero 2/3 (top)',
       'hero-23-bottom': 'Hero 2/3 (bottom)',
@@ -566,6 +578,7 @@ export const en = {
       editorial: 'Editorial',
       'editorial-3': 'Editorial 3',
       'editorial-mag': 'Magazine',
+      'editorial-pinwheel': 'Pinwheel',
       'st-2v': '2 side by side',
       'st-2h': '2 stacked',
       'st-3h': '3 bands',
@@ -595,6 +608,10 @@ export const en = {
       'p5-hero-tilt': '1 tilted',
       'p5-vs': 'Showdown (2)',
       'p5-diag-2': '2 parallel',
+      'p5-diag-3': '3 diagonal',
+      'p5-diag-3-rev': '3 diagonal (mirror)',
+      'p5-split-2': 'Diagonal split (2)',
+      'p5-diag-4': '4 diagonal',
       'p5-slash-3': '1 + 2 slash',
       'p5-zigzag-3': 'Zigzag (3)',
       'p5-shards-4': 'Shards (4)',
@@ -683,6 +700,13 @@ export const en = {
 
   shortcuts: {
     saved: 'Saved'
+  },
+
+  license: {
+    expiredTitle: 'License expired',
+    expiredBody:
+      'Your access to Noir Dump Studio ended on {date}. To keep using the app, purchase a license.',
+    buy: 'Buy a license'
   }
 } as const
 

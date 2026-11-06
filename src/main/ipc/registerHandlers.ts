@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron'
 import type { IpcChannel, IpcContract } from '@shared/ipc/contract'
+import { isLicenseExpired } from '@shared/license'
 import { preferencesService } from '../services/preferencesService'
 import { projectService } from '../services/projectService'
 import { uiStateService } from '../services/uiStateService'
@@ -10,6 +11,13 @@ import { exportService } from '../services/exportService'
 import { snapshotService } from '../services/snapshotService'
 import { getAutoOpenProjectId } from '../services/devSeed'
 
+/** Canais liberados mesmo com a licença expirada (necessários para a tela de bloqueio). */
+const LICENSE_ALLOWED: ReadonlySet<IpcChannel> = new Set<IpcChannel>([
+  'app:ping',
+  'app:bootInfo',
+  'preferences:get'
+])
+
 /** Helper que força os tipos de args/result do contrato nos dois lados. */
 function handle<C extends IpcChannel>(
   channel: C,
@@ -17,7 +25,13 @@ function handle<C extends IpcChannel>(
     ...args: IpcContract[C]['args']
   ) => IpcContract[C]['result'] | Promise<IpcContract[C]['result']>
 ): void {
-  ipcMain.handle(channel, (_event, ...args) => fn(...(args as IpcContract[C]['args'])))
+  ipcMain.handle(channel, (_event, ...args) => {
+    // Reforço da licença: com o prazo vencido, só os canais da tela de bloqueio respondem.
+    if (isLicenseExpired() && !LICENSE_ALLOWED.has(channel)) {
+      throw new Error('LICENSE_EXPIRED')
+    }
+    return fn(...(args as IpcContract[C]['args']))
+  })
 }
 
 export function registerIpcHandlers(): void {

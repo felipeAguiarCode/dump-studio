@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Layers, Square, Check, FlipHorizontal, FlipVertical, Pipette, Trash2 } from 'lucide-react'
 import type { ImageLayerData, Layer, OverlayLayerData } from '@shared/types'
 import { useEditorStore, selectSelectedLayer, selectActiveDumpItem } from '../../stores/editorStore'
@@ -16,13 +16,20 @@ const OVERLAY_COLORS = ['#000000', '#FFFFFF', '#4a3b2e', '#2e3a4a', '#3a2e3f']
 export function FxPanel(): JSX.Element {
   const t = useT()
   const selected = useEditorStore(selectSelectedLayer)
-  const [openId, setOpenId] = useState<string | null>('overlays')
+  const [openId, setOpenId] = useState<string | null>(null)
   const toggle = (id: string): void => setOpenId((prev) => (prev === id ? null : id))
 
-  // Ao selecionar um overlay/sombra, abre a sessão da sua espécie para revelar os controles.
+  // O painel sempre começa com as sessões colapsadas. Só ao TROCAR a seleção para um
+  // overlay/sombra (com o painel já aberto) abrimos a sessão da sua espécie para revelar
+  // os controles — a primeira montagem é ignorada para não expandir nada de saída.
   const selKind =
     selected?.type === 'overlay' ? (isShadow((selected.data as OverlayLayerData).overlayId) ? 'shadows' : 'overlays') : null
+  const mounted = useRef(false)
   useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true
+      return
+    }
     if (selKind) setOpenId(selKind)
   }, [selected?.id, selKind])
 

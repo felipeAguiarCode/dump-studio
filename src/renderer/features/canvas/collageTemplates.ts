@@ -74,6 +74,16 @@ export const LAYOUT_SESSIONS: LayoutSession[] = [
           { x: 0, y: 0, w: T, h: 0.5 }, { x: T, y: 0, w: T, h: 0.5 }, { x: 2 * T, y: 0, w: T, h: 0.5 },
           { x: 0, y: 0.5, w: T, h: 0.5 }, { x: T, y: 0.5, w: T, h: 0.5 }, { x: 2 * T, y: 0.5, w: T, h: 0.5 }
         ]
+      },
+      {
+        id: 'grid2x4',
+        label: '2×4',
+        cells: [
+          { x: 0, y: 0, w: 0.5, h: Q }, { x: 0.5, y: 0, w: 0.5, h: Q },
+          { x: 0, y: Q, w: 0.5, h: Q }, { x: 0.5, y: Q, w: 0.5, h: Q },
+          { x: 0, y: 2 * Q, w: 0.5, h: Q }, { x: 0.5, y: 2 * Q, w: 0.5, h: Q },
+          { x: 0, y: 3 * Q, w: 0.5, h: Q }, { x: 0.5, y: 3 * Q, w: 0.5, h: Q }
+        ]
       }
     ]
   },
@@ -92,6 +102,14 @@ export const LAYOUT_SESSIONS: LayoutSession[] = [
         id: 'strip3h',
         label: '3 horizontais',
         cells: [{ x: 0, y: 0, w: 1, h: T }, { x: 0, y: T, w: 1, h: T }, { x: 0, y: 2 * T, w: 1, h: T }]
+      },
+      {
+        id: 'strip4h',
+        label: '4 horizontais',
+        cells: [
+          { x: 0, y: 0, w: 1, h: Q }, { x: 0, y: Q, w: 1, h: Q },
+          { x: 0, y: 2 * Q, w: 1, h: Q }, { x: 0, y: 3 * Q, w: 1, h: Q }
+        ]
       },
       {
         id: 'strip4v',
@@ -131,6 +149,33 @@ export const LAYOUT_SESSIONS: LayoutSession[] = [
         cells: [
           { x: 0, y: 0, w: 1, h: 0.6 },
           { x: 0, y: 0.6, w: T, h: 0.4 }, { x: T, y: 0.6, w: T, h: 0.4 }, { x: 2 * T, y: 0.6, w: T, h: 0.4 }
+        ]
+      },
+      // Espelhos de big-left/big-top: hero à direita/embaixo (completa as 4 orientações).
+      {
+        id: 'big-right',
+        label: '1 + 2 (esq.)',
+        cells: [{ x: 0.4, y: 0, w: 0.6, h: 1 }, { x: 0, y: 0, w: 0.4, h: 0.5 }, { x: 0, y: 0.5, w: 0.4, h: 0.5 }]
+      },
+      {
+        id: 'big-bottom',
+        label: '1 + 2 (cima)',
+        cells: [{ x: 0, y: 0.4, w: 1, h: 0.6 }, { x: 0, y: 0, w: 0.5, h: 0.4 }, { x: 0.5, y: 0, w: 0.5, h: 0.4 }]
+      },
+      {
+        id: 'big-right-3',
+        label: '1 + 3 (esq.)',
+        cells: [
+          { x: 0.4, y: 0, w: 0.6, h: 1 },
+          { x: 0, y: 0, w: 0.4, h: T }, { x: 0, y: T, w: 0.4, h: T }, { x: 0, y: 2 * T, w: 0.4, h: T }
+        ]
+      },
+      {
+        id: 'big-bottom-3',
+        label: '1 + 3 (cima)',
+        cells: [
+          { x: 0, y: 0.4, w: 1, h: 0.6 },
+          { x: 0, y: 0, w: T, h: 0.4 }, { x: T, y: 0, w: T, h: 0.4 }, { x: 2 * T, y: 0, w: T, h: 0.4 }
         ]
       },
       {
@@ -180,6 +225,15 @@ export const LAYOUT_SESSIONS: LayoutSession[] = [
           { x: 0, y: 0.55, w: T, h: 0.45 },
           { x: T, y: 0.55, w: T, h: 0.45 },
           { x: 2 * T, y: 0.55, w: T, h: 0.45 }
+        ]
+      },
+      // Cata-vento: 2×2 com alturas alternadas (colunas defasadas).
+      {
+        id: 'editorial-pinwheel',
+        label: 'Cata-vento',
+        cells: [
+          { x: 0, y: 0, w: 0.5, h: 0.42 }, { x: 0.5, y: 0, w: 0.5, h: 0.58 },
+          { x: 0, y: 0.42, w: 0.5, h: 0.58 }, { x: 0.5, y: 0.58, w: 0.5, h: 0.42 }
         ]
       }
     ]
@@ -439,6 +493,53 @@ export const LAYOUT_SESSIONS: LayoutSession[] = [
         ]
       }
     ] as CollageTemplate[]).map((t) => ({ ...t, background: 'black' as CanvasBackground })),
+      // Tríptico diagonal (preenche o quadro): 3 painéis paralelos inclinados, separados por
+      // finas emendas brancas. Fundo branco (como as refs). Painéis com folga entre si (nunca
+      // se sobrepõem) → a emenda é uma faixa de largura constante e a ordem-z é irrelevante.
+      // Os painéis externos transbordam a página (recortada) para cobrir os cantos.
+      {
+        id: 'p5-diag-3',
+        label: '3 diagonais',
+        background: 'white' as CanvasBackground,
+        cells: [
+          { x: -0.564, y: -0.175, w: 0.9, h: 1.35, rot: 8 },
+          { x: 0.339, y: -0.175, w: 0.323, h: 1.35, rot: 8 },
+          { x: 0.664, y: -0.175, w: 0.9, h: 1.35, rot: 8 }
+        ]
+      },
+      // Tríptico diagonal espelhado: mesma geometria de p5-diag-3, inclinação oposta (\ em vez de /).
+      {
+        id: 'p5-diag-3-rev',
+        label: '3 diagonais (esp.)',
+        background: 'white' as CanvasBackground,
+        cells: [
+          { x: -0.564, y: -0.175, w: 0.9, h: 1.35, rot: -8 },
+          { x: 0.339, y: -0.175, w: 0.323, h: 1.35, rot: -8 },
+          { x: 0.664, y: -0.175, w: 0.9, h: 1.35, rot: -8 }
+        ]
+      },
+      // Corte diagonal ousado: 2 metades inclinadas preenchendo o quadro (mesma emenda/ordem-z livre).
+      {
+        id: 'p5-split-2',
+        label: 'Corte diagonal (2)',
+        background: 'white' as CanvasBackground,
+        cells: [
+          { x: -0.792, y: -0.2, w: 1.3, h: 1.4, rot: 12 },
+          { x: 0.492, y: -0.2, w: 1.3, h: 1.4, rot: 12 }
+        ]
+      },
+      // Quatro fatias diagonais paralelas (extensão do tríptico); emendas brancas de largura constante.
+      {
+        id: 'p5-diag-4',
+        label: '4 diagonais',
+        background: 'white' as CanvasBackground,
+        cells: [
+          { x: -0.551, y: -0.175, w: 0.8, h: 1.35, rot: 8 },
+          { x: 0.254, y: -0.175, w: 0.242, h: 1.35, rot: 8 },
+          { x: 0.504, y: -0.175, w: 0.242, h: 1.35, rot: 8 },
+          { x: 0.751, y: -0.175, w: 0.8, h: 1.35, rot: 8 }
+        ]
+      },
       ...([
       // — Hero / geométrico (ex-Persona 3) —
       { id: 'p3-hero', label: '1 destaque', cells: [{ x: 0.06, y: 0.08, w: 0.88, h: 0.84, rot: 3 }] },

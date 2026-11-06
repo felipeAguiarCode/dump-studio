@@ -268,10 +268,51 @@ vec3 applyVintage(vec3 c, int f){
   return clamp(r, 0.0, 1.0);
 }
 
+// Sessão Nostalgic: fotos antigas lavadas — pretos levantados, baixo contraste,
+// cor dessaturada e dominantes sutis (estética VSCO / anos 90).
+vec3 applyNostalgic(vec3 c, int f){
+  float l = luma(c);
+  vec3 r = c;
+  float hi = smoothstep(0.5, 1.0, l);
+  float lo = 1.0 - smoothstep(0.0, 0.5, l);
+  if (f == 32) {                                                          // Anos 90 Lavado
+    r = mix(vec3(l), c, 0.72);                                            // dessatura
+    r = (r - 0.5) * 0.86 + 0.5;                                          // baixo contraste
+    r = r * 0.82 + 0.14;                                                 // fade forte
+    r += vec3(0.028, 0.012, -0.018);                                    // dominante quente sutil
+  } else if (f == 33) {                                                   // Filme Lavado (frio)
+    r = mix(vec3(l), c, 0.7);
+    r = (r - 0.5) * 0.88 + 0.5;
+    r = r * 0.85 + 0.12;                                                 // fade frio
+    r += vec3(-0.02, 0.0, 0.03) * lo;                                   // sombras azuladas
+    r += vec3(0.0, 0.01, 0.022) * hi;                                   // luzes levemente frias
+  } else if (f == 34) {                                                   // Câmera Descartável
+    r = mix(vec3(l), c, 0.9);
+    r += vec3(-0.012, 0.026, -0.012) * lo;                              // sombras esverdeadas
+    r += vec3(0.042, 0.03, -0.02) * hi;                                // luzes amareladas (flash)
+    r = r * 0.9 + 0.08;
+    r = (r - 0.5) * 1.05 + 0.5;                                         // leve punch de flash
+  } else if (f == 35) {                                                   // Suave Fosco (VSCO)
+    r = mix(vec3(l), c, 0.58);                                           // bem dessaturado
+    r = (r - 0.5) * 0.9 + 0.5;
+    r = r * 0.84 + 0.13;                                                 // matte
+    r += vec3(0.01, 0.0, 0.014);                                        // magenta/roxo sutil
+  } else if (f == 36) {                                                   // Desbotado ao Sol
+    r = mix(vec3(l), c, 0.64);
+    r += vec3(0.05, 0.022, 0.0) * hi;                                   // realces âmbar
+    r += vec3(0.022, 0.0, 0.016) * lo;                                 // sombras magenta desbotadas
+    r = r * 0.8 + 0.16;                                                  // fade extremo
+    r = (r - 0.5) * 0.85 + 0.5;
+  }
+  return clamp(r, 0.0, 1.0);
+}
+
 vec3 applyFilter(vec3 c, vec3 colorBase, int f, float t){
   if (f == 0) return c;
   vec3 r = c;
-  if (f >= 27) {                                                          // Sessão Vintage (cor)
+  if (f >= 32) {                                                          // Sessão Nostalgic (cor)
+    r = applyNostalgic(colorBase, f);
+  } else if (f >= 27) {                                                   // Sessão Vintage (cor)
     r = applyVintage(colorBase, f);
   } else if (f >= 22) {                                                   // Sessão Aesthetic (cor)
     r = applyAesthetic(colorBase, f);

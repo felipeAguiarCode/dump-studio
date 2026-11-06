@@ -91,7 +91,13 @@ const FILTER_INDEX: Record<PhotoFilterName, number> = {
   vint_polaroid: 28,
   vint_sepia: 29,
   vint_kodachrome: 30,
-  vint_cross_process: 31
+  vint_cross_process: 31,
+  // Sessão Nostalgic (cor) — índices 32..36
+  nost_faded_90s: 32,
+  nost_washed_film: 33,
+  nost_disposable: 34,
+  nost_muted_vsco: 35,
+  nost_sun_faded: 36
 }
 
 export interface PipelineUniforms {
