@@ -6,8 +6,9 @@ Versão atual: **1.0.0 — Cherry Pie Version**. A distribuição fica em
 ## Site e demonstração
 
 O site do **My Dump Studio** fica em [`.site/`](.site/README.md), com fotos licenciadas,
-hero arrastável, mini editor com o motor real de filtros, exportação PNG, comparador
-antes/depois e idiomas português/inglês. O download detecta o último instalador de uma
+hero com Polaroid flutuante e três looks por foto, mini editor com o motor real de filtros,
+colagens interativas com os layouts do app, exportação PNG, comparador antes/depois e
+idiomas português/inglês. O download detecta o último instalador de uma
 release pública do GitHub. Enquanto não houver release, a página informa **Em breve**.
 
 Para abrir localmente, na raiz do projeto:

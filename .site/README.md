@@ -42,12 +42,18 @@ O motor já está compilado; a publicação não instala dependências do aplica
 
 ## Movimento e navegação
 
-- Hero: dump à esquerda, texto e botões à direita. Fotos automáticas a cada 3,8 segundos,
-  paginação branca, swipe, setas e pausa. A passagem pausa também durante interação,
-  fora da tela e em abas ocultas.
+- Hero: Polaroid flutuante à esquerda, texto e botões à direita. Cada foto passa por 35mm,
+  Satin e Noir, processados pelo motor real, antes de avançar. Os três looks ficam prontos
+  antes de iniciar os seis segundos da foto. Barras de Stories, bolinhas brancas, swipe,
+  setas e pausa ficam sincronizados. A passagem pausa durante interação, fora da tela e
+  em abas ocultas.
 - Menu fixo e barras de rolagem nas cores da identidade. As âncoras descontam a altura do menu.
 - Faixas animadas “Faz um dump”, botões com brilho e elevação, entradas suaves por seção.
-- Manifesto com texto SVG vazado em degradê; as linhas aparecem conforme o scroll avança.
+- Manifesto centralizado, com texto preenchido em degradê sobre fundo suave. As linhas
+  surgem, ficam legíveis e se dissipam conforme o scroll avança.
+- Colagens interativas: catálogo e geometria reais do app, organizados por estilo.
+  Selecione layouts, alterne os três formatos, troque as fotos e salve a colagem em PNG.
+  Os layouts de carrossel contínuo mostram as duas partes do mesmo recorte.
 - Movimento reduzido desativa autoplay, entradas animadas, alinhamento de scroll e a etapa
   fixa do manifesto, mantendo todo o conteúdo visível e os controles manuais disponíveis.
 
@@ -63,7 +69,8 @@ node .site/scripts/check-site.mjs
 Ela usa Chromium/Electron em um perfil temporário, testa o PNG exportado e simula os
 estados da API de releases. Não altera projetos do usuário nem publica arquivos.
 
-A demo usa o mesmo shader, uniforms e defaults do editor desktop. Após mudar o motor,
+A demo usa o mesmo shader, uniforms, defaults, catálogo de layouts e geometria do editor
+desktop. Após mudar essas fontes, no checkout de desenvolvimento atualizado do aplicativo,
 com as dependências da raiz instaladas:
 
 ```powershell

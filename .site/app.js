@@ -14,11 +14,14 @@ Object.assign(dictionaries.pt, {heroDownload:'Quero meu studio',ribbonAction:'Fa
 Object.assign(dictionaries.en, {heroDownload:'Get my studio',ribbonAction:'Make a dump. Try the studio.',ribbonMake:'MAKE A DUMP',ribbonYours:'MAKE IT YOURS',ribbonRoll:'CAMERA ROLL TO FEED',ribbonDownload:'Camera roll to feed. Discover the app.'});
 Object.assign(dictionaries.pt, {pauseSlideshow:'Pausar fotos automáticas',playSlideshow:'Reproduzir fotos automaticamente',goToPhoto:'Ir para a foto',manifestoLine1:'Um date. Um café.',manifestoLine2:'Um look que deu certo.',manifestoLine3:'O cotidiano merece',manifestoLine4:'um lugar no seu feed.'});
 Object.assign(dictionaries.en, {pauseSlideshow:'Pause automatic slideshow',playSlideshow:'Play automatic slideshow',goToPhoto:'Go to photo',manifestoLine1:'A date. A coffee.',manifestoLine2:'An outfit that just worked.',manifestoLine3:'Everyday life deserves',manifestoLine4:'a place in your feed.'});
+Object.assign(dictionaries.pt, {navCollages:'Colagens',collageKicker:'Um rolo. Muitas composições.',collageTitle:'Junta os cliques.<br>Muda a história.',collageDesc:'Escolha um estilo e experimente os layouts reais do app. Grades, Polaroids, recortes inclinados ou um carrossel que continua na próxima foto.',collageChoose:'Encontre a composição.',collageHint:'Mesmas fotos. Infinitas formas de juntar.',collageShuffle:'Trocar as fotos ↻',collageSave:'Salvar colagem · PNG',collageNote:'Uma prévia dos layouts do studio. No app, você posiciona suas próprias fotos e edita cada camada.'});
+Object.assign(dictionaries.en, {navCollages:'Collages',collageKicker:'One camera roll. So many compositions.',collageTitle:'Bring the shots.<br>Change the story.',collageDesc:'Choose a style and try the app’s real layouts. Grids, Polaroids, tilted frames, or a carousel that flows into the next photo.',collageChoose:'Find your composition.',collageHint:'Same photos. Endless ways to bring them together.',collageShuffle:'Switch the photos ↻',collageSave:'Save collage · PNG',collageNote:'A preview of the studio layouts. In the app, use your own photos and edit each layer.'});
 let lang = 'pt';
 try { lang = new URLSearchParams(location.search).get('lang') || localStorage.getItem('my-dump-site-lang') || 'pt'; } catch {}
 if (!dictionaries[lang]) lang = 'pt';
 const t = (key) => dictionaries[lang][key];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let collageDemo;
 let releaseState = { status:'pending' };
 let photos = [], photoIndex = 0, lookIndex = 1, intensity = 80, format = '4:5', grain = false, renderTicket = 0, rendered = false;
 let rotateIndex = 0;
@@ -58,19 +61,38 @@ function localize() {
   $$('[data-photo-file]').forEach((image) => { const data = photos.find((p) => p.file === image.dataset.photoFile); if(data) image.alt = data.alt[lang]; });
   $$('.photo-choice').forEach((button,index) => button.setAttribute('aria-label',photos[index]?.alt[lang] || 'Photo'));
   renderReleaseState();
+  collageDemo?.localize();
 }
 $('#language').addEventListener('click',() => {lang = lang === 'pt' ? 'en' : 'pt';try{localStorage.setItem('my-dump-site-lang',lang);}catch{}localize();});
 
-const stage = $('#dump-stage'), track = $('#dump-track');
-let trackX = 0, pointer = null, heroPosition = 0, autoTimer, manualPaused = reducedMotion, hovering = false, focusWithin = false, heroVisible = true;
+const stage = $('#dump-stage'), track = $('#dump-track'), HERO_DURATION = 6000;
+const heroLooks=[{label:'35mm',filter:'vint_seventies'},{label:'Satin',filter:'edit_satin'},{label:'Noir',filter:'noir'}];
+const heroLookCache=new Map(),heroReady=new Set(),heroPreparing=new Map();let heroPhotos=[],heroLookTicket=0,effectTimer;
+let trackX = 0, pointer = null, heroPosition = 0, autoTimer, autoStartedAt = 0, autoRemaining = HERO_DURATION, manualPaused = reducedMotion, hovering = false, focusWithin = false, heroVisible = true;
+function cachedHeroLook(index,lookIndex) {
+  const data=heroPhotos[index],look=heroLooks[lookIndex];
+  const key=`${data.file}:${look.filter}`;
+  if(!heroLookCache.has(key))heroLookCache.set(key,(async()=>{const [image,{renderPhoto}]=await Promise.all([loadImage(`./${data.file}`),engine()]);const processed=renderPhoto(image,look.filter,85,false,900);return new Promise((resolve,reject)=>processed.toBlob(blob=>blob?resolve(URL.createObjectURL(blob)):reject(new Error('Hero look unavailable')),'image/webp',.87));})());
+  return heroLookCache.get(key);
+}
+function prepareHero(index) {if(!heroPreparing.has(index))heroPreparing.set(index,Promise.all(heroLooks.map((_,look)=>cachedHeroLook(index,look))).catch(()=>{}).then(()=>heroReady.add(index)));return heroPreparing.get(index);}
+async function showHeroLook(index,lookIndex) {
+  const look=heroLooks[lookIndex],ticket=++heroLookTicket;if(!heroPhotos[index])return;
+  try{const url=await cachedHeroLook(index,lookIndex);if(ticket!==heroLookTicket||index!==heroPosition)return;const image=track.children[index]?.querySelector('img');if(!image)return;image.src=url;image.dataset.look=look.filter;$('#hero-look').textContent=look.label;stage.dataset.look=look.filter;}
+  catch{if(index===heroPosition)$('#hero-look').textContent='Original';}
+}
+function scheduleHeroLook(playing) {
+  clearTimeout(effectTimer);const elapsed=HERO_DURATION-autoRemaining,lookIndex=Math.min(2,Math.floor(elapsed/2000));void showHeroLook(heroPosition,lookIndex);
+  if(playing&&lookIndex<2)effectTimer=setTimeout(()=>{const elapsedNow=HERO_DURATION-autoRemaining+(performance.now()-autoStartedAt);const nextLook=Math.min(2,Math.floor(elapsedNow/2000));void showHeroLook(heroPosition,nextLook);if(nextLook<2)effectTimer=setTimeout(()=>void showHeroLook(heroPosition,2),Math.max(20,4000-elapsedNow));},Math.max(20,(lookIndex+1)*2000-elapsed));
+}
 function trackBounds() {return Math.min(0,stage.clientWidth-track.scrollWidth);}
-function positionTrack(value, animate = false) {trackX = Math.max(trackBounds(),Math.min(0,value));track.style.transition = animate && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'transform .65s cubic-bezier(.22,.7,.15,1)' : 'none';track.style.transform = `translateX(${trackX}px)`;const cards = $$('.dump-card');heroPosition = Math.min(cards.length-1,Math.max(0,Math.round(-trackX/stage.clientWidth)));$('#hero-counter').textContent = `${heroPosition+1} / ${cards.length}`;$$('.dump-dot').forEach((button,index)=>button.setAttribute('aria-pressed',String(index===heroPosition)));}
-function scheduleAutoplay() {clearTimeout(autoTimer);if(manualPaused||hovering||focusWithin||pointer||document.hidden||!heroVisible||matchMedia('(prefers-reduced-motion: reduce)').matches||!track.children.length)return;autoTimer=setTimeout(()=>advance(1),3800);}
-function goToSlide(index) {const count=track.children.length;if(!count)return;const next=(index+count)%count;const wraps=Math.abs(next-heroPosition)>1;positionTrack(-next*stage.clientWidth,!wraps);scheduleAutoplay();}
+function positionTrack(value, animate = false) {trackX = Math.max(trackBounds(),Math.min(0,value));track.style.transition = animate && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'transform .5s cubic-bezier(.22,.7,.15,1)' : 'none';track.style.transform = `translateX(${trackX}px)`;const cards = $$('.dump-card');heroPosition = Math.min(cards.length-1,Math.max(0,Math.round(-trackX/stage.clientWidth)));$('#hero-counter').textContent = `${heroPosition+1} / ${cards.length}`;$$('.dump-dot').forEach((button,index)=>button.setAttribute('aria-pressed',String(index===heroPosition)));$$('.story-segment').forEach((segment,index)=>segment.dataset.state=index<heroPosition?'complete':index===heroPosition?'active':'upcoming');cards.forEach((card,index)=>card.classList.toggle('is-current',index===heroPosition));$('#hero-photo-caption').textContent=cards[heroPosition]?.querySelector('figcaption').textContent||'';}
+function scheduleAutoplay() {if(autoTimer){clearTimeout(autoTimer);autoTimer=null;autoRemaining=Math.max(0,autoRemaining-(performance.now()-autoStartedAt));}if(!heroPhotos.length)return;if(!heroReady.has(heroPosition)){clearTimeout(effectTimer);stage.classList.remove('is-playing');const index=heroPosition;void prepareHero(index).then(()=>{if(index===heroPosition)scheduleAutoplay();});return;}const playing=!(manualPaused||hovering||focusWithin||pointer||document.hidden||!heroVisible||matchMedia('(prefers-reduced-motion: reduce)').matches||!track.children.length);stage.classList.toggle('is-playing',playing);scheduleHeroLook(playing);if(!playing)return;autoStartedAt=performance.now();autoTimer=setTimeout(()=>{autoTimer=null;advance(1);},autoRemaining);}
+function goToSlide(index) {const count=track.children.length;if(!count)return;clearTimeout(autoTimer);autoTimer=null;autoRemaining=HERO_DURATION;const next=(index+count)%count;const wraps=Math.abs(next-heroPosition)>1;positionTrack(-next*stage.clientWidth,!wraps);const fill=$('.story-segment[data-state=active] > span');if(fill){fill.style.animation='none';void fill.offsetWidth;fill.style.animation='';}scheduleAutoplay();}
 function advance(direction) {goToSlide(heroPosition+direction);rotateCopy(direction);}
 $('#hero-prev').addEventListener('click',() => advance(-1));$('#hero-next').addEventListener('click',() => advance(1));
 stage.addEventListener('keydown',(event) => {if(event.target!==stage)return;if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();advance(event.key==='ArrowRight'?1:-1);}});
-stage.addEventListener('pointerdown',(event) => {if(event.button!==0||event.target.closest('button'))return;pointer = {id:event.pointerId,x:event.clientX,trackX,index:heroPosition};clearTimeout(autoTimer);stage.setPointerCapture(event.pointerId);stage.classList.add('dragging');});
+stage.addEventListener('pointerdown',(event) => {if(event.button!==0||event.target.closest('button'))return;pointer = {id:event.pointerId,x:event.clientX,trackX,index:heroPosition};scheduleAutoplay();stage.setPointerCapture(event.pointerId);stage.classList.add('dragging');});
 stage.addEventListener('pointermove',(event) => {if(!pointer || pointer.id!==event.pointerId)return;positionTrack(pointer.trackX+event.clientX-pointer.x);});
 function endDrag(event) {if(pointer?.id!==event.pointerId)return;const delta=event.clientX-pointer.x,index=pointer.index;pointer=null;stage.classList.remove('dragging');if(stage.hasPointerCapture(event.pointerId))stage.releasePointerCapture(event.pointerId);goToSlide(index+(event.type==='pointercancel'?0:Math.abs(delta)>stage.clientWidth*.16?(delta<0?1:-1):0));}
 stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);
@@ -144,7 +166,7 @@ async function checkRelease() {
 
 function setupScrollReveal() {
   if(reducedMotion || !('IntersectionObserver' in window))return;
-  const targets=$$('.section-heading, .playground, .comparison, .compare-caption, .feature-layout > article, .feature-details > article, .app-gallery > h2, .app-gallery > p, .app-shots > figure, .download-inner > div, .faq > h2, .faq details, .footer');
+  const targets=$$('.section-heading, .playground, .collage-studio, .comparison, .compare-caption, .feature-layout > article, .feature-details > article, .app-gallery > h2, .app-gallery > p, .app-shots > figure, .download-inner > div, .faq > h2, .faq details, .footer');
   const observer=new IntersectionObserver((entries)=>{
     for(const entry of entries)if(entry.isIntersecting){entry.target.classList.add('is-revealed');observer.unobserve(entry.target);}
   },{threshold:.08,rootMargin:'0px 0px -35px 0px'});
@@ -159,7 +181,7 @@ setupScrollReveal();
 
 function setupManifesto() {
   const section=$('.manifesto'),lines=$$('.manifesto-line');let queued=false;
-  function paint(){queued=false;const rect=section.getBoundingClientRect(),nav=$('.nav').offsetHeight;const distance=Math.max(1,section.offsetHeight-innerHeight+nav);const progress=Math.max(0,Math.min(1,(nav+80-rect.top)/distance));const still=matchMedia('(prefers-reduced-motion: reduce)').matches;lines.forEach((line,index)=>{const phase=still?1:Math.max(0,Math.min(1,progress*4.4-index));line.style.opacity=String(.12+.88*phase);line.style.transform=`translateY(${(1-phase)*16}px)`;});}
+  function paint(){queued=false;const rect=section.getBoundingClientRect(),nav=$('.nav').offsetHeight;const distance=Math.max(1,section.offsetHeight-innerHeight+nav);const progress=Math.max(0,Math.min(1,(nav-rect.top)/distance));const still=matchMedia('(prefers-reduced-motion: reduce)').matches;lines.forEach((line,index)=>{const enter=Math.max(0,Math.min(1,(progress-.03-index*.075)/.22)),exit=Math.max(0,Math.min(1,(progress-.70-index*.03)/.2)),opacity=still?1:enter*(1-exit);line.style.opacity=String(opacity);line.style.transform=`translateY(${still?0:(1-enter)*28-exit*25}px)`;line.style.filter=still?'none':`blur(${(1-opacity)*5}px)`;});}
   function requestPaint(){if(!queued){queued=true;requestAnimationFrame(paint);}}
   addEventListener('scroll',requestPaint,{passive:true});addEventListener('resize',requestPaint);matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',requestPaint);paint();
 }
@@ -169,14 +191,16 @@ async function init() {
   localize();void checkRelease();
   try {const result=await fetch('./assets/photo-credits.json');if(!result.ok)throw new Error('Photo catalog unavailable');photos=(await result.json()).photos;
     const heroNames=['city-muse','cafe-moment','city-romance','amalfi-film','golden-street','beach-romance','leopard-city','paris-cafe'];
+    heroPhotos=heroNames.map(photo);
     const captions=['city girl diary','slow mornings','just us ♡','a little getaway','golden state of mind','wish you were here','outfit on repeat','little rituals'];
-    heroNames.forEach((name,index)=>{const data=photo(name),figure=document.createElement('figure');figure.className='dump-card';const image=makeImage(data,index<2);image.dataset.photoFile=data.file;if(index===0)image.fetchPriority='high';figure.append(image);const caption=document.createElement('figcaption');caption.textContent=captions[index];figure.append(caption);track.append(figure);const dot=document.createElement('button');dot.className='dump-dot';dot.setAttribute('aria-label',`${t('goToPhoto')} ${index+1}`);dot.addEventListener('click',()=>goToSlide(index));$('#dump-pagination').append(dot);});
+    heroNames.forEach((name,index)=>{const data=photo(name),figure=document.createElement('figure');figure.className='dump-card';const image=makeImage(data,index<2);image.dataset.photoFile=data.file;if(index===0)image.fetchPriority='high';figure.append(image);const caption=document.createElement('figcaption');caption.textContent=captions[index];figure.append(caption);track.append(figure);const dot=document.createElement('button');dot.className='dump-dot';dot.setAttribute('aria-label',`${t('goToPhoto')} ${index+1}`);dot.addEventListener('click',()=>goToSlide(index));$('#dump-pagination').append(dot);const segment=document.createElement('span');segment.className='story-segment';segment.append(document.createElement('span'));$('#story-progress').append(segment);});
     photos.forEach((data,index)=>{const button=document.createElement('button');button.className='photo-choice';button.setAttribute('aria-label',data.alt[lang]);const image=makeImage(data);image.alt='';button.append(image);button.addEventListener('click',()=>{photoIndex=index;selectedButtons();scheduleRender();});$('#photo-picker').append(button);});
     const thumb=photo('golden-street');looks.forEach((look,index)=>{const button=document.createElement('button');button.className='look-choice';button.setAttribute('aria-label',`Look ${look.label}`);const image=makeImage(thumb);image.alt='';image.style.filter=look.css;const label=document.createElement('span');label.textContent=look.label;button.append(image,label);button.addEventListener('click',()=>{lookIndex=index;selectedButtons();scheduleRender();});$('#look-picker').append(button);});
     ['city-muse','cafe-moment','city-romance'].forEach((name)=>$('#mini-collage').append(makeImage(photo(name))));
     for(let i=0;i<3;i++)$('#look-fan').append(makeImage(photo('golden-street')));
     $('#download-photo').append(makeImage(photo('white-dress')));
     selectedButtons();positionTrack(0);localize();$('#hero-toggle').setAttribute('aria-pressed',String(manualPaused));scheduleAutoplay();
+    void import('./collages.js').then(({setupCollages})=>setupCollages({photos,loadImage,engine,getLanguage:()=>lang,toast})).then(demo=>{collageDemo=demo;demo.localize();}).catch(()=>{$('#collage-message').textContent=t('renderError');});
     const observer=new IntersectionObserver((entries)=>{for(const entry of entries)if(entry.isIntersecting){if(entry.target.id==='play')void renderEditor();else void setupComparison();observer.unobserve(entry.target);}},{rootMargin:'350px'});observer.observe($('#play'));observer.observe($('#comparison'));
   }catch(error){console.error('[site]',error);$('#editor-message').textContent=t('renderError');$('#save-preview').disabled=true;}
 }
