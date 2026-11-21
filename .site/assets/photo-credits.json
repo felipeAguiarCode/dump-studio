@@ -1,0 +1,197 @@
+{
+  "license_note": "Photos may be used and edited under the Pexels License. Do not imply endorsement by the depicted people. Stock images are editorial examples, not customer testimonials.",
+  "photos": [
+    {
+      "file": "assets/photos/city-muse.jpg",
+      "source_url": "https://www.pexels.com/photo/chic-urban-fashion-on-a-stylish-city-street-31656634/",
+      "download_url": "https://images.pexels.com/photos/31656634/pexels-photo-31656634.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Necip Duman",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Mulher de óculos escuros com look de rua em uma cidade europeia.",
+        "en": "Woman in sunglasses wearing street fashion in a European city."
+      },
+      "category": "fashion",
+      "width": 1200,
+      "height": 1598,
+      "bytes": 219032
+    },
+    {
+      "file": "assets/photos/sunlit-portrait.jpg",
+      "source_url": "https://www.pexels.com/photo/portrait-of-a-woman-wearing-sunglasses-on-a-street-17491471/",
+      "download_url": "https://images.pexels.com/photos/17491471/pexels-photo-17491471.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Caner B",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Retrato de uma mulher de óculos escuros em uma rua iluminada.",
+        "en": "Portrait of a woman in sunglasses on a sunlit street."
+      },
+      "category": "fashion",
+      "width": 1200,
+      "height": 1461,
+      "bytes": 173484
+    },
+    {
+      "file": "assets/photos/leopard-city.jpg",
+      "source_url": "https://www.pexels.com/photo/fashionable-asian-woman-in-sunglasses-on-city-street-4603387/",
+      "download_url": "https://images.pexels.com/photos/4603387/pexels-photo-4603387.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "HONG SON",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Mulher de vestido com estampa de leopardo e óculos escuros na cidade.",
+        "en": "Woman in a leopard-print dress and sunglasses in the city."
+      },
+      "category": "fashion",
+      "width": 1200,
+      "height": 1800,
+      "bytes": 314573
+    },
+    {
+      "file": "assets/photos/white-dress.jpg",
+      "source_url": "https://www.pexels.com/photo/elegant-fashion-portrait-in-sao-paulo-32256859/",
+      "download_url": "https://images.pexels.com/photos/32256859/pexels-photo-32256859.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Emanuel Pedro",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Mulher de vestido branco posando ao ar livre em São Paulo.",
+        "en": "Woman in a white dress posing outdoors in São Paulo."
+      },
+      "category": "fashion",
+      "width": 1200,
+      "height": 1689,
+      "bytes": 295692
+    },
+    {
+      "file": "assets/photos/city-romance.jpg",
+      "source_url": "https://www.pexels.com/photo/romantic-couple-embracing-in-mexico-city-30695952/",
+      "download_url": "https://images.pexels.com/photos/30695952/pexels-photo-30695952.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Gerardo Manzano",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Casal abraçado junto a um muro na Cidade do México.",
+        "en": "Couple embracing by a wall in Mexico City."
+      },
+      "category": "couple",
+      "width": 1200,
+      "height": 1599,
+      "bytes": 185496
+    },
+    {
+      "file": "assets/photos/beach-romance.jpg",
+      "source_url": "https://www.pexels.com/photo/young-couple-embracing-on-a-beach-at-sunset-25856501/",
+      "download_url": "https://images.pexels.com/photos/25856501/pexels-photo-25856501.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Marlon Schmeiski",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Casal abraçado na praia durante o pôr do sol.",
+        "en": "Couple embracing on the beach at sunset."
+      },
+      "category": "couple",
+      "width": 1200,
+      "height": 1500,
+      "bytes": 161147
+    },
+    {
+      "file": "assets/photos/lisbon-sunset.jpg",
+      "source_url": "https://www.pexels.com/photo/faceless-romantic-couple-hugging-and-enjoying-sunset-on-city-riverbank-5191372/",
+      "download_url": "https://images.pexels.com/photos/5191372/pexels-photo-5191372.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Ryutaro Tsukata",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Casal de costas abraçado à beira do rio em Lisboa ao entardecer.",
+        "en": "Couple seen from behind embracing by the river in Lisbon at dusk."
+      },
+      "category": "couple",
+      "width": 1200,
+      "height": 1800,
+      "bytes": 111037
+    },
+    {
+      "file": "assets/photos/cafe-moment.jpg",
+      "source_url": "https://www.pexels.com/photo/cozy-cafe-table-with-pastry-and-coffee-33179731/",
+      "download_url": "https://images.pexels.com/photos/33179731/pexels-photo-33179731.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Đan Thy Nguyễn Mai",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Croissant e café gelado em uma mesa de madeira escura.",
+        "en": "Croissant and iced coffee on a dark wooden table."
+      },
+      "category": "details",
+      "width": 1200,
+      "height": 1800,
+      "bytes": 129649
+    },
+    {
+      "file": "assets/photos/paris-cafe.jpg",
+      "source_url": "https://www.pexels.com/photo/charming-street-scene-with-parisian-cafe-and-wine-bar-35893537/",
+      "download_url": "https://images.pexels.com/photos/35893537/pexels-photo-35893537.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Liisbet Luup",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Café e bar de vinhos em uma calçada de Paris.",
+        "en": "A cafe and wine bar on a Paris sidewalk."
+      },
+      "category": "city",
+      "width": 1200,
+      "height": 1800,
+      "bytes": 364086
+    },
+    {
+      "file": "assets/photos/amalfi-film.jpg",
+      "source_url": "https://www.pexels.com/photo/scenic-coastal-town-on-amalfi-coast-36499418/",
+      "download_url": "https://images.pexels.com/photos/36499418/pexels-photo-36499418.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Ioana Alexandra Patrolea",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Vila costeira nas falésias da Costa Amalfitana, na Itália.",
+        "en": "A coastal village on the cliffs of Italy's Amalfi Coast."
+      },
+      "category": "travel",
+      "width": 1200,
+      "height": 805,
+      "bytes": 156069
+    },
+    {
+      "file": "assets/photos/summer-beach.jpg",
+      "source_url": "https://www.pexels.com/photo/sunny-beach-day-on-the-amalfi-coast-36823298/",
+      "download_url": "https://images.pexels.com/photos/36823298/pexels-photo-36823298.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Thao August-Lam",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Guarda-sóis e banhistas em um dia ensolarado na Costa Amalfitana.",
+        "en": "Beach umbrellas and visitors on a sunny day on the Amalfi Coast."
+      },
+      "category": "travel",
+      "width": 1200,
+      "height": 1800,
+      "bytes": 414051
+    },
+    {
+      "file": "assets/photos/golden-street.jpg",
+      "source_url": "https://www.pexels.com/photo/woman-in-sunglasses-standing-on-street-16215956/",
+      "download_url": "https://images.pexels.com/photos/16215956/pexels-photo-16215956.jpeg?auto=compress&cs=tinysrgb&w=1200&q=85",
+      "author": "Yaritza",
+      "license": "Pexels License",
+      "license_url": "https://www.pexels.com/license/",
+      "alt": {
+        "pt": "Mulher de roupa preta e óculos escuros na rua ao entardecer.",
+        "en": "Woman in black clothing and sunglasses on the street at dusk."
+      },
+      "category": "fashion",
+      "width": 1200,
+      "height": 1800,
+      "bytes": 137891
+    }
+  ]
+}

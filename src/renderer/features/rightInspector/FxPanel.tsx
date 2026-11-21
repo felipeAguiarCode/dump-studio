@@ -84,7 +84,7 @@ function FxAssetSection({ kind }: { kind: 'overlay' | 'shadow' }): JSX.Element {
       const shadow = await projectActions.addLayer({
         dumpItemId: activeItem.id,
         type: 'overlay',
-        data: { overlayId: id, flipX: false, flipY: false, color: '#000000' },
+        data: { overlayId: id, flipX: false, flipY: false, color: '#000000', ...(selected?.type === 'image' ? { imageLayerId: selected.id } : {}) },
         transform: { x: Math.round((canvas.width - w) / 2), y: Math.round((canvas.height - h) / 2), width: w, height: h, rotation: 0 }
       })
       if (shadow && targetId) {
@@ -106,14 +106,14 @@ function FxAssetSection({ kind }: { kind: 'overlay' | 'shadow' }): JSX.Element {
       await projectActions.addLayer({
         dumpItemId: activeItem.id,
         type: 'overlay',
-        data: { overlayId: id, flipX: false, flipY: false, color: '#000000', slotIndex },
+        data: { overlayId: id, flipX: false, flipY: false, color: '#000000', slotIndex, imageLayerId: selected!.id },
         transform: { x: s.x, y: s.y, width: s.width, height: s.height, rotation: s.rotation }
       })
     } else {
       await projectActions.addLayer({
         dumpItemId: activeItem.id,
         type: 'overlay',
-        data: { overlayId: id, flipX: false, flipY: false, color: '#000000' },
+        data: { overlayId: id, flipX: false, flipY: false, color: '#000000', ...(selected?.type === 'image' ? { imageLayerId: selected.id } : {}) },
         transform: { x: 0, y: 0, width: canvas.width, height: canvas.height }
       })
     }

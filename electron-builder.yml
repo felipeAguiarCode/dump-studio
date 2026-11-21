@@ -2,19 +2,24 @@ appId: me.dio.noirdumpstudio
 productName: Noir Dump Studio
 directories:
   buildResources: build
-  output: dist
+  output: "dist/1.0.0 - Cherry Pie Version"
+releaseInfo:
+  releaseName: "1.0.0 - Cherry Pie Version"
 files:
   - out/**
   - package.json
+extraResources:
+  - from: build/icon.png
+    to: icon.png
 asarUnpack:
   - "**/*.node"
   - resources/**
 win:
+  icon: build/icon.ico
   target:
     - nsis
-  artifactName: ${productName}-${version}-setup.${ext}
+  artifactName: ${productName}-${version}-Cherry-Pie-Version-setup.${ext}
 nsis:
   oneClick: false
   perMachine: false
   allowToChangeInstallationDirectory: true
-npmRebuild: false

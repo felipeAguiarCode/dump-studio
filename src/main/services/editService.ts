@@ -9,6 +9,7 @@ import { createBackgroundLayer, createDumpItem, createImageLayer } from './facto
 import { preferencesService } from './preferencesService'
 import type { AddLayerInput } from '@shared/ipc/contract'
 import type { DumpItem, ImageLayerData, InstagramFormat, Layer } from '@shared/types'
+import { remapFxOwner } from '@shared/photoPresets'
 
 function assembleDumpItem(id: string): DumpItem {
   const row = dumpItemsRepo.getById(id)
@@ -49,8 +50,9 @@ export const editService = {
     getDb().transaction(() => {
       const copy: DumpItem = { ...source, id: newId, orderIndex, title: `${source.title} (cópia)`, createdAt: now, updatedAt: now, layers: [] }
       dumpItemsRepo.insert(copy)
+      const layerIds = new Map(source.layers.map((layer) => [layer.id, uuid()]))
       for (const layer of source.layers) {
-        layersRepo.insert({ ...layer, id: uuid(), dumpItemId: newId, createdAt: now, updatedAt: now })
+        layersRepo.insert({ ...layer, id: layerIds.get(layer.id)!, data: remapFxOwner(layer, layerIds), dumpItemId: newId, createdAt: now, updatedAt: now })
       }
       // Posiciona logo após a original.
       const items = dumpItemsRepo.listByProject(source.projectId).map((r) => r.id).filter((iid) => iid !== newId)
@@ -158,6 +160,13 @@ export const editService = {
     const projectId = row.project_id
     const now = nowIso()
     const created: Layer[] = []
+    const layerIds = new Map(layers.map((layer) => [layer.id, uuid()]))
+    for (const layer of layers) {
+      if (layer.type === 'image') {
+        const asset = assetsRepo.getById((layer.data as ImageLayerData).assetId)
+        if (!asset || asset.projectId !== projectId) layerIds.delete(layer.id)
+      }
+    }
 
     getDb().transaction(() => {
       let order = layersRepo.nextOrderIndex(dumpItemId)
@@ -170,8 +179,9 @@ export const editService = {
         }
         const copy: Layer = {
           ...src,
-          id: uuid(),
+          id: layerIds.get(src.id)!,
           dumpItemId,
+          data: remapFxOwner(src, layerIds, src.dumpItemId === dumpItemId),
           orderIndex: order++,
           transform: { ...src.transform, x: src.transform.x + 24, y: src.transform.y + 24 },
           adjustments: src.adjustments ? { ...src.adjustments } : undefined,

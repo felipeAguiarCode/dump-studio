@@ -67,7 +67,7 @@ export function ShapePanel({ layer }: { layer: Layer }): JSX.Element {
             )}
             style={{
               backgroundImage:
-                'linear-gradient(45deg,#444 25%,transparent 25%,transparent 75%,#444 75%),linear-gradient(45deg,#444 25%,#1a1a1a 25%,#1a1a1a 75%,#444 75%)',
+                'var(--checkerboard)',
               backgroundSize: '6px 6px',
               backgroundPosition: '0 0,3px 3px'
             }}

@@ -11,6 +11,7 @@ import { PhotosAssetsPanel } from '../assets/PhotosAssetsPanel'
 import { CanvasRegion } from '../canvas/CanvasRegion'
 import { assetsBarHeight } from '../../lib/layout'
 import { cn } from '../../lib/cn'
+import { useUiStore } from '../../stores/uiStore'
 
 export function AppShell(): JSX.Element {
   const ui = useEditorStore((s) => s.ui)
@@ -18,9 +19,13 @@ export function AppShell(): JSX.Element {
   const barHeight = assetsBarHeight(ui?.filmstripCollapsed ?? false)
   const [dragging, setDragging] = useState(false)
   const t = useT()
+  const formatChanging = useUiStore((s) => s.formatChanging)
+  const applyingPreset = useUiStore((s) => s.applyingPreset)
+  const editingBlocked = formatChanging || applyingPreset
   useKeyboardShortcuts()
 
   const onDrop = async (e: DragEvent): Promise<void> => {
+    if (editingBlocked) { e.preventDefault(); return }
     if (!Array.from(e.dataTransfer.types).includes('Files')) return
     e.preventDefault()
     setDragging(false)
@@ -34,6 +39,8 @@ export function AppShell(): JSX.Element {
   return (
     <div
       className="flex h-screen w-screen flex-col bg-noir-bg"
+      aria-busy={editingBlocked}
+      onKeyDownCapture={(event) => { if (editingBlocked) { event.preventDefault(); event.stopPropagation() } }}
       onDragOver={(e) => {
         if (!Array.from(e.dataTransfer.types).includes('Files')) return
         e.preventDefault()
@@ -45,6 +52,9 @@ export function AppShell(): JSX.Element {
       onDrop={(e) => void onDrop(e)}
     >
       <TopBar />
+      {editingBlocked && <div className="fixed inset-0 z-[200] flex cursor-wait items-center justify-center bg-black/40" role="status" aria-live="polite">
+        <div className="rounded-xl border border-noir-border bg-noir-panel px-6 py-4 text-sm shadow-bubble">{t(formatChanging ? 'topbar.formatChanging' : 'presetLibrary.applying')}</div>
+      </div>}
       <div className="relative flex min-h-0 flex-1">
         {/* Esquerda: ferramentas (trilho de ícones + painel expansível, estilo Canva) */}
         <RightInspector />

@@ -21,6 +21,7 @@ interface CanvasExtra {
   showGuides: boolean
   showGrid: boolean
   layout?: PageLayout | null
+  compositionFrame?: CanvasSettings['compositionFrame']
 }
 
 export function rowToDumpItem(r: DumpItemRow): DumpItem {
@@ -36,7 +37,8 @@ export function rowToDumpItem(r: DumpItemRow): DumpItem {
     backgroundColor: r.canvas_background as CanvasBackground,
     showGuides: extra.showGuides,
     showGrid: extra.showGrid,
-    layout: extra.layout ?? null
+    layout: extra.layout ?? null,
+    compositionFrame: extra.compositionFrame
   }
   return {
     id: r.id,
@@ -73,7 +75,8 @@ export const dumpItemsRepo = {
           format: item.canvas.format,
           showGuides: item.canvas.showGuides,
           showGrid: item.canvas.showGrid,
-          layout: item.canvas.layout ?? null
+          layout: item.canvas.layout ?? null,
+          compositionFrame: item.canvas.compositionFrame
         }),
         created_at: now,
         updated_at: now
@@ -105,7 +108,8 @@ export const dumpItemsRepo = {
       showGuides: canvas.showGuides ?? extra.showGuides,
       showGrid: canvas.showGrid ?? extra.showGrid,
       // !== undefined (não ??): permite limpar o layout com null ("Livre / Sem layout").
-      layout: canvas.layout !== undefined ? canvas.layout : (extra.layout ?? null)
+      layout: canvas.layout !== undefined ? canvas.layout : (extra.layout ?? null),
+      compositionFrame: canvas.compositionFrame ?? extra.compositionFrame
     }
     const { clause, values } = buildUpdate({
       canvas_width: canvas.width,

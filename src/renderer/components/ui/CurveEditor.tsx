@@ -3,7 +3,7 @@ import type { CurveChannel, CurvePoint } from '@shared/types'
 import { sampleCurve, LUT_SIZE } from '../../../engine/pipeline/curveLut'
 
 const CHANNEL_COLOR: Record<CurveChannel, string> = {
-  rgb: '#e8e8e8',
+  rgb: 'currentColor',
   red: '#e05a5a',
   green: '#46c46a',
   blue: '#5a86e8'
@@ -90,19 +90,19 @@ export function CurveEditor({ points, channel, onChange, onChangeStart }: CurveE
       ref={ref}
       viewBox="0 0 100 100"
       preserveAspectRatio="none"
-      className="aspect-square w-full cursor-crosshair touch-none select-none rounded-md border border-noir-border bg-noir-bg"
+      className="aspect-square w-full cursor-crosshair touch-none select-none rounded-md border border-noir-border bg-noir-bg text-noir-text"
       onPointerDown={onAdd}
       onPointerMove={onMove}
       onPointerUp={onUp}
     >
       {[25, 50, 75].map((v) => (
-        <line key={`v${v}`} x1={v} y1={0} x2={v} y2={100} stroke="rgba(255,255,255,0.08)" strokeWidth={0.5} />
+        <line key={`v${v}`} x1={v} y1={0} x2={v} y2={100} stroke="var(--plot-grid)" strokeWidth={0.5} />
       ))}
       {[25, 50, 75].map((v) => (
-        <line key={`h${v}`} x1={0} y1={v} x2={100} y2={v} stroke="rgba(255,255,255,0.08)" strokeWidth={0.5} />
+        <line key={`h${v}`} x1={0} y1={v} x2={100} y2={v} stroke="var(--plot-grid)" strokeWidth={0.5} />
       ))}
       {/* Diagonal de referência (identidade). */}
-      <line x1={0} y1={100} x2={100} y2={0} stroke="rgba(255,255,255,0.14)" strokeWidth={0.5} />
+      <line x1={0} y1={100} x2={100} y2={0} stroke="var(--plot-grid)" strokeWidth={0.5} />
       <polyline points={pathPoints} fill="none" stroke={color} strokeWidth={1.4} strokeLinejoin="round" strokeLinecap="round" />
       {points.map((p, i) => (
         <circle
@@ -111,7 +111,7 @@ export function CurveEditor({ points, channel, onChange, onChangeStart }: CurveE
           cy={(1 - p.y) * 100}
           r={2.6}
           fill={color}
-          stroke="#0b0b0b"
+          stroke="var(--noir-bg)"
           strokeWidth={0.9}
           className="cursor-pointer"
           onPointerDown={(e) => onPointDown(i, e)}

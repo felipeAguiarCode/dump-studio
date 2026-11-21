@@ -97,7 +97,16 @@ const FILTER_INDEX: Record<PhotoFilterName, number> = {
   nost_washed_film: 33,
   nost_disposable: 34,
   nost_muted_vsco: 35,
-  nost_sun_faded: 36
+  nost_sun_faded: 36,
+  // Novos índices são sempre acrescentados para preservar os filtros de projetos existentes.
+  edit_porcelain: 37,
+  edit_satin: 38,
+  edit_graphite: 39,
+  edit_champagne: 40,
+  lab_cyanotype: 41,
+  lab_selenium: 42,
+  lab_lith: 43,
+  lab_solarized: 44
 }
 
 export interface PipelineUniforms {

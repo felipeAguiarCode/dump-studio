@@ -4,7 +4,7 @@ import type { PhotoFilterName } from './domain'
 /** Idiomas suportados pela interface. Inglês é o default global. */
 export type AppLanguage = 'en' | 'pt'
 
-export type RightTab = 'adjustments' | 'filters' | 'cameras' | 'shaders' | 'fx' | 'crop' | 'canvas' | 'layouts' | 'text'
+export type RightTab = 'presets' | 'adjustments' | 'filters' | 'cameras' | 'shaders' | 'fx' | 'crop' | 'canvas' | 'layouts' | 'text'
 export type GridType = 'off' | '3x3' | 'dense'
 export type ThumbnailView = 'large' | 'compact' | 'grid'
 
@@ -35,9 +35,13 @@ export interface ProjectUiState {
   updatedAt: string
 }
 
+export type AppTheme = 'instagram_light' | 'noir_dark'
+
 export interface UserPreferences {
   appearance: {
-    theme: 'noir_dark'
+    theme: AppTheme
+    /** Distinguishes an explicitly selectable theme from the old fixed dark default. */
+    themeVersion: 1
     /** Idioma da interface. Default 'en'. */
     language: AppLanguage
     density: 'compact' | 'comfortable'

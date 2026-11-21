@@ -1,13 +1,7 @@
-import type { SlotRect } from '@shared/types'
 import { coverRect } from './collageTemplates'
-
-export interface SlotTransform {
-  x: number
-  y: number
-  width: number
-  height: number
-  rotation: number
-}
+import type { SlotTransform } from '@shared/layoutGeometry'
+export type { SlotTransform } from '@shared/layoutGeometry'
+export { slotRectToTransform } from '@shared/layoutGeometry'
 
 /**
  * Geometria real (px do canvas) de um slot a partir do retângulo normalizado + gutter.
@@ -17,31 +11,6 @@ export interface SlotTransform {
  * o nó em torno do seu (x,y) (canto superior-esquerdo), recuamos o (x,y) de modo que,
  * após a rotação, o centro do painel caia exatamente no centro da célula.
  */
-export function slotRectToTransform(
-  slot: SlotRect,
-  canvas: { width: number; height: number },
-  gutter: number
-): SlotTransform {
-  const width = Math.max(1, slot.w * canvas.width - gutter)
-  const height = Math.max(1, slot.h * canvas.height - gutter)
-  const cx = slot.x * canvas.width + gutter / 2 + width / 2
-  const cy = slot.y * canvas.height + gutter / 2 + height / 2
-  const rotation = slot.rot ?? 0
-  if (!rotation) {
-    return { x: cx - width / 2, y: cy - height / 2, width, height, rotation: 0 }
-  }
-  const rad = (rotation * Math.PI) / 180
-  const cos = Math.cos(rad)
-  const sin = Math.sin(rad)
-  return {
-    x: cx - ((width / 2) * cos - (height / 2) * sin),
-    y: cy - ((width / 2) * sin + (height / 2) * cos),
-    width,
-    height,
-    rotation
-  }
-}
-
 /** Tipo mínimo de contexto para traçar um caminho (Konva.Context e CanvasRenderingContext2D). */
 interface PathCtx {
   beginPath(): void

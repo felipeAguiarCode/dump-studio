@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Palette, FolderCog, SlidersHorizontal, Upload, Save } from 'lucide-react'
+import { Palette, FolderCog, SlidersHorizontal, Upload, Save, Info } from 'lucide-react'
 import type { UserPreferences } from '@shared/types'
 import { INSTAGRAM_FORMATS } from '@shared/constants'
 import { FILTERS } from '../../../engine/filters/registry'
@@ -11,15 +11,17 @@ import { Toggle } from '../../components/ui/Toggle'
 import { Select } from '../../components/ui/Select'
 import { Slider } from '../../components/ui/Slider'
 import { cn } from '../../lib/cn'
+import { AboutContent } from './AboutDialog'
 
-type TabId = 'appearance' | 'project' | 'editing' | 'export' | 'autosave'
+type TabId = 'appearance' | 'project' | 'editing' | 'export' | 'autosave' | 'about'
 
 const TAB_META: { id: TabId; icon: JSX.Element }[] = [
   { id: 'appearance', icon: <Palette size={15} /> },
   { id: 'project', icon: <FolderCog size={15} /> },
   { id: 'editing', icon: <SlidersHorizontal size={15} /> },
   { id: 'export', icon: <Upload size={15} /> },
-  { id: 'autosave', icon: <Save size={15} /> }
+  { id: 'autosave', icon: <Save size={15} /> },
+  { id: 'about', icon: <Info size={15} /> }
 ]
 
 export function PreferencesDialog(): JSX.Element | null {
@@ -61,6 +63,12 @@ export function PreferencesDialog(): JSX.Element | null {
         <div className="min-w-0 flex-1">
           {tab === 'appearance' && (
             <Group>
+              <Select
+                label={t('preferences.theme')}
+                value={prefs.appearance.theme}
+                options={[{ value: 'instagram_light', label: t('preferences.themeLight') }, { value: 'noir_dark', label: t('preferences.themeDark') }]}
+                onChange={(theme) => setAppearance({ theme, themeVersion: 1 })}
+              />
               <Select
                 label={t('preferences.language')}
                 value={prefs.appearance.language}
@@ -139,7 +147,8 @@ export function PreferencesDialog(): JSX.Element | null {
             </Group>
           )}
 
-          <p className="mt-5 text-[10px] text-noir-disabled">{t('preferences.footer')}</p>
+          {tab === 'about' && <AboutContent />}
+          {tab !== 'about' && <p className="mt-5 text-[10px] text-noir-disabled">{t('preferences.footer')}</p>}
         </div>
       </div>
     </Modal>

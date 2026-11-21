@@ -2,6 +2,10 @@ import type { Dictionary } from './en'
 
 /** Dicionário português. Mesma estrutura de `en` (garantido pelo tipo `Dictionary`). */
 export const pt: Dictionary = {
+  about: {
+    title: 'Sobre o Noir Dump Studio',
+    version: 'Versão'
+  },
   common: {
     cancel: 'Cancelar',
     save: 'Salvar',
@@ -14,6 +18,7 @@ export const pt: Dictionary = {
   },
 
   inspector: {
+    presets: 'Presets',
     text: 'Texto',
     adjustments: 'Ajustes',
     filters: 'Filtros',
@@ -24,6 +29,39 @@ export const pt: Dictionary = {
     layouts: 'Layouts',
     shape: 'Forma',
     canvas: 'Canvas'
+  },
+
+  presetLibrary: {
+    library: 'Biblioteca de presets',
+    favorites: 'Favoritos', saveFavorite: 'Adicionar aos favoritos',
+    addFavorite: 'Adicionar {name} aos favoritos', removeFavorite: 'Remover {name} dos favoritos',
+    favoritesEmpty: 'Seus looks favoritos ficam aqui', favoritesHint: 'Marque a estrela de um preset ou escolha adicionar aos favoritos ao salvar.',
+    yourLibrary: 'Sua coleção de looks',
+    subtitle: 'Salve o visual completo de uma foto. Organize uma vez e use em qualquer projeto.',
+    target: 'Foto', selectPhoto: 'Selecione uma foto', locked: 'Bloqueada',
+    saveLook: 'Salvar preset', newPreset: 'Meu preset', copy: 'Copiar look', paste: 'Colar look',
+    search: 'Buscar presets ou pastas', folders: 'Pastas', newFolder: 'Nova pasta',
+    all: 'Todos os presets', root: 'Biblioteca', folder: 'Pasta', name: 'Nome',
+    editFolder: 'Editar pasta', deleteFolder: 'Excluir pasta', deletePreset: 'Excluir preset',
+    deletePresetConfirm: 'Excluir o preset “{name}” da biblioteca?',
+    deleteFolderConfirm: 'Excluir “{name}”, todas as subpastas e seus presets? Esta ação não pode ser desfeita.',
+    import: 'Importar JSON', export: 'Exportar JSON', importClipboard: 'Adicionar JSON copiado à biblioteca',
+    results: 'Resultados da busca', retry: 'Tentar novamente', empty: 'Seu próximo look autoral',
+    emptyHint: 'Edite uma foto e salve seu primeiro preset, ou importe uma coleção JSON.',
+    noResults: 'Nenhum preset encontrado', trySearch: 'Tente outro nome ou pasta.',
+    applyNamed: 'Aplicar {name}', actions: 'Ações de {name}', edit: 'Renomear / mover',
+    previous: 'Preset anterior', next: 'Próximo preset', oneClick: 'Um clique para aplicar',
+    selectHint: 'Selecione uma foto para salvar ou aplicar um look. Sua biblioteca está sempre disponível.',
+    lockedHint: 'Desbloqueie a foto selecionada para aplicar um preset.',
+    preserveHint: 'Um clique aplica o look completo. Recorte, posição e layout são preservados. Ctrl+Z desfaz.',
+    includes: 'Inclui todos os ajustes, curvas, gradação de cor, HSL, filtro, câmera, texturas, borda da foto e opacidade.',
+    includeFx: 'FX para incluir', fxHint: 'Os FX vinculados já estão marcados. Você pode incluir FX independentes da página; a posição se adapta à foto de destino.',
+    noFx: 'Nenhum FX disponível nesta página.', applying: 'Atualizando sua edição…',
+    saved: 'Preset salvo na biblioteca.', copied: 'Look copiado. Cole com Ctrl+Shift+V.',
+    imported: '{count} preset(s) importado(s). Os presets existentes foram preservados.', exported: 'Presets exportados em JSON.',
+    failed: 'Não foi possível concluir. Verifique se a foto e seus FX estão desbloqueados e tente novamente.',
+    invalidJson: 'Não foi possível importar este JSON. Use um arquivo válido de presets do Noir (até 10 MB).',
+    invalidClipboard: 'Copie um preset do Noir antes de colar um look.'
   },
 
   fxPanel: {
@@ -145,7 +183,9 @@ export const pt: Dictionary = {
       cinematic: { label: 'Cinematográfico', description: 'Looks de cinema' },
       aesthetic: { label: 'Aesthetic', description: 'Estética para redes' },
       vintage: { label: 'Vintage', description: 'Filmes retrô' },
-      nostalgic: { label: 'Nostalgic', description: 'Fotos antigas lavadas' }
+      nostalgic: { label: 'Nostalgic', description: 'Fotos antigas lavadas' },
+      editorial: { label: 'Editorial', description: 'Retratos e acabamentos de revista' },
+      laboratory: { label: 'Laboratório', description: 'Releituras de processos fotográficos' }
     },
     items: {
       high_contrast_bw: { label: 'Preto e Branco Alto Contraste', description: 'Contraste intenso com pretos profundos e brancos brilhantes.' },
@@ -183,19 +223,33 @@ export const pt: Dictionary = {
       nost_washed_film: { label: 'Filme Lavado', description: 'Fade frio com sombras azuladas e luzes suaves, no estilo VSCO analógico.' },
       nost_disposable: { label: 'Câmera Descartável', description: 'Flash direto dos anos 90: sombras esverdeadas, luzes amareladas e leve punch.' },
       nost_muted_vsco: { label: 'Suave Fosco', description: 'Bem dessaturado e fosco, com um toque magenta — o mínimo aesthetic do VSCO.' },
-      nost_sun_faded: { label: 'Desbotado ao Sol', description: 'Fade extremo com realces âmbar e sombras magenta, como foto esquecida ao sol.' }
+      nost_sun_faded: { label: 'Desbotado ao Sol', description: 'Fade extremo com realces âmbar e sombras magenta, como foto esquecida ao sol.' },
+      edit_porcelain: { label: 'Porcelana', description: 'Cor delicada, sombras abertas e realces suaves para retratos luminosos.' },
+      edit_satin: { label: 'Cetim', description: 'Acabamento fosco discreto, sombras frias e luzes levemente quentes.' },
+      edit_graphite: { label: 'Grafite', description: 'Preto e branco limpo, com contraste firme e um toque frio nas luzes.' },
+      edit_champagne: { label: 'Champagne', description: 'Realces dourados delicados, tons de pele quentes e cor equilibrada.' },
+      lab_cyanotype: { label: 'Cianotipia', description: 'Monocromia azul da Prússia com realces de papel claro.' },
+      lab_selenium: { label: 'Selênio', description: 'Viragem fria com sombras violeta e gradação prateada.' },
+      lab_lith: { label: 'Lith', description: 'Pretos densos e realces de papel creme em uma viragem quente e contrastada.' },
+      lab_solarized: { label: 'Solarização', description: 'Altas luzes invertidas, com transições tonais surreais.' }
     }
   },
 
   preferences: {
     title: 'Preferências',
+    theme: 'Tema da interface',
+    themeLight: 'White · Inspirado no Instagram',
+    themeDark: 'Noir · Escuro',
+    switchToLight: 'Mudar para a interface branca',
+    switchToDark: 'Mudar para Noir escuro',
     language: 'Idioma',
     tabs: {
       appearance: 'Aparência',
       project: 'Projeto',
       editing: 'Edição',
       export: 'Exportação',
-      autosave: 'Autosave'
+      autosave: 'Autosave',
+      about: 'Sobre'
     },
     density: 'Densidade',
     comfortable: 'Confortável',
@@ -257,7 +311,17 @@ export const pt: Dictionary = {
     saved: 'Salvo',
     savedAt: 'Salvo às {time}',
     saveError: 'Erro ao salvar',
-    formatTooltip: 'Formato do Instagram',
+    formatTooltip: 'Formato do projeto',
+    formatHint: 'Altera todas as páginas. Fotos, textos e layouts mantêm suas proporções; as margens usam o fundo da tela. Desfaça com Ctrl+Z.',
+    formatChanging: 'Alterando formato do projeto…',
+    formatChanged: 'Formato atualizado em todas as páginas',
+    formatFailed: 'Não foi possível trocar o formato. Suas edições foram preservadas; tente novamente.',
+    posts: 'Posts',
+    feedStories: 'Feed e Stories',
+    formatNames: {
+      portrait_post_3_4: 'Retrato', square_post_1_1: 'Quadrado', landscape_post_191: 'Horizontal',
+      ultrawide_post: 'Ultrapanorâmico', feed_4_5: 'Feed vertical', story_reel_9_16: 'Stories / Reels'
+    },
     formatChangeWarning: 'Trocar para {format} pode reenquadrar as imagens.',
     switch: 'Trocar'
   },
@@ -356,7 +420,7 @@ export const pt: Dictionary = {
     subtitle: 'Texturas e efeitos empilháveis — aplicado só nesta foto.',
     removeAll: 'Remover todos os efeitos',
     intensity: 'Intensidade',
-    sessions: { screen: 'Tela & Sinal', film: 'Filme & Grão', leak: 'Vazamentos', surface: 'Superfície', aging: 'Tempo & Desgaste', games: 'Games', fisheye: 'Fisheye' },
+    sessions: { screen: 'Tela & Sinal', film: 'Filme & Grão', leak: 'Vazamentos', surface: 'Superfície', aging: 'Tempo & Desgaste', games: 'Aberrações Cromáticas', fisheye: 'Fisheye' },
     effects: {
       crt: { label: 'CRT', description: 'Scanlines, máscara de fósforo e aberração de monitor antigo.' },
       vhs: { label: 'VHS', description: 'Sangramento de croma, jitter de linha e faixas de tracking.' },
@@ -685,12 +749,5 @@ export const pt: Dictionary = {
 
   shortcuts: {
     saved: 'Salvo'
-  },
-
-  license: {
-    expiredTitle: 'Licença expirada',
-    expiredBody:
-      'Seu acesso ao Noir Dump Studio terminou em {date}. Para continuar usando o app, adquira uma licença.',
-    buy: 'Comprar licença'
   }
 }

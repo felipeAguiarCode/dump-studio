@@ -41,7 +41,7 @@ export function CarouselDots(): JSX.Element | null {
           aria-label={t('canvas.carousel.goToPage', { n: i + 1 })}
           className={cn(
             'h-1.5 rounded-full transition-all',
-            i === activeIndex ? 'w-4 bg-noir-white' : 'w-1.5 bg-noir-muted/40 hover:bg-noir-muted'
+            i === activeIndex ? 'w-4 bg-brand-accent' : 'w-1.5 bg-noir-muted/40 hover:bg-noir-muted'
           )}
         />
       ))}
@@ -60,7 +60,7 @@ export function CarouselDots(): JSX.Element | null {
         }}
         aria-label={t('canvas.carousel.deleteCurrentPage')}
         title={t('canvas.carousel.deleteCurrentPage')}
-        className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-noir-muted/40 text-noir-muted transition-colors hover:border-red-400 hover:text-red-300"
+        className="flex h-3.5 w-3.5 items-center justify-center rounded-full border border-noir-muted/40 text-noir-muted transition-colors hover:border-red-400 hover:text-noir-danger"
       >
         <Minus size={9} />
       </button>
@@ -79,7 +79,7 @@ export function CarouselDots(): JSX.Element | null {
           </button>
           <button
             onClick={() => { const id = menu.id; setMenu(null); confirmDelete(id) }}
-            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-xs text-red-300 hover:bg-red-500/10"
+            className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-xs text-noir-danger hover:bg-red-500/10"
           >
             <Trash2 size={13} /> {t('canvas.carousel.deletePage')}
           </button>

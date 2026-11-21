@@ -17,7 +17,6 @@ import {
   SignalZero,
   Antenna,
   AlignJustify,
-  Gamepad2,
   Gamepad,
   Drama,
   Ghost,
@@ -128,8 +127,8 @@ const TEXTURE_SESSIONS: TextureSession[] = [
   },
   {
     id: 'games',
-    label: 'Games',
-    icon: <Gamepad2 size={13} />,
+    label: 'Aberrações Cromáticas',
+    icon: <Rainbow size={13} />,
     effects: [
       { key: 'personaRed', label: 'Fantasma Vermelho', description: 'Eco/silhueta vermelha com duotone carmesim, estilo JRPG ousado.', icon: <Drama size={15} /> },
       { key: 'personaBlue', label: 'Fantasma Azul', description: 'Contornos e eco azuis com clima melancólico.', icon: <Ghost size={15} /> },

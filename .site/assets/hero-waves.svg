@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1100" viewBox="0 0 1800 1100" fill="none">
+  <defs>
+    <linearGradient id="paper" x1="100" y1="40" x2="1700" y2="1000" gradientUnits="userSpaceOnUse"><stop stop-color="#F2E7FF"/><stop offset=".5" stop-color="#FFE5F0"/><stop offset="1" stop-color="#FFEBD8"/></linearGradient>
+    <linearGradient id="wave" x1="90" y1="760" x2="1770" y2="310" gradientUnits="userSpaceOnUse"><stop stop-color="#7135D2"/><stop offset=".39" stop-color="#C52AA0"/><stop offset=".7" stop-color="#F04779"/><stop offset="1" stop-color="#FFAC62"/></linearGradient>
+    <linearGradient id="crest" x1="100" y1="900" x2="1650" y2="450" gradientUnits="userSpaceOnUse"><stop stop-color="#974BDE"/><stop offset=".45" stop-color="#EF67B0"/><stop offset=".76" stop-color="#FF9789"/><stop offset="1" stop-color="#FFD597"/></linearGradient>
+    <linearGradient id="sky" x1="700" y1="0" x2="1700" y2="330" gradientUnits="userSpaceOnUse"><stop stop-color="#D6BDFF"/><stop offset=".5" stop-color="#F3A1D6"/><stop offset="1" stop-color="#FFC891"/></linearGradient>
+  </defs>
+  <path fill="url(#paper)" d="M0 0h1800v1100H0z"/>
+  <path d="M470-140C790 230 1030-150 1430 90c180 108 300 100 480 42V-140Z" fill="url(#sky)" opacity=".55"/>
+  <path class="wave-back" d="M-180 760C170 450 425 1090 940 635s630-635 1000-400v1000H-180Z" fill="url(#wave)" opacity=".53"/>
+  <path class="wave-front" d="M-170 945C150 570 490 1150 1010 755s610-505 930-365v850H-170Z" fill="url(#crest)" opacity=".85"/>
+  <path class="wave-low" d="M-100 1050C225 760 520 1230 1120 900s650-470 840-350v700H-100Z" fill="url(#wave)" opacity=".48"/>
+  <path class="wave-back" d="M-180 760C170 450 425 1090 940 635s630-635 1000-400" stroke="white" stroke-width="2" opacity=".5"/>
+  <path class="wave-front" d="M-170 945C150 570 490 1150 1010 755s610-505 930-365" stroke="white" stroke-width="2" opacity=".55"/>
+</svg>

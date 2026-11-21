@@ -19,12 +19,12 @@ export function Toggle({
         onClick={() => onChange(!checked)}
         className={cn(
           'relative h-5 w-9 shrink-0 rounded-full transition-colors',
-          checked ? 'bg-noir-text' : 'bg-noir-border'
+          checked ? 'brand-primary' : 'bg-noir-border'
         )}
       >
         <span
           className={cn(
-            'absolute top-0.5 h-4 w-4 rounded-full bg-noir-bg transition-transform',
+            'absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform',
             checked ? 'left-0.5 translate-x-4' : 'left-0.5'
           )}
         />

@@ -5,18 +5,23 @@ module.exports = {
     extend: {
       colors: {
         noir: {
-          bg: '#151616', // backdrop da aplicação (fora do canvas)
-          panel: '#2D2D2D', // chrome: barras laterais, topo e dock (tom Lightroom)
-          elevated: '#3A3A3A', // superfícies elevadas sobre o chrome (menus, diálogos)
-          border: '#464646',
-          'border-active': '#F5F5F5',
-          text: '#F2F2F2',
-          muted: '#A0A0A0',
-          disabled: '#777777',
-          canvas: '#151616', // área ao redor do canvas, dentro do editor
+          bg: 'rgb(var(--noir-bg-rgb) / <alpha-value>)',
+          panel: 'rgb(var(--noir-panel-rgb) / <alpha-value>)',
+          elevated: 'rgb(var(--noir-elevated-rgb) / <alpha-value>)',
+          border: 'rgb(var(--noir-border-rgb) / <alpha-value>)',
+          'border-active': 'rgb(var(--noir-border-active-rgb) / <alpha-value>)',
+          text: 'rgb(var(--noir-text-rgb) / <alpha-value>)',
+          muted: 'rgb(var(--noir-muted-rgb) / <alpha-value>)',
+          disabled: 'rgb(var(--noir-disabled-rgb) / <alpha-value>)',
+          canvas: 'rgb(var(--noir-canvas-rgb) / <alpha-value>)',
           white: '#FFFFFF',
-          hover: '#424242',
-          selection: '#4F4F4F'
+          hover: 'rgb(var(--noir-hover-rgb) / <alpha-value>)',
+          selection: 'rgb(var(--noir-selection-rgb) / <alpha-value>)',
+          danger: 'rgb(var(--noir-danger-rgb) / <alpha-value>)'
+        },
+        brand: {
+          accent: 'rgb(var(--brand-accent-rgb) / <alpha-value>)',
+          soft: 'rgb(var(--brand-soft-rgb) / <alpha-value>)'
         }
       },
       fontFamily: {
@@ -26,8 +31,9 @@ module.exports = {
         '2xs': ['0.6875rem', { lineHeight: '1rem' }]
       },
       boxShadow: {
-        bubble: '0 8px 30px rgba(0,0,0,0.6)',
-        panel: '0 2px 16px rgba(0,0,0,0.5)'
+        bubble: 'var(--shadow-bubble)',
+        panel: 'var(--shadow-panel)',
+        dock: 'var(--shadow-dock)'
       }
     }
   },

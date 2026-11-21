@@ -23,7 +23,7 @@ export function ToastSystem(): JSX.Element {
             key={toast.id}
             className={cn(
               'pointer-events-auto flex items-center gap-2.5 rounded-lg border bg-noir-elevated px-3.5 py-2.5 text-sm shadow-bubble',
-              toast.kind === 'error' ? 'border-red-500/40 text-red-200' : 'border-noir-border text-noir-text'
+              toast.kind === 'error' ? 'border-red-500/40 text-noir-danger' : 'border-noir-border text-noir-text'
             )}
           >
             <Icon size={16} className={toast.kind === 'success' ? 'text-noir-text' : undefined} />

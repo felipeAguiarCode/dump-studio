@@ -32,7 +32,7 @@ export function TextToolPanel(): JSX.Element {
         <button
           onClick={addText}
           disabled={!activeItem}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-noir-text py-2 text-xs font-medium text-noir-bg transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex w-full items-center justify-center gap-2 rounded-md brand-primary py-2 text-xs font-medium  transition-colors  disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Plus size={14} /> {t('textPanel.addText')}
         </button>

@@ -11,10 +11,10 @@ const RETRY_MS = 1500
  * - Debounce para sliders; flush imediato para mudanças estruturais.
  * - Fila persistente + retry: um patch nunca é descartado em falha.
  */
-class AutosaveClient {
+export class AutosaveClient {
   private pending = new Map<string, AutosavePatch>()
   private timer: ReturnType<typeof setTimeout> | null = null
-  private inFlight = false
+  private inFlight: Promise<boolean> | null = null
 
   enqueue(patch: AutosavePatch, opts?: { immediate?: boolean }): void {
     const key = keyOf(patch)
@@ -36,8 +36,19 @@ class AutosaveClient {
   }
 
   async flush(): Promise<void> {
-    if (this.inFlight) return
-    if (this.pending.size === 0) return
+    await this.flushBatch()
+  }
+
+  /** Wait for every pending and in-flight save before a structural change. */
+  async drain(): Promise<void> {
+    while (this.inFlight || this.pending.size > 0) {
+      if (!await this.flushBatch()) throw new Error('Pending edits could not be saved')
+    }
+  }
+
+  private flushBatch(): Promise<boolean> {
+    if (this.inFlight) return this.inFlight
+    if (this.pending.size === 0) return Promise.resolve(true)
     if (this.timer) {
       clearTimeout(this.timer)
       this.timer = null
@@ -45,26 +56,29 @@ class AutosaveClient {
 
     const batch = [...this.pending.values()]
     this.pending.clear()
-    this.inFlight = true
     useUiStore.getState().setSaveStatus('saving')
 
-    try {
-      const { savedAt } = await ipc('autosave:patch', batch)
-      this.inFlight = false
-      useUiStore.getState().setSaveStatus('saved', savedAt)
-      // Se chegaram patches durante o envio, agenda novamente.
-      if (this.pending.size > 0) this.schedule()
-    } catch {
-      this.inFlight = false
-      // Recoloca os patches no início da fila (sem sobrescrever os mais novos).
-      for (const patch of batch) {
-        const key = keyOf(patch)
-        const newer = this.pending.get(key)
-        this.pending.set(key, newer ? merge(patch, newer) : patch)
+    const work = (async (): Promise<boolean> => {
+      try {
+        const { savedAt } = await ipc('autosave:patch', batch)
+        useUiStore.getState().setSaveStatus('saved', savedAt)
+        if (this.pending.size > 0) this.schedule()
+        return true
+      } catch {
+        for (const patch of batch) {
+          const key = keyOf(patch)
+          const newer = this.pending.get(key)
+          this.pending.set(key, newer ? merge(patch, newer) : patch)
+        }
+        useUiStore.getState().setSaveStatus('error')
+        setTimeout(() => void this.flush(), RETRY_MS)
+        return false
+      } finally {
+        this.inFlight = null
       }
-      useUiStore.getState().setSaveStatus('error')
-      setTimeout(() => void this.flush(), RETRY_MS)
-    }
+    })()
+    this.inFlight = work
+    return work
   }
 }
 

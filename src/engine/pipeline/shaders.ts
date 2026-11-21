@@ -39,8 +39,8 @@ uniform float uFilmGrain, uDarkGrainy, uConcrete, uGrunge, uGlitch, uDustVintage
 uniform float uSignalLoss, uInterference, uScanlines;
 uniform float uLightLeak, uLeakStreak, uLeakRainbow, uLeakEdge, uLeakSpot; // sessão Leak
 uniform float uFilmBloom, uAnamorphic;   // extras de Filme & Grão
-uniform float uPersonaRed, uPersonaBlue, uDarkKnight, uCyberNeon, uInkToon, uDreadFog; // sessão Games
-uniform float uPixelArt, uGameboy, uThermal, uVaporwave; // extras de Games
+uniform float uPersonaRed, uPersonaBlue, uDarkKnight, uCyberNeon, uInkToon, uDreadFog; // aberrações cromáticas
+uniform float uPixelArt, uGameboy, uThermal, uVaporwave; // efeitos de cor
 uniform float uFisheye, uAntiFisheye; // distorção de lente radial (barril / pincushion)
 // Color grading (split-toning) + Color mixer (HSL)
 uniform vec3 uCgShadows, uCgMidtones, uCgHighlights, uCgGlobal;
@@ -307,10 +307,63 @@ vec3 applyNostalgic(vec3 c, int f){
   return clamp(r, 0.0, 1.0);
 }
 
+// Editorial: controlled contrast and restrained color for portraits and print-like finishes.
+vec3 applyEditorial(vec3 c, int f){
+  float l = luma(c);
+  float hi = smoothstep(0.45, 1.0, l);
+  float lo = 1.0 - smoothstep(0.0, 0.55, l);
+  vec3 r = c;
+  if (f == 37) {                                                        // Porcelain
+    r = mix(vec3(l), c, 0.78);
+    r = (r - 0.5) * 0.90 + 0.5;
+    r += vec3(0.022, 0.012, 0.005) * lo;
+    r = mix(r, vec3(0.98, 0.965, 0.95), hi * 0.10);
+  } else if (f == 38) {                                                 // Satin
+    r = mix(vec3(l), c, 0.86);
+    r = r * 0.92 + 0.045;
+    r += vec3(-0.014, 0.0, 0.022) * lo;
+    r += vec3(0.025, 0.012, -0.01) * hi;
+  } else if (f == 39) {                                                 // Graphite
+    float tone = sCurve(l, 0.62);
+    tone = (tone - 0.5) * 1.12 + 0.5;
+    r = vec3(tone) + vec3(-0.008, 0.0, 0.014) * hi;
+  } else if (f == 40) {                                                 // Champagne
+    r = mix(vec3(l), c, 0.94);
+    r = (r - 0.5) * 0.98 + 0.5;
+    r += vec3(0.045, 0.022, -0.018) * hi;
+    r += vec3(0.012, 0.003, -0.006) * lo;
+  }
+  return clamp(r, 0.0, 1.0);
+}
+
+// Laboratory: tonal reinterpretations of darkroom processes, using the same export pipeline.
+vec3 applyLaboratory(vec3 c, int f){
+  float l = luma(c);
+  float tone = sCurve(l, 0.40);
+  vec3 r = c;
+  if (f == 41) {                                                        // Cyanotype
+    r = mix(vec3(0.012, 0.045, 0.19), vec3(0.96, 0.975, 0.93), pow(tone, 1.12));
+  } else if (f == 42) {                                                 // Selenium
+    r = mix(vec3(0.045, 0.028, 0.060), vec3(0.955, 0.960, 0.98), tone);
+    r = (r - 0.5) * 1.08 + 0.5;
+  } else if (f == 43) {                                                 // Lith
+    tone = pow(sCurve(l, 0.92), 0.88);
+    r = mix(vec3(0.055, 0.026, 0.012), vec3(0.985, 0.88, 0.67), tone);
+  } else if (f == 44) {                                                 // Solarization
+    tone = l <= 0.62 ? l / 0.62 : 1.0 - (l - 0.62) / 0.38;
+    r = vec3(sCurve(tone, 0.45)) * vec3(0.98, 1.0, 1.015);
+  }
+  return clamp(r, 0.0, 1.0);
+}
+
 vec3 applyFilter(vec3 c, vec3 colorBase, int f, float t){
   if (f == 0) return c;
   vec3 r = c;
-  if (f >= 32) {                                                          // Sessão Nostalgic (cor)
+  if (f >= 41) {                                                        // Laboratory
+    r = applyLaboratory(colorBase, f);
+  } else if (f >= 37) {                                                 // Editorial
+    r = applyEditorial(colorBase, f);
+  } else if (f >= 32) {                                                   // Sessão Nostalgic (cor)
     r = applyNostalgic(colorBase, f);
   } else if (f >= 27) {                                                   // Sessão Vintage (cor)
     r = applyVintage(colorBase, f);
@@ -652,7 +705,7 @@ void main(){
     outc += uScanlines * 0.04 * (1.0 - sl);                                // leve realce entre linhas
   }
 
-  // ===== Sessão Games (estéticas inspiradas em jogos) =====
+  // ===== Aberrações cromáticas e efeitos de cor =====
 
   // Fantasma Vermelho (JRPG estiloso, ex. Persona 5): eco/silhueta vermelha deslocada + duotone carmesim.
   if (uPersonaRed > 0.001) {
@@ -832,7 +885,7 @@ void main(){
     outc = clamp(outc, 0.0, 1.0);
   }
 
-  // ===== Extras de Games =====
+  // ===== Efeitos de cor adicionais =====
 
   // Pixel Art: pixeliza (grade) + reduz a paleta, estilo console retrô.
   if (uPixelArt > 0.001) {

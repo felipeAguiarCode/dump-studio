@@ -27,6 +27,8 @@ export function CanvasStage({ item, width, height }: Props): JSX.Element {
   const selectedIds = useEditorStore((s) => s.ui?.selectedLayerIds ?? [])
   const quickMenu = useEditorStore((s) => s.ui?.quickMenu)
   const lineThickness = usePreferencesStore((s) => s.prefs?.appearance.overlayLineThickness ?? 2)
+  const darkTheme = usePreferencesStore((s) => s.prefs?.appearance.theme === 'noir_dark')
+  const selectionColor = darkTheme ? '#efa0cc' : '#b71e70'
   const tool = useUiStore((s) => s.tool)
   const setTool = useUiStore((s) => s.setTool)
   const setRotationHint = useUiStore((s) => s.setRotationHint)
@@ -364,8 +366,8 @@ export function CanvasStage({ item, width, height }: Props): JSX.Element {
 
   if (width <= 0 || height <= 0) return <div />
 
-  // Tamanho constante na tela (compensa a escala do grupo).
-  const anchorSize = 9 / scale
+  // Transformer already uses screen coordinates; scaling again enlarges handles when zoomed out.
+  const anchorSize = 9
 
   return (
     <Stage
@@ -390,7 +392,7 @@ export function CanvasStage({ item, width, height }: Props): JSX.Element {
             strokeWidth={1 / scale}
             shadowColor="#000000"
             shadowBlur={40 / scale}
-            shadowOpacity={0.6}
+            shadowOpacity={darkTheme ? 0.6 : 0.16}
             listening={false}
             fill={resolveBackground(background) ? undefined : '#0b0b0b'}
           />
@@ -461,7 +463,7 @@ export function CanvasStage({ item, width, height }: Props): JSX.Element {
                 width={rect.width}
                 height={rect.height}
                 rotation={rect.rotation}
-                stroke="#F5F5F5"
+                stroke={selectionColor}
                 strokeWidth={2 / scale}
                 opacity={0.55}
                 listening={false}
@@ -482,13 +484,13 @@ export function CanvasStage({ item, width, height }: Props): JSX.Element {
             ref={trRef}
             rotateEnabled
             anchorSize={anchorSize}
-            anchorStrokeWidth={1 / scale}
-            anchorStroke="#F5F5F5"
-            anchorFill="#0b0b0b"
-            borderStroke="#F5F5F5"
-            borderStrokeWidth={1 / scale}
-            anchorCornerRadius={2 / scale}
-            rotateAnchorOffset={24 / scale}
+            anchorStrokeWidth={1}
+            anchorStroke={selectionColor}
+            anchorFill={darkTheme ? '#0b0b0b' : '#ffffff'}
+            borderStroke={selectionColor}
+            borderStrokeWidth={1}
+            anchorCornerRadius={2}
+            rotateAnchorOffset={24}
             ignoreStroke
             boundBoxFunc={(oldBox, newBox) => (newBox.width < 8 || newBox.height < 8 ? oldBox : newBox)}
             onTransform={() => {
@@ -512,8 +514,8 @@ export function CanvasStage({ item, width, height }: Props): JSX.Element {
             y={marquee.y}
             width={marquee.w}
             height={marquee.h}
-            fill="rgba(245,245,245,0.06)"
-            stroke="#F5F5F5"
+            fill="rgba(183,30,112,0.10)"
+            stroke={selectionColor}
             strokeWidth={1}
             dash={[4, 3]}
           />

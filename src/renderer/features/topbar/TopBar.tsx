@@ -26,6 +26,7 @@ import { FormatDropdown } from './FormatDropdown'
 import { ZoomControl } from './ZoomControl'
 import { formatTime } from '../../lib/format'
 import { cn } from '../../lib/cn'
+import { ThemeToggle } from '../../components/ui/ThemeToggle'
 
 export function TopBar(): JSX.Element {
   const project = useEditorStore((s) => s.project)
@@ -130,6 +131,7 @@ export function TopBar(): JSX.Element {
         <IconButton label={t('topbar.preferences')} onClick={() => openDialog('preferences')}>
           <Settings size={17} />
         </IconButton>
+        <ThemeToggle />
       </div>
     </header>
   )
@@ -144,7 +146,7 @@ function SaveStatus(): JSX.Element | null {
     <div
       className={cn(
         'mr-1 flex items-center gap-1.5 text-2xs',
-        status === 'error' ? 'text-red-300' : 'text-noir-muted'
+        status === 'error' ? 'text-noir-danger' : 'text-noir-muted'
       )}
     >
       {status === 'saving' && <Loader2 size={12} className="animate-spin" />}

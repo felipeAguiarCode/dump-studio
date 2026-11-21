@@ -10,7 +10,7 @@ export type CanvasTool =
   | 'text'
   | 'shape'
   | 'zoom'
-export type DialogKind = 'export' | 'preferences' | 'snapshots' | 'newProject' | 'preview' | null
+export type DialogKind = 'export' | 'preferences' | 'snapshots' | 'newProject' | 'preview' | 'about' | null
 
 export interface Toast {
   id: number
@@ -32,6 +32,9 @@ interface UiState {
   view: AppView
   tool: CanvasTool
   saveStatus: SaveStatus
+  formatChanging: boolean
+  applyingPreset: boolean
+  presetSaveRequested: boolean
   lastSavedAt: string | null
   toasts: Toast[]
   activeDialog: DialogKind
@@ -40,6 +43,9 @@ interface UiState {
   confirm: ConfirmRequest | null
 
   setView: (view: AppView) => void
+  setFormatChanging: (changing: boolean) => void
+  setApplyingPreset: (applying: boolean) => void
+  setPresetSaveRequested: (requested: boolean) => void
   setTool: (tool: CanvasTool) => void
   setRotationHint: (hint: UiState['rotationHint']) => void
   requestConfirm: (req: ConfirmRequest) => void
@@ -57,6 +63,9 @@ export const useUiStore = create<UiState>((set) => ({
   view: 'home',
   tool: 'select',
   saveStatus: 'idle',
+  formatChanging: false,
+  applyingPreset: false,
+  presetSaveRequested: false,
   lastSavedAt: null,
   toasts: [],
   activeDialog: null,
@@ -64,6 +73,9 @@ export const useUiStore = create<UiState>((set) => ({
   confirm: null,
 
   setView: (view) => set({ view }),
+  setFormatChanging: (formatChanging) => set({ formatChanging }),
+  setApplyingPreset: (applyingPreset) => set({ applyingPreset }),
+  setPresetSaveRequested: (presetSaveRequested) => set({ presetSaveRequested }),
   setTool: (tool) => set({ tool }),
   setRotationHint: (rotationHint) => set({ rotationHint }),
   requestConfirm: (confirm) => set({ confirm }),

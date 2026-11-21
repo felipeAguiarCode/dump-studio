@@ -46,9 +46,24 @@ export const projectActions = {
   async setFormat(format: import('@shared/constants').InstagramFormat): Promise<void> {
     const editor = useEditorStore.getState()
     if (!editor.project || editor.project.format === format) return
-    editor.captureHistory()
-    const updated = await ipc('projects:setFormat', { id: editor.project.id, format })
-    editor.setProject(updated)
+    const ui = useUiStore.getState()
+    if (ui.formatChanging) return
+    ui.setFormatChanging(true)
+    try {
+      await autosaveClient.drain()
+      const current = useEditorStore.getState()
+      if (!current.project) return
+      const updated = await ipc('projects:setFormat', { id: current.project.id, format })
+      current.captureHistory()
+      current.setProject(updated)
+      current.resetView()
+      ui.pushToast('success', t('topbar.formatChanged'))
+    } catch (error) {
+      console.error('[format] could not resize project:', error)
+      ui.pushToast('error', t('topbar.formatFailed'))
+    } finally {
+      ui.setFormatChanging(false)
+    }
   },
 
   /** Abre o seletor e importa fotos para o POOL do projeto. */

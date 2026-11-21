@@ -60,7 +60,7 @@ export function PhotosAssetsPanel(): JSX.Element {
   }
 
   return (
-    <div className="border-t border-noir-border bg-noir-panel shadow-[0_-10px_28px_rgba(0,0,0,0.45)]">
+    <div className="border-t border-noir-border bg-noir-panel shadow-dock">
       <div className="flex h-10 items-center gap-3 px-4">
         <span className="text-2xs font-semibold uppercase tracking-[0.14em] text-noir-muted">Photos Assets</span>
         <span className="text-2xs text-noir-disabled">
@@ -108,7 +108,7 @@ export function PhotosAssetsPanel(): JSX.Element {
                     {used > 0 && (
                       <span className="absolute right-1 top-1 rounded bg-black/60 px-1 text-[9px] font-medium text-noir-text">{used}×</span>
                     )}
-                    <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-center gap-0.5 bg-gradient-to-t from-black/70 to-transparent py-1 text-[9px] font-medium text-noir-text opacity-0 transition-opacity group-hover:opacity-100">
+                    <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-center gap-0.5 bg-gradient-to-t from-black/70 to-transparent py-1 text-[9px] font-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
                       <Plus size={11} /> {t('assets.add')}
                     </span>
                   </div>

@@ -57,7 +57,7 @@ export function SnapshotsDialog(): JSX.Element | null {
           <button
             onClick={() => void create()}
             disabled={busy}
-            className="inline-flex items-center gap-1.5 rounded-md bg-noir-text px-3 py-2 text-xs font-medium text-noir-bg hover:bg-white disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-md brand-primary px-3 py-2 text-xs font-medium   disabled:opacity-50"
           >
             <Save size={14} /> {t('snapshotsDialog.saveState')}
           </button>
@@ -81,7 +81,7 @@ export function SnapshotsDialog(): JSX.Element | null {
                 {confirmRestore === s.id ? (
                   <div className="flex items-center gap-1.5">
                     <span className="text-2xs text-noir-muted">{t('snapshotsDialog.replaceCurrent')}</span>
-                    <button onClick={() => void restore(s.id)} className="rounded-md bg-noir-text px-2 py-1 text-2xs font-medium text-noir-bg hover:bg-white">{t('common.restore')}</button>
+                    <button onClick={() => void restore(s.id)} className="rounded-md brand-primary px-2 py-1 text-2xs font-medium  ">{t('common.restore')}</button>
                     <button onClick={() => setConfirmRestore(null)} className="rounded-md border border-noir-border px-2 py-1 text-2xs hover:bg-noir-hover">{t('common.cancel')}</button>
                   </div>
                 ) : (
@@ -92,7 +92,7 @@ export function SnapshotsDialog(): JSX.Element | null {
                     <button
                       onClick={async () => { await ipc('snapshots:delete', { snapshotId: s.id }); void refresh() }}
                       title={t('common.delete')}
-                      className="rounded-md p-1.5 text-red-300 hover:bg-red-500/10"
+                      className="rounded-md p-1.5 text-noir-danger hover:bg-red-500/10"
                     >
                       <Trash2 size={14} />
                     </button>

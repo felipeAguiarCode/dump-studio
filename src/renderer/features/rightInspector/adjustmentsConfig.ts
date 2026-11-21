@@ -24,8 +24,8 @@ export interface GroupDef {
   sliders: SliderDef[]
 }
 
-const TEMP_GRAD = 'linear-gradient(90deg,#5b7fb0,#2a2a2a,#b0925b)'
-const TINT_GRAD = 'linear-gradient(90deg,#5bb07f,#2a2a2a,#b05ba0)'
+const TEMP_GRAD = 'linear-gradient(90deg,#5b7fb0,rgb(var(--noir-border-rgb)),#b0925b)'
+const TINT_GRAD = 'linear-gradient(90deg,#5bb07f,rgb(var(--noir-border-rgb)),#b05ba0)'
 
 export const ADJUSTMENT_GROUPS: GroupDef[] = [
   {

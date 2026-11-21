@@ -1,4 +1,4 @@
-import { SlidersHorizontal, Wand2, Camera, Layers, Sparkles, Crop, LayoutGrid, Frame, Type, Shapes, ChevronLeft, ImageOff } from 'lucide-react'
+import { SlidersHorizontal, Wand2, Camera, Layers, Sparkles, Crop, LayoutGrid, Frame, Type, Shapes, ChevronLeft, ImageOff, Bookmark } from 'lucide-react'
 import type { RightTab } from '@shared/types'
 import { useEditorStore, selectSelectedLayer, selectActiveDumpItem } from '../../stores/editorStore'
 import { assetsBarHeight } from '../../lib/layout'
@@ -14,6 +14,8 @@ import { LayoutsPanel } from './LayoutsPanel'
 import { CanvasPanel } from './panels/CanvasPanel'
 import { TextToolPanel } from './panels/TextPanel'
 import { ShapePanel } from './panels/ShapePanel'
+import { PresetsPanel } from './PresetsPanel'
+import { PresetQuickActions } from './PresetQuickActions'
 
 interface Section {
   id: string
@@ -22,7 +24,7 @@ interface Section {
   render: () => JSX.Element
 }
 
-const RIGHT_TABS: RightTab[] = ['adjustments', 'filters', 'cameras', 'shaders', 'fx', 'crop', 'canvas', 'layouts', 'text']
+const RIGHT_TABS: RightTab[] = ['presets', 'adjustments', 'filters', 'cameras', 'shaders', 'fx', 'crop', 'canvas', 'layouts', 'text']
 const isRightTab = (id: string): id is RightTab => (RIGHT_TABS as string[]).includes(id)
 
 /**
@@ -45,7 +47,7 @@ export function RightInspector(): JSX.Element {
   // Seção Texto (ferramenta de texto): disponível com imagem, em página, e ao editar texto.
   const textSection: Section = { id: 'text', label: t('inspector.text'), icon: <Type size={18} />, render: () => <TextToolPanel /> }
 
-  const sections: Section[] = isImage
+  const contextualSections: Section[] = isImage
     ? [
         { id: 'layouts', label: t('inspector.layouts'), icon: <LayoutGrid size={18} />, render: () => <LayoutsPanel /> },
         { id: 'adjustments', label: t('inspector.adjustments'), icon: <SlidersHorizontal size={18} />, render: () => <AdjustmentsPanel layer={selected!} /> },
@@ -69,6 +71,7 @@ export function RightInspector(): JSX.Element {
             ]
           : []
 
+  const sections: Section[] = [{ id: 'presets', label: t('inspector.presets'), icon: <Bookmark size={18} />, render: () => <PresetsPanel /> }, ...contextualSections]
   const ids = sections.map((s) => s.id)
   const activeId = ids.includes(tab) ? tab : sections[0]?.id ?? null
   const active = sections.find((s) => s.id === activeId) ?? null
@@ -108,7 +111,7 @@ export function RightInspector(): JSX.Element {
               className={cn(
                 'mx-1.5 flex flex-col items-center gap-1 rounded-lg px-1 py-2 transition-colors',
                 open && s.id === activeId
-                  ? 'bg-noir-selection text-noir-text'
+                  ? 'bg-noir-selection text-brand-accent'
                   : 'text-noir-muted hover:bg-noir-hover hover:text-noir-text'
               )}
             >
@@ -134,13 +137,14 @@ export function RightInspector(): JSX.Element {
             </button>
           </div>
 
-          {isImage && active.id !== 'layouts' && active.id !== 'text' && (
+          {active.id !== 'presets' && <PresetQuickActions />}
+          {isImage && active.id !== 'layouts' && active.id !== 'text' && active.id !== 'presets' && (
             <div className="border-b border-noir-border/60 px-4 py-2 text-2xs text-noir-disabled">
               {t('inspectorPanel.editing')} <span className="text-noir-muted">{selected!.name}</span>
             </div>
           )}
 
-          <div className="min-h-0 flex-1 overflow-y-auto" style={{ paddingBottom: barH }}>
+          <div className={cn('min-h-0 flex-1', active.id === 'presets' ? 'overflow-hidden' : 'overflow-y-auto')} style={{ paddingBottom: barH }}>
             {active.render()}
           </div>
         </div>

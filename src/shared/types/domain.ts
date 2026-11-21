@@ -40,6 +40,13 @@ export interface PageLayout {
   slots: SlotRect[]
 }
 
+export interface CompositionFrame {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
 export interface CanvasSettings {
   width: number
   height: number
@@ -50,6 +57,8 @@ export interface CanvasSettings {
   showGrid: boolean
   /** Layout de placeholders ativo na página. null/ausente = movimentação livre. */
   layout?: PageLayout | null
+  /** Basis of the contained composition, retained so repeated format changes do not shrink it. */
+  compositionFrame?: CompositionFrame
 }
 
 export interface LayerTransform {
@@ -124,7 +133,7 @@ export interface ShaderEffects {
   filmBloom: number
   /** Flare anamórfico: risco horizontal azul saindo das altas luzes, cinematográfico. */
   anamorphic: number
-  // ---- Sessão Games (inspirados em jogos) ----
+  // ---- Sessão Aberrações Cromáticas ----
   /** Fantasma vermelho (JRPG estiloso, ex. Persona 5): eco/silhueta vermelha + duotone carmesim. */
   personaRed: number
   /** Fantasma azul (JRPG melancólico, ex. Persona 3): contornos e eco azuis + duotone frio. */
@@ -195,10 +204,14 @@ export interface BorderLayerData {
   cornerRadius: number
   /** Espaçamento interno entre slots de uma collage. */
   gutter: number
+  /** Legacy borders fill the canvas; resized borders retain their original composition frame. */
+  frame?: CompositionFrame
 }
 
 /** Camada de FX → Overlay: PNG de sombra degradê (bundlado) sobreposto à foto. */
 export interface OverlayLayerData {
+  /** Photo whose reusable look owns this FX. Legacy independent effects have no owner. */
+  imageLayerId?: string
   /** Chave estável do overlay → URL bundlada (ver `renderer/lib/overlays.ts`). */
   overlayId: string
   /** Espelha horizontalmente. */
@@ -376,6 +389,16 @@ export type PhotoFilterName =
   | 'nost_disposable'
   | 'nost_muted_vsco'
   | 'nost_sun_faded'
+  // Sessão Editorial
+  | 'edit_porcelain'
+  | 'edit_satin'
+  | 'edit_graphite'
+  | 'edit_champagne'
+  // Sessão Laboratório
+  | 'lab_cyanotype'
+  | 'lab_selenium'
+  | 'lab_lith'
+  | 'lab_solarized'
 
 export interface PhotoFilter {
   name: PhotoFilterName | null

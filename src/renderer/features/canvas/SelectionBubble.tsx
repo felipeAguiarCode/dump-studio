@@ -212,7 +212,7 @@ function BubbleBtn({
       className={cn(
         'flex h-7 w-7 items-center justify-center rounded-md transition-colors disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent',
         danger
-          ? 'text-red-300 hover:bg-red-500/10'
+          ? 'text-noir-danger hover:bg-red-500/10'
           : active
             ? 'bg-noir-selection text-noir-text'
             : 'text-noir-muted hover:bg-noir-hover hover:text-noir-text'

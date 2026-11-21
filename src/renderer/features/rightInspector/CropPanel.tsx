@@ -153,7 +153,7 @@ export function CropPanel({ layer }: { layer: Layer }): JSX.Element {
             setTab('adjustments')
             setTool('select')
           }}
-          className="flex flex-1 items-center justify-center gap-1 rounded-md bg-noir-text py-2 text-2xs font-medium text-noir-bg hover:bg-white"
+          className="flex flex-1 items-center justify-center gap-1 rounded-md brand-primary py-2 text-2xs font-medium  "
         >
           <Check size={13} /> {t('cropPanel.apply')}
         </button>

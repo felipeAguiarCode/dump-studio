@@ -12,11 +12,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-noir-text text-noir-bg hover:bg-white border border-transparent font-medium',
+    'brand-primary border border-transparent font-medium',
   ghost:
     'bg-transparent text-noir-text hover:bg-noir-hover border border-noir-border',
   subtle: 'bg-noir-elevated text-noir-text hover:bg-noir-hover border border-transparent',
-  danger: 'bg-transparent text-red-300 hover:bg-red-500/10 border border-red-500/30'
+  danger: 'bg-transparent text-noir-danger hover:bg-red-500/10 border border-red-500/30'
 }
 
 const SIZES: Record<Size, string> = {

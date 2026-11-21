@@ -4,6 +4,7 @@ import { useUiStore } from '../stores/uiStore'
 import { projectActions } from '../services/projectActions'
 import { autosaveClient } from '../services/autosaveClient'
 import { t } from '../i18n'
+import { presetActions } from '../services/presetActions'
 
 function isTyping(target: EventTarget | null): boolean {
   const el = target as HTMLElement | null
@@ -18,6 +19,7 @@ export function useKeyboardShortcuts(): void {
     const onKey = (e: KeyboardEvent): void => {
       const editor = useEditorStore.getState()
       const ui = useUiStore.getState()
+      if (ui.formatChanging || ui.applyingPreset) { e.preventDefault(); return }
       const mod = e.ctrlKey || e.metaKey
       const typing = isTyping(e.target)
 
@@ -28,6 +30,18 @@ export function useKeyboardShortcuts(): void {
         return
       }
       if (typing) return
+      if (ui.activeDialog || ui.confirm) return
+
+      if (mod && e.shiftKey && e.key.toLowerCase() === 'c') {
+        e.preventDefault()
+        void presetActions.copyCurrent()
+        return
+      }
+      if (mod && e.shiftKey && e.key.toLowerCase() === 'v') {
+        e.preventDefault()
+        void presetActions.paste()
+        return
+      }
 
       // Navegação entre fotos (desativada quando há diálogo/overlay aberto — ex.: Prévia controla as setas)
       if (!mod && !ui.activeDialog && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {

@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "Noir Dump Studio — editor desktop minimalista de photo dumps P&B para Instagram",
   "productName": "Noir Dump Studio",
-  "author": "Noir Dump Studio",
+  "author": "Felipe Aguiar",
   "license": "MIT",
   "main": "./out/main/index.js",
   "scripts": {
-    "dev": "electron-vite dev",
-    "build": "electron-vite build",
+    "site": "node .site/scripts/serve.mjs",
+    "dev": "npm run build:branding && electron-vite dev",
+    "build:branding": "node scripts/build-branding.mjs",
+    "build": "npm run build:branding && electron-vite build",
     "preview": "electron-vite preview",
     "start": "electron-vite preview",
     "typecheck:node": "tsc -p tsconfig.node.json --noEmit",
@@ -16,7 +18,12 @@
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "rebuild": "electron-rebuild -f -w better-sqlite3",
     "postinstall": "electron-builder install-app-deps",
-    "dist": "electron-vite build && electron-builder --win"
+    "dist": "npm run build && electron-builder --win",
+    "check:startup": "node scripts/check-startup.mjs",
+    "check:formats": "node scripts/check-formats.mjs && node scripts/check-format-db.mjs",
+    "check:filters": "node scripts/check-filters.mjs",
+    "check:themes": "node scripts/check-themes.mjs",
+    "check:presets": "node scripts/check-presets.mjs"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",

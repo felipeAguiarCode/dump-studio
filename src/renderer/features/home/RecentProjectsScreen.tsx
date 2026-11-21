@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Plus, MoreHorizontal, Copy, Trash2, Images, ArrowRight } from 'lucide-react'
+import { Plus, MoreHorizontal, Copy, Trash2, Images, ArrowRight, Info } from 'lucide-react'
 import type { ProjectSummary } from '@shared/types'
 import { INSTAGRAM_FORMATS, FORMAT_GROUPS, type InstagramFormat } from '@shared/constants'
 import { ipc } from '../../services/ipcClient'
@@ -11,6 +11,9 @@ import { formatRelativeDate } from '../../lib/format'
 import { cn } from '../../lib/cn'
 import { EmptyState } from '../shell/EmptyState'
 import { FormatGlyph } from '../../components/FormatGlyph'
+import appIcon from '../../assets/branding/noir-icon.png'
+import { ThemeToggle } from '../../components/ui/ThemeToggle'
+import { IconButton } from '../../components/ui/IconButton'
 
 export function RecentProjectsScreen(): JSX.Element {
   const [projects, setProjects] = useState<ProjectSummary[]>([])
@@ -76,23 +79,25 @@ export function RecentProjectsScreen(): JSX.Element {
       <div className="mx-auto max-w-5xl px-10 py-16">
         {/* Cabeçalho */}
         <header className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-noir-border bg-noir-elevated text-sm font-semibold tracking-tight">
-            ND
-          </div>
+          <img src={appIcon} alt="" className="h-12 w-12 shrink-0 object-contain" />
           <div>
             <h1 className="text-xl font-medium tracking-tight">Noir Dump Studio</h1>
             <p className="text-xs text-noir-muted">{t('home.subtitle')}</p>
           </div>
+          <div className="ml-auto flex items-center gap-2">
+          <IconButton label={t('about.title')} onClick={() => useUiStore.getState().openDialog('about')}><Info size={18} /></IconButton>
+          <ThemeToggle />
           {last && (
             <button
               onClick={() => void open(last.id)}
               disabled={busy}
-              className="ml-auto inline-flex items-center gap-2 rounded-lg border border-noir-border bg-noir-elevated px-4 py-2.5 text-sm transition-colors hover:bg-noir-hover disabled:opacity-40"
+              className="inline-flex items-center gap-2 rounded-lg border border-noir-border bg-noir-elevated px-4 py-2.5 text-sm transition-colors hover:bg-noir-hover disabled:opacity-40"
             >
               {t('home.continue')} <span className="text-noir-muted">{last.name}</span>
               <ArrowRight size={15} />
             </button>
           )}
+          </div>
         </header>
 
         {/* Criar novo projeto */}
@@ -174,9 +179,9 @@ export function RecentProjectsScreen(): JSX.Element {
                         <Images size={28} strokeWidth={1.25} />
                       </div>
                     )}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2.5">
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2.5 text-white">
                       <div className="truncate text-xs font-medium">{p.name}</div>
-                      <div className="text-2xs text-noir-muted">
+                      <div className="text-2xs text-white/75">
                         {INSTAGRAM_FORMATS[p.format].label.split(' ')[0]} · {t.plural('home.photoCount', p.photoCount, { count: p.photoCount })} · {formatRelativeDate(p.lastOpenedAt ?? p.updatedAt)}
                       </div>
                     </div>
@@ -187,7 +192,7 @@ export function RecentProjectsScreen(): JSX.Element {
                         e.stopPropagation()
                         setMenuId(menuId === p.id ? null : p.id)
                       }}
-                      className="absolute right-1.5 top-1.5 rounded-md bg-black/40 p-1 text-noir-muted opacity-0 backdrop-blur transition-opacity hover:text-noir-text group-hover:opacity-100"
+                      className="absolute right-1.5 top-1.5 rounded-md bg-black/40 p-1 text-white/80 opacity-0 backdrop-blur transition-opacity hover:text-white group-hover:opacity-100"
                       aria-label={t('home.projectOptions')}
                     >
                       <MoreHorizontal size={16} />
@@ -213,7 +218,7 @@ export function RecentProjectsScreen(): JSX.Element {
 
                     {confirmId === p.id && (
                       <div
-                        className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-black/85 p-3 text-center"
+                        className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-noir-panel/95 p-3 text-center"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <p className="text-xs text-noir-text">{t('home.deleteConfirm', { name: p.name })}</p>
@@ -260,7 +265,7 @@ function MenuItem({
       onClick={onClick}
       className={cn(
         'flex w-full items-center gap-2.5 px-3 py-2 text-left text-xs transition-colors hover:bg-noir-hover',
-        danger ? 'text-red-300' : 'text-noir-text'
+        danger ? 'text-noir-danger' : 'text-noir-text'
       )}
     >
       {icon}

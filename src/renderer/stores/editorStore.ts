@@ -25,6 +25,7 @@ import { DEFAULT_ADJUSTMENTS, DEFAULT_SHADERS } from '@shared/defaults'
 import { ipc } from '../services/ipcClient'
 import { autosaveClient } from '../services/autosaveClient'
 import { useHistoryStore } from './historyStore'
+import { useUiStore } from './uiStore'
 import { slotRectToTransform, coverCropForSlot, seamCropForSlot } from '../features/canvas/layoutSlots'
 import type { CameraLook } from '../features/rightInspector/camerasConfig'
 
@@ -34,6 +35,7 @@ interface EditorState {
 
   loadProject: (project: Project, ui: ProjectUiState) => void
   setProject: (project: Project) => void
+  replaceDumpItem: (item: DumpItem) => void
   closeProject: () => void
 
   // Histórico
@@ -138,6 +140,14 @@ export const useEditorStore = create<EditorState>()(
         })
       },
 
+      replaceDumpItem: (item) => {
+        set((s) => {
+          if (!s.project) return
+          const index = s.project.dumpItems.findIndex((page) => page.id === item.id)
+          if (index >= 0) s.project.dumpItems[index] = item
+        })
+      },
+
       closeProject: () => {
         useHistoryStore.getState().reset()
         set((s) => {
@@ -153,6 +163,8 @@ export const useEditorStore = create<EditorState>()(
       },
 
       undo: () => {
+        const ui = useUiStore.getState()
+        if (ui.applyingPreset || ui.formatChanging) return
         const { project } = get()
         if (!project) return
         const prev = useHistoryStore.getState().undo({ ...project, assets: [] })
@@ -161,10 +173,16 @@ export const useEditorStore = create<EditorState>()(
         set((s) => {
           s.project = restored
         })
-        void ipc('projects:replaceTree', { project: restored })
+        ui.setApplyingPreset(true)
+        void autosaveClient.drain().then(() => ipc('projects:replaceTree', { project: restored })).catch((error) => {
+          console.error('[undo]', error)
+          ui.setSaveStatus('error')
+        }).finally(() => ui.setApplyingPreset(false))
       },
 
       redo: () => {
+        const ui = useUiStore.getState()
+        if (ui.applyingPreset || ui.formatChanging) return
         const { project } = get()
         if (!project) return
         const next = useHistoryStore.getState().redo({ ...project, assets: [] })
@@ -173,7 +191,11 @@ export const useEditorStore = create<EditorState>()(
         set((s) => {
           s.project = restored
         })
-        void ipc('projects:replaceTree', { project: restored })
+        ui.setApplyingPreset(true)
+        void autosaveClient.drain().then(() => ipc('projects:replaceTree', { project: restored })).catch((error) => {
+          console.error('[redo]', error)
+          ui.setSaveStatus('error')
+        }).finally(() => ui.setApplyingPreset(false))
       },
 
       setActiveDumpItem: (id) => {

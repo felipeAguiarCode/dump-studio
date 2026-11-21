@@ -13,6 +13,7 @@ import type {
 import type { UserPreferences, ProjectUiState } from '../types/preferences'
 import type { ProjectSnapshot, ProjectExportSettings } from '../types/snapshots'
 import type { OriginalAsset } from '../types/assets'
+import type { PhotoLook, PresetLibrary, UserPreset } from '../types/presets'
 
 export interface CreateProjectInput {
   name?: string
@@ -68,6 +69,7 @@ export interface AddLayerInput {
  */
 export interface IpcContract {
   'app:ping': { args: []; result: string }
+  'app:version': { args: []; result: string }
   'app:bootInfo': { args: []; result: { autoOpenProjectId: string | null; exportDir: string | null; openDialog: string | null } }
 
   // Preferências
@@ -120,6 +122,21 @@ export interface IpcContract {
   'snapshots:restore': { args: [{ snapshotId: string }]; result: Project }
   'snapshots:rename': { args: [{ snapshotId: string; name: string }]; result: void }
   'snapshots:delete': { args: [{ snapshotId: string }]; result: void }
+
+  // Global photo look library
+  'presets:list': { args: []; result: PresetLibrary }
+  'presets:save': { args: [{ name: string; folderId: string | null; dumpItemId: string; layerId: string; fxIds: string[]; favorite?: boolean }]; result: { preset: UserPreset; item: DumpItem } }
+  'presets:favorite': { args: [{ id: string; favorite: boolean }]; result: void }
+  'presets:update': { args: [{ id: string; name: string; folderId: string | null }]; result: void }
+  'presets:delete': { args: [{ id: string }]; result: void }
+  'presets:saveFolder': { args: [{ id?: string; name: string; parentId: string | null }]; result: string }
+  'presets:deleteFolder': { args: [{ id: string }]; result: void }
+  'presets:apply': { args: [{ dumpItemId: string; layerId: string; look: PhotoLook }]; result: DumpItem }
+  'presets:export': { args: [{ presetId?: string; folderId?: string | null }]; result: boolean }
+  'presets:import': { args: [{ folderId: string | null }]; result: number | null }
+  'presets:copy': { args: [{ name: string; look: PhotoLook }]; result: void }
+  'presets:clipboard': { args: []; result: { name: string; look: PhotoLook } }
+  'presets:importClipboard': { args: [{ folderId: string | null }]; result: number }
 
   // Exportação
   'export:pickFolder': { args: []; result: string | null }

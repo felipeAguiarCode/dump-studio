@@ -11,6 +11,8 @@ import { preferencesService } from './preferencesService'
 import { createDumpItem, createProject } from './factories'
 import { createDefaultUiState } from '@shared/defaults'
 import { INSTAGRAM_FORMATS, type InstagramFormat } from '@shared/constants'
+import { resizeComposition } from '@shared/resizeComposition'
+import { remapFxOwner } from '@shared/photoPresets'
 import type { CreateProjectInput } from '@shared/ipc/contract'
 import type { DumpItem, Layer, Project, ProjectSummary } from '@shared/types'
 
@@ -104,28 +106,17 @@ export const projectService = {
 
   setFormat(id: string, format: InstagramFormat): Project {
     const spec = INSTAGRAM_FORMATS[format]
+    if (!spec) throw new Error('Unsupported format')
     getDb().transaction(() => {
       projectsRepo.update(id, { format })
       const items = dumpItemsRepo.listByProject(id)
       for (const ir of items) {
-        const oldW = ir.canvas_width
-        const oldH = ir.canvas_height
-        const sx = spec.width / oldW
-        const sy = spec.height / oldH
-        dumpItemsRepo.updateCanvas(ir.id, { width: spec.width, height: spec.height, format })
-        // Reescala transformações das camadas para manter posição relativa.
         const layers = layersRepo.listByDumpItem(ir.id)
-        for (const l of layers) {
-          if (l.type === 'background') continue
-          layersRepo.update(l.id, {
-            transform: {
-              ...l.transform,
-              x: l.transform.x * sx,
-              y: l.transform.y * sy,
-              width: l.transform.width * sx,
-              height: l.transform.height * sy
-            }
-          })
+        const resized = resizeComposition(rowToDumpItem(ir).canvas, layers, spec)
+        dumpItemsRepo.updateCanvas(ir.id, resized.canvas)
+        for (const layer of resized.layers) {
+          if (layer.type === 'background') continue
+          layersRepo.update(layer.id, { transform: layer.transform, data: layer.data })
         }
       }
     })()
@@ -198,13 +189,14 @@ export const projectService = {
         const newDi: DumpItem = { ...di, id: uuid(), projectId: newId, createdAt: now, updatedAt: now, layers: [] }
         if (!firstItemId) firstItemId = newDi.id
         dumpItemsRepo.insert(newDi)
+        const layerIds = new Map(di.layers.map((layer) => [layer.id, uuid()]))
         for (const layer of di.layers) {
-          let data = layer.data
+          let data = remapFxOwner(layer, layerIds)
           if (layer.type === 'image') {
             const d = layer.data as { assetId: string }
             data = { ...d, assetId: assetIdMap.get(d.assetId) ?? d.assetId }
           }
-          layersRepo.insert({ ...layer, id: uuid(), dumpItemId: newDi.id, data, createdAt: now, updatedAt: now })
+          layersRepo.insert({ ...layer, id: layerIds.get(layer.id)!, dumpItemId: newDi.id, data, createdAt: now, updatedAt: now })
         }
       }
       ui.activeDumpItemId = firstItemId

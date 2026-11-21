@@ -18,18 +18,18 @@ export function ParametricCurvePreview({ parametric }: ParametricCurvePreviewPro
     <svg
       viewBox="0 0 100 100"
       preserveAspectRatio="none"
-      className="aspect-square w-full select-none rounded-md border border-noir-border bg-noir-bg"
+      className="aspect-square w-full select-none rounded-md border border-noir-border bg-noir-bg text-noir-text"
     >
       {/* Zonas tonais (sombras · escuros · claros · realces). */}
       {[25, 50, 75].map((v) => (
-        <line key={`v${v}`} x1={v} y1={0} x2={v} y2={100} stroke="rgba(255,255,255,0.08)" strokeWidth={0.5} />
+        <line key={`v${v}`} x1={v} y1={0} x2={v} y2={100} stroke="var(--plot-grid)" strokeWidth={0.5} />
       ))}
       {[25, 50, 75].map((v) => (
-        <line key={`h${v}`} x1={0} y1={v} x2={100} y2={v} stroke="rgba(255,255,255,0.08)" strokeWidth={0.5} />
+        <line key={`h${v}`} x1={0} y1={v} x2={100} y2={v} stroke="var(--plot-grid)" strokeWidth={0.5} />
       ))}
       {/* Diagonal de referência (identidade). */}
-      <line x1={0} y1={100} x2={100} y2={0} stroke="rgba(255,255,255,0.14)" strokeWidth={0.5} />
-      <polyline points={pathPoints} fill="none" stroke="#e8e8e8" strokeWidth={1.4} strokeLinejoin="round" strokeLinecap="round" />
+      <line x1={0} y1={100} x2={100} y2={0} stroke="var(--plot-grid)" strokeWidth={0.5} />
+      <polyline points={pathPoints} fill="none" stroke="currentColor" strokeWidth={1.4} strokeLinejoin="round" strokeLinecap="round" />
     </svg>
   )
 }

@@ -1,6 +1,5 @@
-import { ipcMain } from 'electron'
+import { app, ipcMain } from 'electron'
 import type { IpcChannel, IpcContract } from '@shared/ipc/contract'
-import { isLicenseExpired } from '@shared/license'
 import { preferencesService } from '../services/preferencesService'
 import { projectService } from '../services/projectService'
 import { uiStateService } from '../services/uiStateService'
@@ -10,13 +9,8 @@ import { autosaveService } from '../services/autosaveService'
 import { exportService } from '../services/exportService'
 import { snapshotService } from '../services/snapshotService'
 import { getAutoOpenProjectId } from '../services/devSeed'
-
-/** Canais liberados mesmo com a licença expirada (necessários para a tela de bloqueio). */
-const LICENSE_ALLOWED: ReadonlySet<IpcChannel> = new Set<IpcChannel>([
-  'app:ping',
-  'app:bootInfo',
-  'preferences:get'
-])
+import { applyNativeTheme } from '../theme'
+import { presetService } from '../services/presetService'
 
 /** Helper que força os tipos de args/result do contrato nos dois lados. */
 function handle<C extends IpcChannel>(
@@ -26,16 +20,13 @@ function handle<C extends IpcChannel>(
   ) => IpcContract[C]['result'] | Promise<IpcContract[C]['result']>
 ): void {
   ipcMain.handle(channel, (_event, ...args) => {
-    // Reforço da licença: com o prazo vencido, só os canais da tela de bloqueio respondem.
-    if (isLicenseExpired() && !LICENSE_ALLOWED.has(channel)) {
-      throw new Error('LICENSE_EXPIRED')
-    }
     return fn(...(args as IpcContract[C]['args']))
   })
 }
 
 export function registerIpcHandlers(): void {
   handle('app:ping', () => 'pong')
+  handle('app:version', () => app.getVersion())
   handle('app:bootInfo', () => ({
     autoOpenProjectId: getAutoOpenProjectId(),
     exportDir: process.env['NOIR_EXPORT'] ?? null,
@@ -44,7 +35,11 @@ export function registerIpcHandlers(): void {
 
   // Preferências
   handle('preferences:get', () => preferencesService.get())
-  handle('preferences:set', (patch) => preferencesService.set(patch))
+  handle('preferences:set', (patch) => {
+    const preferences = preferencesService.set(patch)
+    applyNativeTheme(preferences.appearance.theme)
+    return preferences
+  })
 
   // Projetos
   handle('projects:list', (input) => projectService.list(input?.includeArchived))
@@ -90,4 +85,18 @@ export function registerIpcHandlers(): void {
   handle('snapshots:restore', ({ snapshotId }) => snapshotService.restore(snapshotId))
   handle('snapshots:rename', ({ snapshotId, name }) => snapshotService.rename(snapshotId, name))
   handle('snapshots:delete', ({ snapshotId }) => snapshotService.delete(snapshotId))
+
+  handle('presets:list', () => presetService.list())
+  handle('presets:save', (input) => presetService.save(input))
+  handle('presets:favorite', ({ id, favorite }) => presetService.setFavorite(id, favorite))
+  handle('presets:update', (input) => presetService.update(input))
+  handle('presets:delete', ({ id }) => presetService.delete(id))
+  handle('presets:saveFolder', (input) => presetService.saveFolder(input))
+  handle('presets:deleteFolder', ({ id }) => presetService.deleteFolder(id))
+  handle('presets:apply', (input) => presetService.apply(input))
+  handle('presets:export', (input) => presetService.exportJson(input))
+  handle('presets:import', ({ folderId }) => presetService.importJson(folderId))
+  handle('presets:copy', (input) => presetService.copy(input))
+  handle('presets:clipboard', () => presetService.readClipboard())
+  handle('presets:importClipboard', ({ folderId }) => presetService.importClipboard(folderId))
 }

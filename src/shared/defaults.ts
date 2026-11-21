@@ -207,7 +207,8 @@ export function createDefaultUiState(projectId: string, now: string): ProjectUiS
 export function createDefaultPreferences(now: string): UserPreferences {
   return {
     appearance: {
-      theme: 'noir_dark',
+      theme: 'instagram_light',
+      themeVersion: 1,
       language: 'en',
       density: 'comfortable',
       defaultFilmstripCollapsed: false,

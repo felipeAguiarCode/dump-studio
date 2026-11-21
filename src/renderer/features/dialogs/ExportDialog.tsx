@@ -134,7 +134,7 @@ export function ExportDialog(): JSX.Element | null {
         <button
           onClick={() => void run()}
           disabled={busy}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-noir-text py-2.5 text-sm font-medium text-noir-bg transition-colors hover:bg-white disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-lg brand-primary py-2.5 text-sm font-medium  transition-colors  disabled:opacity-50"
         >
           {busy ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
           {busy

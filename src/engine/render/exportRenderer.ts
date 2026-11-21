@@ -164,12 +164,13 @@ export async function composeDumpItem(
       )
     } else if (l.type === 'border') {
       const d = l.data as BorderLayerData
+      const frame = d.frame ?? { x: 0, y: 0, width, height }
       layer.add(
         new Konva.Rect({
-          x: d.thickness / 2,
-          y: d.thickness / 2,
-          width: width - d.thickness,
-          height: height - d.thickness,
+          x: frame.x + d.thickness / 2,
+          y: frame.y + d.thickness / 2,
+          width: Math.max(0, frame.width - d.thickness),
+          height: Math.max(0, frame.height - d.thickness),
           stroke: d.color,
           strokeWidth: d.thickness,
           cornerRadius: d.cornerRadius,

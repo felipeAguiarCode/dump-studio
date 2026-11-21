@@ -11,7 +11,7 @@ interface ModalProps {
 export function Modal({ title, onClose, children, width = 460 }: ModalProps): JSX.Element {
   return (
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-6"
+      className="ui-modal-backdrop fixed inset-0 z-[80] flex items-center justify-center p-6"
       onMouseDown={onClose}
     >
       <div

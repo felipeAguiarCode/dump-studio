@@ -291,16 +291,17 @@ function ShapeNode(props: NodeProps): JSX.Element {
 function BorderNode(props: NodeProps): JSX.Element {
   const { layer, docWidth, docHeight } = props
   const data = layer.data as BorderLayerData
+  const frame = data.frame ?? { x: 0, y: 0, width: docWidth, height: docHeight }
   // Borda externa = retângulo de contorno cobrindo a página (gutters de collage na Fase 9).
   return (
     <Rect
       id={layer.id}
       name="layer-node"
       listening={!layer.locked}
-      x={data.thickness / 2}
-      y={data.thickness / 2}
-      width={docWidth - data.thickness}
-      height={docHeight - data.thickness}
+      x={frame.x + data.thickness / 2}
+      y={frame.y + data.thickness / 2}
+      width={Math.max(0, frame.width - data.thickness)}
+      height={Math.max(0, frame.height - data.thickness)}
       stroke={data.color}
       strokeWidth={data.thickness}
       cornerRadius={data.cornerRadius}

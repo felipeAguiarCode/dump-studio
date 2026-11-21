@@ -7,6 +7,10 @@
  * (topbar, home, dialogs etc.) são adicionados por feature.
  */
 export const en = {
+  about: {
+    title: 'About Noir Dump Studio',
+    version: 'Version'
+  },
   common: {
     cancel: 'Cancel',
     save: 'Save',
@@ -20,6 +24,7 @@ export const en = {
 
   // Abas do inspetor direito (RightInspector).
   inspector: {
+    presets: 'Presets',
     text: 'Text',
     adjustments: 'Adjustments',
     filters: 'Filters',
@@ -30,6 +35,39 @@ export const en = {
     layouts: 'Layouts',
     shape: 'Shape',
     canvas: 'Canvas'
+  },
+
+  presetLibrary: {
+    library: 'Preset library',
+    favorites: 'Favorites', saveFavorite: 'Add to favorites',
+    addFavorite: 'Add {name} to favorites', removeFavorite: 'Remove {name} from favorites',
+    favoritesEmpty: 'Your favorite looks live here', favoritesHint: 'Star a preset or choose to add it to favorites when saving.',
+    yourLibrary: 'Your look collection',
+    subtitle: 'Save a complete photo look. Organize it once and use it in any project.',
+    target: 'Photo', selectPhoto: 'Select a photo', locked: 'Locked',
+    saveLook: 'Save preset', newPreset: 'My preset', copy: 'Copy look', paste: 'Paste look',
+    search: 'Search presets or folders', folders: 'Folders', newFolder: 'New folder',
+    all: 'All presets', root: 'Library', folder: 'Folder', name: 'Name',
+    editFolder: 'Edit folder', deleteFolder: 'Delete folder', deletePreset: 'Delete preset',
+    deletePresetConfirm: 'Delete preset “{name}” from your library?',
+    deleteFolderConfirm: 'Delete “{name}”, all its subfolders and their presets? This cannot be undone.',
+    import: 'Import JSON', export: 'Export JSON', importClipboard: 'Add JSON from clipboard to library',
+    results: 'Search results', retry: 'Try again', empty: 'Your next signature look',
+    emptyHint: 'Edit a photo and save your first preset, or import a JSON collection.',
+    noResults: 'No presets found', trySearch: 'Try another name or folder.',
+    applyNamed: 'Apply {name}', actions: 'Actions for {name}', edit: 'Rename / move',
+    previous: 'Previous preset', next: 'Next preset', oneClick: 'One click to apply',
+    selectHint: 'Select a photo to save or apply a look. Your library is always available.',
+    lockedHint: 'Unlock the selected photo to apply a preset.',
+    preserveHint: 'One click applies the complete look. Crop, placement and layout stay as they are. Ctrl+Z undoes it.',
+    includes: 'Includes all adjustments, curves, color grading, HSL, filter, camera, textures, photo border and opacity.',
+    includeFx: 'FX to include', fxHint: 'Linked FX are selected. You can include independent page FX here; their position adapts to the destination photo.',
+    noFx: 'No available FX on this page.', applying: 'Updating your edit…',
+    saved: 'Preset saved to your library.', copied: 'Look copied. Paste it with Ctrl+Shift+V.',
+    imported: '{count} preset(s) imported. Existing presets were preserved.', exported: 'Presets exported as JSON.',
+    failed: 'Could not complete this action. Check that the photo and its FX are unlocked and try again.',
+    invalidJson: 'Could not import this JSON. Use a valid Noir preset file (up to 10 MB).',
+    invalidClipboard: 'Copy one Noir preset before pasting a look.'
   },
 
   fxPanel: {
@@ -158,7 +196,9 @@ export const en = {
       cinematic: { label: 'Cinematic', description: 'Cinema looks' },
       aesthetic: { label: 'Aesthetic', description: 'Social-ready aesthetics' },
       vintage: { label: 'Vintage', description: 'Retro films' },
-      nostalgic: { label: 'Nostalgic', description: 'Washed-out old photos' }
+      nostalgic: { label: 'Nostalgic', description: 'Washed-out old photos' },
+      editorial: { label: 'Editorial', description: 'Portraits and magazine finishes' },
+      laboratory: { label: 'Laboratory', description: 'Creative takes on photographic processes' }
     },
     items: {
       high_contrast_bw: { label: 'High Contrast B&W', description: 'Intense contrast with deep blacks and bright whites.' },
@@ -196,20 +236,34 @@ export const en = {
       nost_washed_film: { label: 'Washed Film', description: 'Cool fade with bluish shadows and soft highlights, VSCO analog style.' },
       nost_disposable: { label: 'Disposable', description: 'Direct ’90s flash: greenish shadows, yellowed highlights and a slight punch.' },
       nost_muted_vsco: { label: 'Muted', description: 'Very desaturated and matte, with a magenta touch — VSCO’s minimal aesthetic.' },
-      nost_sun_faded: { label: 'Sun-Faded', description: 'Extreme fade with amber highlights and magenta shadows, like a photo left in the sun.' }
+      nost_sun_faded: { label: 'Sun-Faded', description: 'Extreme fade with amber highlights and magenta shadows, like a photo left in the sun.' },
+      edit_porcelain: { label: 'Porcelain', description: 'Delicate color, open shadows and soft highlights for luminous portraits.' },
+      edit_satin: { label: 'Satin', description: 'A restrained matte finish with cool shadows and gently warm highlights.' },
+      edit_graphite: { label: 'Graphite', description: 'Clean black and white with firm contrast and subtly cool highlights.' },
+      edit_champagne: { label: 'Champagne', description: 'Delicate golden highlights, warm skin tones and balanced color.' },
+      lab_cyanotype: { label: 'Cyanotype', description: 'Prussian-blue monochrome with light paper highlights.' },
+      lab_selenium: { label: 'Selenium', description: 'Cool toning with violet shadows and silver gradation.' },
+      lab_lith: { label: 'Lith', description: 'Dense blacks and cream-paper highlights in a warm, high-contrast tone.' },
+      lab_solarized: { label: 'Solarization', description: 'Inverted highlights with surreal tonal transitions.' }
     }
   },
 
   // Diálogo de Preferências (PreferencesDialog).
   preferences: {
     title: 'Preferences',
+    theme: 'Interface theme',
+    themeLight: 'White · Instagram-inspired',
+    themeDark: 'Noir · Dark',
+    switchToLight: 'Switch to the white interface',
+    switchToDark: 'Switch to Noir dark',
     language: 'Language',
     tabs: {
       appearance: 'Appearance',
       project: 'Project',
       editing: 'Editing',
       export: 'Export',
-      autosave: 'Autosave'
+      autosave: 'Autosave',
+      about: 'About'
     },
     density: 'Density',
     comfortable: 'Comfortable',
@@ -271,7 +325,17 @@ export const en = {
     saved: 'Saved',
     savedAt: 'Saved at {time}',
     saveError: 'Error saving',
-    formatTooltip: 'Instagram format',
+    formatTooltip: 'Project format',
+    formatHint: 'Changes all pages. Photos, text and layouts keep their proportions; margins use the canvas background. Undo with Ctrl+Z.',
+    formatChanging: 'Changing project format…',
+    formatChanged: 'Format updated on all pages',
+    formatFailed: 'Could not change format. Your edits are preserved; try again.',
+    posts: 'Posts',
+    feedStories: 'Feed & Stories',
+    formatNames: {
+      portrait_post_3_4: 'Portrait', square_post_1_1: 'Square', landscape_post_191: 'Landscape',
+      ultrawide_post: 'Ultra-wide', feed_4_5: 'Feed portrait', story_reel_9_16: 'Stories / Reels'
+    },
     formatChangeWarning: 'Switching to {format} may reframe the images.',
     switch: 'Switch'
   },
@@ -370,7 +434,7 @@ export const en = {
     subtitle: 'Stackable textures and effects — applied to this photo only.',
     removeAll: 'Remove all effects',
     intensity: 'Intensity',
-    sessions: { screen: 'Screen & Signal', film: 'Film & Grain', leak: 'Light Leaks', surface: 'Surface', aging: 'Time & Wear', games: 'Games', fisheye: 'Fisheye' },
+    sessions: { screen: 'Screen & Signal', film: 'Film & Grain', leak: 'Light Leaks', surface: 'Surface', aging: 'Time & Wear', games: 'Chromatic Aberrations', fisheye: 'Fisheye' },
     effects: {
       crt: { label: 'CRT', description: 'Scanlines, phosphor mask and old-monitor aberration.' },
       vhs: { label: 'VHS', description: 'Chroma bleed, line jitter and tracking bands.' },
@@ -700,13 +764,6 @@ export const en = {
 
   shortcuts: {
     saved: 'Saved'
-  },
-
-  license: {
-    expiredTitle: 'License expired',
-    expiredBody:
-      'Your access to Noir Dump Studio ended on {date}. To keep using the app, purchase a license.',
-    buy: 'Buy a license'
   }
 } as const
 

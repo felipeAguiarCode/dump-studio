@@ -63,7 +63,7 @@ export async function runDevSeed(): Promise<string | null> {
     console.error('[seed] falha ao importar:', e)
   }
   const proj = projectService.assemble(project.id)
-  const firstPage = proj?.dumpItems[0]
+  const firstPage = proj?.dumpItems.find((page) => page.layers.some((layer) => layer.type === 'image')) ?? proj?.dumpItems[0]
   const firstImg = firstPage?.layers.find((l) => l.type === 'image')
   if (firstPage) {
     const ui = uiStateRepo.get(project.id)

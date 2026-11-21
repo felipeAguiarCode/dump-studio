@@ -85,7 +85,7 @@ export function CanvasPanel({ item }: { item: DumpItem }): JSX.Element {
                 className="h-6 w-6 rounded-full border border-noir-border"
                 style={
                   sw.id === 'transparent'
-                    ? { backgroundImage: 'linear-gradient(45deg,#333 25%,transparent 25%,transparent 75%,#333 75%),linear-gradient(45deg,#333 25%,#1a1a1a 25%,#1a1a1a 75%,#333 75%)', backgroundSize: '8px 8px', backgroundPosition: '0 0,4px 4px' }
+                    ? { backgroundImage: 'var(--checkerboard)', backgroundSize: '8px 8px', backgroundPosition: '0 0,4px 4px' }
                     : { background: sw.css }
                 }
               />

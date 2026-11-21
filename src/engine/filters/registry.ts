@@ -235,6 +235,28 @@ export const FILTER_SESSIONS: FilterSession[] = [
         description: 'Fade extremo com realces âmbar e sombras magenta, como foto esquecida ao sol.'
       }
     ]
+  },
+  {
+    id: 'editorial',
+    label: 'Editorial',
+    description: 'Retratos e acabamentos de revista',
+    filters: [
+      { name: 'edit_porcelain', label: 'Porcelana', description: 'Cor delicada, sombras abertas e realces suaves para retratos luminosos.' },
+      { name: 'edit_satin', label: 'Cetim', description: 'Acabamento fosco discreto, sombras frias e luzes levemente quentes.' },
+      { name: 'edit_graphite', label: 'Grafite', description: 'Preto e branco limpo, com contraste firme e um toque frio nas luzes.' },
+      { name: 'edit_champagne', label: 'Champagne', description: 'Realces dourados delicados, tons de pele quentes e cor equilibrada.' }
+    ]
+  },
+  {
+    id: 'laboratory',
+    label: 'Laboratório',
+    description: 'Releituras de processos fotográficos',
+    filters: [
+      { name: 'lab_cyanotype', label: 'Cianotipia', description: 'Monocromia azul da Prússia com realces de papel claro.' },
+      { name: 'lab_selenium', label: 'Selênio', description: 'Viragem fria com sombras violeta e gradação prateada.' },
+      { name: 'lab_lith', label: 'Lith', description: 'Pretos densos e realces de papel creme em uma viragem quente e contrastada.' },
+      { name: 'lab_solarized', label: 'Solarização', description: 'Altas luzes invertidas, com transições tonais surreais.' }
+    ]
   }
 ]
 
