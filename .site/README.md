@@ -44,9 +44,11 @@ O motor já está compilado; a publicação não instala dependências do aplica
 
 - Hero: Polaroid flutuante à esquerda, texto e botões à direita. Cada foto passa por 35mm,
   Satin e Noir, processados pelo motor real, antes de avançar. Os três looks ficam prontos
-  antes de iniciar os seis segundos da foto. Barras de Stories, bolinhas brancas, swipe,
-  setas e pausa ficam sincronizados. A passagem pausa durante interação, fora da tela e
-  em abas ocultas.
+  antes de iniciar os nove segundos da foto. A cada três segundos, o próximo filtro é
+  revelado da direita para a esquerda sobre a mesma foto, com uma divisória acompanhando
+  o deslize. Barras de Stories, bolinhas brancas, swipe, setas e pausa ficam sincronizados.
+  Passar o mouse mantém a demonstração ativa; arrastar, foco por teclado, pausa manual,
+  conteúdo fora da tela e abas ocultas pausam a sequência.
 - Menu fixo e barras de rolagem nas cores da identidade. As âncoras descontam a altura do menu.
 - Ondas animadas na hero e headline com cinco variações em um letreiro que vira.
   No celular, a composição fica centralizada, com navegação compacta para Mood, Colagens e Download.
@@ -55,6 +57,8 @@ O motor já está compilado; a publicação não instala dependências do aplica
 - A seção de download traz uma foto de street style do Pexels, um selo Cherry Pie com
   brilho e volume e órbitas luminosas no fundo. Fontes das fotos continuam nos créditos.
 - Faixas animadas “Faz um dump”, botões com brilho e elevação, entradas suaves por seção.
+- Os cards de presets, camadas e projetos locais têm composições ilustrativas próprias,
+  bordas e profundidade, mantendo a leitura centralizada no celular.
 - Manifesto centralizado, com texto preenchido em degradê sobre fundo suave. As linhas
   surgem, ficam legíveis e se dissipam conforme o scroll avança.
 - Colagens interativas: catálogo e geometria reais do app, organizados por estilo.
@@ -70,6 +74,12 @@ da raiz instaladas:
 
 ```powershell
 node .site/scripts/check-site.mjs
+```
+
+Para verificar apenas o ciclo e o deslize de filtros da hero, os cards e movimento reduzido:
+
+```powershell
+node .site/scripts/check-site.mjs --hero
 ```
 
 Ela usa Chromium/Electron em um perfil temporário, testa o PNG exportado e simula os

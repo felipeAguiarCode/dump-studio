@@ -18,6 +18,8 @@ Object.assign(dictionaries.pt, {navCollages:'Colagens',collageKicker:'Um rolo. M
 Object.assign(dictionaries.en, {navCollages:'Collages',collageKicker:'One camera roll. So many compositions.',collageTitle:'Bring the shots.<br>Change the story.',collageDesc:'Choose a style and try the app’s real layouts. Grids, Polaroids, tilted frames, or a carousel that flows into the next photo.',collageChoose:'Find your composition.',collageHint:'Same photos. Endless ways to bring them together.',collageShuffle:'Switch the photos ↻',collageSave:'Save collage · PNG',collageNote:'A preview of the studio layouts. In the app, use your own photos and edit each layer.'});
 Object.assign(dictionaries.pt, {navPlay:'Mood',mobileLooks:'Looks',mobileAdjust:'Ajustes',mobileFormat:'Formato',headlineVariants:['Suas regras.','Seu estilo.','Sua vibe.','Sua personalidade.','Seu olhar.']});
 Object.assign(dictionaries.en, {navPlay:'Mood',mobileLooks:'Looks',mobileAdjust:'Adjust',mobileFormat:'Format',headlineVariants:['Your rules.','Your style.','Your vibe.','Your personality.','Your point of view.']});
+Object.assign(dictionaries.pt,{cardLooks:'Meus looks',cardEffect:'Efeito',cardText:'Texto',cardPhoto:'Foto',cardLocal:'Projeto local'});
+Object.assign(dictionaries.en,{cardLooks:'My looks',cardEffect:'Effect',cardText:'Text',cardPhoto:'Photo',cardLocal:'Local project'});
 let lang = 'pt';
 try { lang = new URLSearchParams(location.search).get('lang') || localStorage.getItem('my-dump-site-lang') || 'pt'; } catch {}
 if (!dictionaries[lang]) lang = 'pt';
@@ -68,10 +70,11 @@ function localize() {
 }
 $('#language').addEventListener('click',() => {lang = lang === 'pt' ? 'en' : 'pt';try{localStorage.setItem('my-dump-site-lang',lang);}catch{}localize();});
 
-const stage = $('#dump-stage'), track = $('#dump-track'), HERO_DURATION = 6000;
+const stage = $('#dump-stage'), track = $('#dump-track'), HERO_LOOK_DURATION = 3000, HERO_DURATION = HERO_LOOK_DURATION * 3;
+stage.style.setProperty('--story-duration',`${HERO_DURATION}ms`);
 const heroLooks=[{label:'35mm',filter:'vint_seventies'},{label:'Satin',filter:'edit_satin'},{label:'Noir',filter:'noir'}];
-const heroLookCache=new Map(),heroReady=new Set(),heroPreparing=new Map();let heroPhotos=[],heroLookTicket=0,effectTimer;
-let trackX = 0, pointer = null, heroPosition = 0, autoTimer, autoStartedAt = 0, autoRemaining = HERO_DURATION, manualPaused = reducedMotion, hovering = false, focusWithin = false, heroVisible = true;
+const heroLookCache=new Map(),heroReady=new Set(),heroPreparing=new Map();let heroPhotos=[],activeHeroWipe=null,effectTimer;
+let trackX = 0, pointer = null, heroPosition = 0, autoTimer, autoStartedAt = 0, autoRemaining = HERO_DURATION, manualPaused = reducedMotion, focusWithin = false, heroVisible = true;
 function cachedHeroLook(index,lookIndex) {
   const data=heroPhotos[index],look=heroLooks[lookIndex];
   const key=`${data.file}:${look.filter}`;
@@ -79,30 +82,56 @@ function cachedHeroLook(index,lookIndex) {
   return heroLookCache.get(key);
 }
 function prepareHero(index) {if(!heroPreparing.has(index))heroPreparing.set(index,Promise.all(heroLooks.map((_,look)=>cachedHeroLook(index,look))).catch(()=>{}).then(()=>heroReady.add(index)));return heroPreparing.get(index);}
-async function showHeroLook(index,lookIndex) {
-  const look=heroLooks[lookIndex],ticket=++heroLookTicket;if(!heroPhotos[index])return;
-  try{const url=await cachedHeroLook(index,lookIndex);if(ticket!==heroLookTicket||index!==heroPosition)return;const image=track.children[index]?.querySelector('img');if(!image)return;image.src=url;image.dataset.look=look.filter;$('#hero-look').textContent=look.label;stage.dataset.look=look.filter;}
-  catch{if(index===heroPosition)$('#hero-look').textContent='Original';}
+function cancelHeroWipe() {
+  const state=activeHeroWipe;if(!state)return;activeHeroWipe=null;
+  state.animations.forEach(animation=>{animation.finished.catch(()=>{});animation.cancel();});state.overlay.hidden=true;state.divider.hidden=true;state.card.classList.remove('is-filter-sliding');stage.dataset.filterTransition='idle';delete stage.dataset.incomingLook;
+}
+function showHeroLook(index,lookIndex) {
+  if(!heroPhotos[index])return Promise.resolve();
+  if(activeHeroWipe?.index===index&&activeHeroWipe.lookIndex===lookIndex)return activeHeroWipe.promise;
+  cancelHeroWipe();
+  const card=track.children[index],image=card?.querySelector('.hero-photo'),look=heroLooks[lookIndex];if(!image)return Promise.resolve();
+  if(image.dataset.look===look.filter){stage.dataset.look=look.filter;$('#hero-look').textContent=`${look.label} · ${lookIndex+1}/3`;return Promise.resolve();}
+  const state={index,lookIndex,card,overlay:card.querySelector('.hero-filter-layer'),divider:card.querySelector('.hero-filter-divider'),animations:[],promise:null};activeHeroWipe=state;
+  const current=()=>activeHeroWipe===state&&heroPosition===index;
+  state.promise=(async()=>{
+    try{
+      const url=await cachedHeroLook(index,lookIndex);if(!current())return;
+      state.overlay.src=url;await state.overlay.decode();if(!current())return;
+      $('#hero-look').textContent=`${look.label} · ${lookIndex+1}/3`;
+      if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+        state.overlay.hidden=false;state.divider.hidden=false;state.card.classList.add('is-filter-sliding');stage.dataset.incomingLook=look.filter;stage.dataset.filterTransition='sliding';
+        const timing={duration:850,easing:'cubic-bezier(.2,.65,.25,1)',fill:'both'};
+        state.animations=[state.overlay.animate([{clipPath:'inset(0 0 0 100%)'},{clipPath:'inset(0 0 0 0%)'}],timing),state.divider.animate([{left:'100%'},{left:'0%'}],timing)];
+        await state.animations[0].finished;if(!current())return;
+      }
+      image.src=url;await image.decode();if(!current())return;
+      image.dataset.look=look.filter;stage.dataset.look=look.filter;stage.dataset.lookIndex=String(lookIndex);
+    }catch{if(current())$('#hero-look').textContent='Original';}
+    finally{if(activeHeroWipe===state)cancelHeroWipe();}
+  })();
+  return state.promise;
 }
 function scheduleHeroLook(playing) {
-  clearTimeout(effectTimer);const elapsed=HERO_DURATION-autoRemaining,lookIndex=Math.min(2,Math.floor(elapsed/2000));void showHeroLook(heroPosition,lookIndex);
-  if(playing&&lookIndex<2)effectTimer=setTimeout(()=>{const elapsedNow=HERO_DURATION-autoRemaining+(performance.now()-autoStartedAt);const nextLook=Math.min(2,Math.floor(elapsedNow/2000));void showHeroLook(heroPosition,nextLook);if(nextLook<2)effectTimer=setTimeout(()=>void showHeroLook(heroPosition,2),Math.max(20,4000-elapsedNow));},Math.max(20,(lookIndex+1)*2000-elapsed));
+  clearTimeout(effectTimer);
+  if(pointer)return;
+  function tick(){const elapsed=HERO_DURATION-autoRemaining+(autoTimer?performance.now()-autoStartedAt:0),lookIndex=Math.min(heroLooks.length-1,Math.floor(elapsed/HERO_LOOK_DURATION));void showHeroLook(heroPosition,lookIndex);if(playing&&lookIndex<heroLooks.length-1)effectTimer=setTimeout(tick,Math.max(20,(lookIndex+1)*HERO_LOOK_DURATION-elapsed));}
+  tick();
 }
 function trackBounds() {return Math.min(0,stage.clientWidth-track.scrollWidth);}
 function positionTrack(value, animate = false) {trackX = Math.max(trackBounds(),Math.min(0,value));track.style.transition = animate && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'transform .5s cubic-bezier(.22,.7,.15,1)' : 'none';track.style.transform = `translateX(${trackX}px)`;const cards = $$('.dump-card');heroPosition = Math.min(cards.length-1,Math.max(0,Math.round(-trackX/stage.clientWidth)));$('#hero-counter').textContent = `${heroPosition+1} / ${cards.length}`;$$('.dump-dot').forEach((button,index)=>button.setAttribute('aria-pressed',String(index===heroPosition)));$$('.story-segment').forEach((segment,index)=>segment.dataset.state=index<heroPosition?'complete':index===heroPosition?'active':'upcoming');cards.forEach((card,index)=>card.classList.toggle('is-current',index===heroPosition));$('#hero-photo-caption').textContent=cards[heroPosition]?.querySelector('figcaption').textContent||'';}
-function scheduleAutoplay() {if(autoTimer){clearTimeout(autoTimer);autoTimer=null;autoRemaining=Math.max(0,autoRemaining-(performance.now()-autoStartedAt));}if(!heroPhotos.length)return;if(!heroReady.has(heroPosition)){clearTimeout(effectTimer);stage.classList.remove('is-playing');const index=heroPosition;void prepareHero(index).then(()=>{if(index===heroPosition)scheduleAutoplay();});return;}const playing=!(manualPaused||hovering||focusWithin||pointer||document.hidden||!heroVisible||matchMedia('(prefers-reduced-motion: reduce)').matches||!track.children.length);stage.classList.toggle('is-playing',playing);scheduleHeroLook(playing);if(!playing)return;autoStartedAt=performance.now();autoTimer=setTimeout(()=>{autoTimer=null;advance(1);},autoRemaining);}
-function goToSlide(index) {const count=track.children.length;if(!count)return;clearTimeout(autoTimer);autoTimer=null;autoRemaining=HERO_DURATION;const next=(index+count)%count;const wraps=Math.abs(next-heroPosition)>1;positionTrack(-next*stage.clientWidth,!wraps);const fill=$('.story-segment[data-state=active] > span');if(fill){fill.style.animation='none';void fill.offsetWidth;fill.style.animation='';}scheduleAutoplay();}
+function scheduleAutoplay() {if(autoTimer){clearTimeout(autoTimer);autoTimer=null;autoRemaining=Math.max(0,autoRemaining-(performance.now()-autoStartedAt));}if(!heroPhotos.length)return;if(!heroReady.has(heroPosition)){clearTimeout(effectTimer);stage.classList.remove('is-playing');const index=heroPosition;void prepareHero(index).then(()=>{if(index===heroPosition)scheduleAutoplay();});return;}const playing=!(manualPaused||focusWithin||pointer||document.hidden||!heroVisible||matchMedia('(prefers-reduced-motion: reduce)').matches||!track.children.length);stage.classList.toggle('is-playing',playing);scheduleHeroLook(playing);if(!playing)return;autoStartedAt=performance.now();autoTimer=setTimeout(()=>{autoTimer=null;advance(1);},autoRemaining);}
+function goToSlide(index) {const count=track.children.length;if(!count)return;cancelHeroWipe();clearTimeout(autoTimer);autoTimer=null;autoRemaining=HERO_DURATION;const next=(index+count)%count;const wraps=Math.abs(next-heroPosition)>1;positionTrack(-next*stage.clientWidth,!wraps);const fill=$('.story-segment[data-state=active] > span');if(fill){fill.style.animation='none';void fill.offsetWidth;fill.style.animation='';}scheduleAutoplay();}
 function advance(direction) {goToSlide(heroPosition+direction);rotateCopy(direction);}
 $('#hero-prev').addEventListener('click',() => advance(-1));$('#hero-next').addEventListener('click',() => advance(1));
 stage.addEventListener('keydown',(event) => {if(event.target!==stage)return;if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();advance(event.key==='ArrowRight'?1:-1);}});
-stage.addEventListener('pointerdown',(event) => {if(event.button!==0||event.target.closest('button'))return;pointer = {id:event.pointerId,x:event.clientX,trackX,index:heroPosition};scheduleAutoplay();stage.setPointerCapture(event.pointerId);stage.classList.add('dragging');});
+stage.addEventListener('pointerdown',(event) => {if(event.button!==0||event.target.closest('button'))return;cancelHeroWipe();pointer = {id:event.pointerId,x:event.clientX,trackX,index:heroPosition};scheduleAutoplay();stage.setPointerCapture(event.pointerId);stage.classList.add('dragging');});
 stage.addEventListener('pointermove',(event) => {if(!pointer || pointer.id!==event.pointerId)return;positionTrack(pointer.trackX+event.clientX-pointer.x);});
 function endDrag(event) {if(pointer?.id!==event.pointerId)return;const delta=event.clientX-pointer.x,index=pointer.index;pointer=null;stage.classList.remove('dragging');if(stage.hasPointerCapture(event.pointerId))stage.releasePointerCapture(event.pointerId);goToSlide(index+(event.type==='pointercancel'?0:Math.abs(delta)>stage.clientWidth*.16?(delta<0?1:-1):0));}
 stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);
-stage.addEventListener('pointerenter',(event)=>{if(event.pointerType==='mouse'){hovering=true;scheduleAutoplay();}});stage.addEventListener('pointerleave',()=>{hovering=false;scheduleAutoplay();});
-stage.addEventListener('focusin',()=>{focusWithin=true;scheduleAutoplay();});stage.addEventListener('focusout',()=>queueMicrotask(()=>{focusWithin=stage.contains(document.activeElement);scheduleAutoplay();}));
-$('#hero-toggle').addEventListener('click',()=>{manualPaused=!manualPaused;if(!manualPaused){hovering=false;focusWithin=false;}$('#hero-toggle').setAttribute('aria-pressed',String(manualPaused));$('#hero-toggle').setAttribute('aria-label',t(manualPaused?'playSlideshow':'pauseSlideshow'));scheduleAutoplay();});
-document.addEventListener('visibilitychange',scheduleAutoplay);matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',scheduleAutoplay);
+stage.addEventListener('focusin',(event)=>{focusWithin=event.target.matches(':focus-visible');scheduleAutoplay();});stage.addEventListener('focusout',()=>queueMicrotask(()=>{focusWithin=stage.contains(document.activeElement)&&document.activeElement.matches(':focus-visible');scheduleAutoplay();}));
+$('#hero-toggle').addEventListener('click',()=>{manualPaused=!manualPaused;if(!manualPaused)focusWithin=false;$('#hero-toggle').setAttribute('aria-pressed',String(manualPaused));$('#hero-toggle').setAttribute('aria-label',t(manualPaused?'playSlideshow':'pauseSlideshow'));scheduleAutoplay();});
+document.addEventListener('visibilitychange',scheduleAutoplay);matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',()=>{cancelHeroWipe();scheduleAutoplay();});
 new IntersectionObserver(([entry])=>{heroVisible=entry.isIntersecting;scheduleAutoplay();},{threshold:.1}).observe(stage);
 window.addEventListener('resize',() => positionTrack(-heroPosition*stage.clientWidth));
 function rotateCopy(direction = 1) {rotateIndex = (rotateIndex+direction+t('rotate').length)%t('rotate').length;$('#rotating-copy').textContent=t('rotate')[rotateIndex];}
@@ -205,7 +234,7 @@ async function init() {
     const heroNames=['city-muse','cafe-moment','city-romance','amalfi-film','golden-street','beach-romance','leopard-city','paris-cafe'];
     heroPhotos=heroNames.map(photo);
     const captions=['city girl diary','slow mornings','just us ♡','a little getaway','golden state of mind','wish you were here','outfit on repeat','little rituals'];
-    heroNames.forEach((name,index)=>{const data=photo(name),figure=document.createElement('figure');figure.className='dump-card';const image=makeImage(data,index<2);image.dataset.photoFile=data.file;if(index===0)image.fetchPriority='high';figure.append(image);const caption=document.createElement('figcaption');caption.textContent=captions[index];figure.append(caption);track.append(figure);const dot=document.createElement('button');dot.className='dump-dot';dot.setAttribute('aria-label',`${t('goToPhoto')} ${index+1}`);dot.addEventListener('click',()=>goToSlide(index));$('#dump-pagination').append(dot);const segment=document.createElement('span');segment.className='story-segment';segment.append(document.createElement('span'));$('#story-progress').append(segment);});
+    heroNames.forEach((name,index)=>{const data=photo(name),figure=document.createElement('figure');figure.className='dump-card';const image=makeImage(data,index<2);image.className='hero-photo';image.dataset.photoFile=data.file;if(index===0)image.fetchPriority='high';figure.append(image);const caption=document.createElement('figcaption');caption.textContent=captions[index];figure.append(caption);const filterLayer=document.createElement('img');filterLayer.className='hero-filter-layer';filterLayer.alt='';filterLayer.setAttribute('aria-hidden','true');filterLayer.hidden=true;const divider=document.createElement('span');divider.className='hero-filter-divider';divider.setAttribute('aria-hidden','true');divider.hidden=true;figure.append(filterLayer,divider);track.append(figure);const dot=document.createElement('button');dot.className='dump-dot';dot.setAttribute('aria-label',`${t('goToPhoto')} ${index+1}`);dot.addEventListener('click',()=>goToSlide(index));$('#dump-pagination').append(dot);const segment=document.createElement('span');segment.className='story-segment';segment.append(document.createElement('span'));$('#story-progress').append(segment);});
     photos.forEach((data,index)=>{const button=document.createElement('button');button.className='photo-choice';button.setAttribute('aria-label',data.alt[lang]);const image=makeImage(data);image.alt='';button.append(image);button.addEventListener('click',()=>{photoIndex=index;selectedButtons();scheduleRender();});$('#photo-picker').append(button);});
     const thumb=photo('golden-street');looks.forEach((look,index)=>{const button=document.createElement('button');button.className='look-choice';button.setAttribute('aria-label',`Look ${look.label}`);const image=makeImage(thumb);image.alt='';image.style.filter=look.css;const label=document.createElement('span');label.textContent=look.label;button.append(image,label);button.addEventListener('click',()=>{lookIndex=index;selectedButtons();scheduleRender();if(matchMedia('(max-width: 740px)').matches)button.scrollIntoView({block:'nearest',inline:'center',behavior:reducedMotion?'auto':'smooth'});});$('#look-picker').append(button);});
     ['city-muse','cafe-moment','city-romance'].forEach((name)=>$('#mini-collage').append(makeImage(photo(name))));
