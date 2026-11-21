@@ -138,7 +138,7 @@ $('#save-preview').addEventListener('click',() => {
 });
 $('#compare-range').addEventListener('input',(event) => $('#comparison').style.setProperty('--split',`${event.target.value}%`));
 async function setupComparison() {
-  const data=photo('city-romance');$('#before-image').src=`./${data.file}`;
+  const data=photo('sunlit-portrait');$('#before-image').src=`./${data.file}`;
   try{const [image,{renderPhoto}]=await Promise.all([loadImage(`./${data.file}`),engine()]);const processed=renderPhoto(image,'vint_seventies',85,true);const out=$('#after-canvas');out.width=processed.width;out.height=processed.height;out.getContext('2d').drawImage(processed,0,0);out.dataset.ready='true';}
   catch(error){console.error('[comparison]',error);$('#after-canvas').hidden=true;$('#compare-range').disabled=true;$('#compare-line').hidden=true;$('.compare-label.after').hidden=true;$('.compare-caption').firstElementChild.textContent=t('renderError');}
 }
