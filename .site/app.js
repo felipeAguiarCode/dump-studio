@@ -16,6 +16,8 @@ Object.assign(dictionaries.pt, {pauseSlideshow:'Pausar fotos automáticas',playS
 Object.assign(dictionaries.en, {pauseSlideshow:'Pause automatic slideshow',playSlideshow:'Play automatic slideshow',goToPhoto:'Go to photo',manifestoLine1:'A date. A coffee.',manifestoLine2:'An outfit that just worked.',manifestoLine3:'Everyday life deserves',manifestoLine4:'a place in your feed.'});
 Object.assign(dictionaries.pt, {navCollages:'Colagens',collageKicker:'Um rolo. Muitas composições.',collageTitle:'Junta os cliques.<br>Muda a história.',collageDesc:'Escolha um estilo e experimente os layouts reais do app. Grades, Polaroids, recortes inclinados ou um carrossel que continua na próxima foto.',collageChoose:'Encontre a composição.',collageHint:'Mesmas fotos. Infinitas formas de juntar.',collageShuffle:'Trocar as fotos ↻',collageSave:'Salvar colagem · PNG',collageNote:'Uma prévia dos layouts do studio. No app, você posiciona suas próprias fotos e edita cada camada.'});
 Object.assign(dictionaries.en, {navCollages:'Collages',collageKicker:'One camera roll. So many compositions.',collageTitle:'Bring the shots.<br>Change the story.',collageDesc:'Choose a style and try the app’s real layouts. Grids, Polaroids, tilted frames, or a carousel that flows into the next photo.',collageChoose:'Find your composition.',collageHint:'Same photos. Endless ways to bring them together.',collageShuffle:'Switch the photos ↻',collageSave:'Save collage · PNG',collageNote:'A preview of the studio layouts. In the app, use your own photos and edit each layer.'});
+Object.assign(dictionaries.pt, {navPlay:'Mood',mobileLooks:'Looks',mobileAdjust:'Ajustes',mobileFormat:'Formato',headlineVariants:['Suas regras.','Seu estilo.','Sua vibe.','Sua personalidade.','Seu olhar.']});
+Object.assign(dictionaries.en, {navPlay:'Mood',mobileLooks:'Looks',mobileAdjust:'Adjust',mobileFormat:'Format',headlineVariants:['Your rules.','Your style.','Your vibe.','Your personality.','Your point of view.']});
 let lang = 'pt';
 try { lang = new URLSearchParams(location.search).get('lang') || localStorage.getItem('my-dump-site-lang') || 'pt'; } catch {}
 if (!dictionaries[lang]) lang = 'pt';
@@ -55,6 +57,7 @@ function localize() {
   if(appShots[0]) appShots[0].alt = t('appFilters');
   if(appShots[1]) appShots[1].alt = t('appLayouts');
   $('#rotating-copy').textContent = t('rotate')[rotateIndex];
+  setHeadlineWord();
   $('#hero-toggle').setAttribute('aria-label',t(manualPaused?'playSlideshow':'pauseSlideshow'));
   $$('.dump-dot').forEach((button,index)=>button.setAttribute('aria-label',`${t('goToPhoto')} ${index+1}`));
   document.title = `My Dump Studio — ${t('heroTitle1')} ${t('heroTitle2')}`;
@@ -105,6 +108,15 @@ window.addEventListener('resize',() => positionTrack(-heroPosition*stage.clientW
 function rotateCopy(direction = 1) {rotateIndex = (rotateIndex+direction+t('rotate').length)%t('rotate').length;$('#rotating-copy').textContent=t('rotate')[rotateIndex];}
 if(!reducedMotion) setInterval(() => {if(!document.hidden&&!matchMedia('(prefers-reduced-motion: reduce)').matches)rotateCopy();},5200);
 
+let headlineIndex=0,headlineFlipping=false;
+function fitHeadline(){const word=$('#hero-headline-word'),container=word.parentElement;word.style.fontSize='inherit';const base=parseFloat(getComputedStyle(word).fontSize),natural=word.offsetWidth;word.style.fontSize=`${base*Math.min(1,(container.clientWidth-2)/Math.max(1,natural))}px`;}
+function setHeadlineWord(){const word=$('#hero-headline-word');word.textContent=t('headlineVariants')[headlineIndex];fitHeadline();}
+window.addEventListener('resize',fitHeadline);document.fonts.ready.then(fitHeadline);
+setInterval(async()=>{if(headlineFlipping||document.hidden||matchMedia('(prefers-reduced-motion: reduce)').matches||$('.hero').getBoundingClientRect().bottom<0)return;headlineFlipping=true;const word=$('#hero-headline-word');try{await word.animate([{transform:'rotateX(0deg)',opacity:1},{transform:'rotateX(85deg)',opacity:0}],{duration:270,easing:'ease-in',fill:'forwards'}).finished;headlineIndex=(headlineIndex+1)%5;setHeadlineWord();word.getAnimations().forEach(animation=>animation.cancel());await word.animate([{transform:'rotateX(-85deg)',opacity:0},{transform:'rotateX(0deg)',opacity:1}],{duration:440,easing:'cubic-bezier(.2,.7,.2,1)'}).finished;}catch{}finally{headlineFlipping=false;}},4200);
+
+function selectMobileEditorTab(button,focus=false){$('.editor-controls').dataset.mobileTab=button.dataset.editorTab;$$('.mobile-edit-tabs button').forEach(tab=>{tab.setAttribute('aria-selected',String(tab===button));tab.tabIndex=tab===button?0:-1;});if(focus)button.focus();}
+$$('.mobile-edit-tabs button').forEach((button,index,buttons)=>{button.addEventListener('click',()=>selectMobileEditorTab(button));button.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%buttons.length;else if(event.key==='ArrowLeft')next=(index+buttons.length-1)%buttons.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=buttons.length-1;if(next!==undefined){event.preventDefault();selectMobileEditorTab(buttons[next],true);}});});
+
 function selectedButtons() {
   $$('.photo-choice').forEach((button,index) => button.setAttribute('aria-pressed',String(index===photoIndex)));
   $$('.look-choice').forEach((button,index) => button.setAttribute('aria-pressed',String(index===lookIndex)));
@@ -122,7 +134,7 @@ async function renderEditor() {
     const padding=36,scale=Math.min((dims[0]-padding*2)/processed.width,(dims[1]-padding*2)/processed.height);const w=processed.width*scale,h=processed.height*scale;
     ctx.drawImage(processed,(dims[0]-w)/2,(dims[1]-h)/2,w,h);
     $('#preview-name').textContent=looks[lookIndex].label;$('#preview-dimensions').textContent=`${dims[0]} × ${dims[1]}`;
-    $('#editor-canvas').dataset.ready='true';$('#editor-canvas').dataset.filter=looks[lookIndex].filter||'original';rendered=true;$('#save-preview').disabled=false;
+    $('#editor-canvas').dataset.ready='true';$('#editor-canvas').dataset.filter=looks[lookIndex].filter||'original';$('#editor-canvas').dataset.grain=String(grain);rendered=true;$('#save-preview').disabled=false;
   } catch(error) {console.error('[demo]',error);if(ticket===renderTicket)$('#editor-message').textContent=t('renderError');}
   finally {if(ticket===renderTicket)$('#render-status').hidden=true;}
 }
@@ -195,10 +207,10 @@ async function init() {
     const captions=['city girl diary','slow mornings','just us ♡','a little getaway','golden state of mind','wish you were here','outfit on repeat','little rituals'];
     heroNames.forEach((name,index)=>{const data=photo(name),figure=document.createElement('figure');figure.className='dump-card';const image=makeImage(data,index<2);image.dataset.photoFile=data.file;if(index===0)image.fetchPriority='high';figure.append(image);const caption=document.createElement('figcaption');caption.textContent=captions[index];figure.append(caption);track.append(figure);const dot=document.createElement('button');dot.className='dump-dot';dot.setAttribute('aria-label',`${t('goToPhoto')} ${index+1}`);dot.addEventListener('click',()=>goToSlide(index));$('#dump-pagination').append(dot);const segment=document.createElement('span');segment.className='story-segment';segment.append(document.createElement('span'));$('#story-progress').append(segment);});
     photos.forEach((data,index)=>{const button=document.createElement('button');button.className='photo-choice';button.setAttribute('aria-label',data.alt[lang]);const image=makeImage(data);image.alt='';button.append(image);button.addEventListener('click',()=>{photoIndex=index;selectedButtons();scheduleRender();});$('#photo-picker').append(button);});
-    const thumb=photo('golden-street');looks.forEach((look,index)=>{const button=document.createElement('button');button.className='look-choice';button.setAttribute('aria-label',`Look ${look.label}`);const image=makeImage(thumb);image.alt='';image.style.filter=look.css;const label=document.createElement('span');label.textContent=look.label;button.append(image,label);button.addEventListener('click',()=>{lookIndex=index;selectedButtons();scheduleRender();});$('#look-picker').append(button);});
+    const thumb=photo('golden-street');looks.forEach((look,index)=>{const button=document.createElement('button');button.className='look-choice';button.setAttribute('aria-label',`Look ${look.label}`);const image=makeImage(thumb);image.alt='';image.style.filter=look.css;const label=document.createElement('span');label.textContent=look.label;button.append(image,label);button.addEventListener('click',()=>{lookIndex=index;selectedButtons();scheduleRender();if(matchMedia('(max-width: 740px)').matches)button.scrollIntoView({block:'nearest',inline:'center',behavior:reducedMotion?'auto':'smooth'});});$('#look-picker').append(button);});
     ['city-muse','cafe-moment','city-romance'].forEach((name)=>$('#mini-collage').append(makeImage(photo(name))));
     for(let i=0;i<3;i++)$('#look-fan').append(makeImage(photo('golden-street')));
-    $('#download-photo').append(makeImage(photo('white-dress')));
+    const downloadPhoto=photo('leopard-city'),downloadImage=makeImage(downloadPhoto);downloadImage.dataset.photoFile=downloadPhoto.file;$('#download-photo').append(downloadImage);
     selectedButtons();positionTrack(0);localize();$('#hero-toggle').setAttribute('aria-pressed',String(manualPaused));scheduleAutoplay();
     void import('./collages.js').then(({setupCollages})=>setupCollages({photos,loadImage,engine,getLanguage:()=>lang,toast})).then(demo=>{collageDemo=demo;demo.localize();}).catch(()=>{$('#collage-message').textContent=t('renderError');});
     const observer=new IntersectionObserver((entries)=>{for(const entry of entries)if(entry.isIntersecting){if(entry.target.id==='play')void renderEditor();else void setupComparison();observer.unobserve(entry.target);}},{rootMargin:'350px'});observer.observe($('#play'));observer.observe($('#comparison'));

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs><radialGradient id="fruit" cx=".3" cy=".2" r=".9"><stop stop-color="#FFB6DE"/><stop offset=".3" stop-color="#FE4C9F"/><stop offset=".7" stop-color="#D7146F"/><stop offset="1" stop-color="#720C59"/></radialGradient><linearGradient id="stem" x1="40" y1="15" x2="95" y2="85" gradientUnits="userSpaceOnUse"><stop stop-color="#FFD3AD"/><stop offset="1" stop-color="#FF8BCB"/></linearGradient></defs>
+  <path d="M48 77C52 54 69 41 77 18c0 24 9 35 17 56" stroke="url(#stem)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M77 20C91 3 112 10 114 13c-8 15-23 19-37 7Z" fill="#F7B2DE"/>
+  <circle cx="43" cy="89" r="27" fill="url(#fruit)"/><circle cx="91" cy="86" r="25" fill="url(#fruit)"/>
+  <path d="M28 79c2-6 6-9 12-10m38 9c1-6 6-9 11-10" stroke="#FFF0FA" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+</svg>
