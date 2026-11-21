@@ -9,11 +9,14 @@ Não depende de serviços de IA, contas ou uploads. O PNG é gerado no navegador
 Na raiz do projeto:
 
 ```powershell
-python -m http.server 4173 --directory .site --bind 127.0.0.1
+npm run site
 ```
 
 Abra `http://127.0.0.1:4173`. Use um servidor HTTP; abrir `index.html` via `file://`
 não permite carregar os módulos e o catálogo de fotos em todos os navegadores.
+O comando serve sempre esta pasta, com o cache desativado para mostrar as últimas
+alterações. Não use `npm run dev`: ele inicia o aplicativo desktop.
+Se a porta estiver ocupada, use `npm run site -- --port 4174`.
 
 ## Download
 

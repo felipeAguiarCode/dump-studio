@@ -14,7 +14,7 @@ release pública do GitHub. Enquanto não houver release, a página informa **Em
 Para abrir localmente, na raiz do projeto:
 
 ```powershell
-python -m http.server 4173 --directory .site --bind 127.0.0.1
+npm run site
 ```
 
 Acesse `http://127.0.0.1:4173` ou o [site público no GitHub Pages](https://felipeaguiarcode.github.io/dump-studio/).

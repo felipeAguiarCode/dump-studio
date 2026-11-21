@@ -16,7 +16,8 @@
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "rebuild": "electron-rebuild -f -w better-sqlite3",
     "postinstall": "electron-builder install-app-deps",
-    "dist": "electron-vite build && electron-builder --win"
+    "dist": "electron-vite build && electron-builder --win",
+    "site": "node .site/scripts/serve.mjs"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",

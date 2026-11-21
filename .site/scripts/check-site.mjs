@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
-import { createServer } from 'node:http'
+import { createSiteServer } from './serve.mjs'
 import { readFile, writeFile, mkdir, mkdtemp } from 'node:fs/promises'
-import { resolve, join, extname, sep } from 'node:path'
+import { resolve, join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { spawn } from 'node:child_process'
@@ -11,9 +11,8 @@ const heroOnly=process.argv.includes('--hero')
 const scratch=await mkdtemp(join(tmpdir(),'my-dump-site-check-'))
 const cache=join(root,'node_modules/.cache/my-dump-site-check');await mkdir(cache,{recursive:true})
 await mkdir(join(site,'previews'),{recursive:true})
-const types={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.jpg':'image/jpeg','.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml','.woff2':'font/woff2','.txt':'text/plain'}
 const missing=[]
-const server=createServer(async(req,res)=>{try{const path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);const target=resolve(site,'.'+(path==='/'?'/index.html':path));if(!target.startsWith(site)||target===site)throw Error('Invalid path');const body=await readFile(target);res.writeHead(200,{'Content-Type':types[extname(target)]||'application/octet-stream'});res.end(body)}catch{missing.push(req.url);res.writeHead(404);res.end('Not found')}})
+const server=createSiteServer({onMissing:url=>missing.push(url)})
 await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin=`http://127.0.0.1:${server.address().port}`
 await writeFile(join(scratch,'preload.cjs'),`const nativeFetch=window.fetch.bind(window);window.fetch=async(input,options)=>{if(String(input).startsWith('https://api.github.com/repos/')){const mode=new URL(location.href).searchParams.get('release');if(mode==='ready')return new Response(JSON.stringify({tag_name:'v2.3.4',draft:false,prerelease:false,assets:[{name:'My-Dump-Studio-2.3.4-setup.exe',state:'uploaded',size:123456789,browser_download_url:'https://github.com/felipeAguiarCode/dump-studio/releases/download/v2.3.4/My-Dump-Studio-2.3.4-setup.exe'}]}),{status:200,headers:{'Content-Type':'application/json'}});if(mode==='error')throw new TypeError('Fixture network unavailable');return new Response('{}',{status:404});}return nativeFetch(input,options)};`)
 await writeFile(join(cache,'main.cjs'),`
