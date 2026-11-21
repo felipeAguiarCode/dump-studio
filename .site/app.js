@@ -76,7 +76,7 @@ function endDrag(event) {if(pointer?.id!==event.pointerId)return;const delta=eve
 stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);
 stage.addEventListener('pointerenter',(event)=>{if(event.pointerType==='mouse'){hovering=true;scheduleAutoplay();}});stage.addEventListener('pointerleave',()=>{hovering=false;scheduleAutoplay();});
 stage.addEventListener('focusin',()=>{focusWithin=true;scheduleAutoplay();});stage.addEventListener('focusout',()=>queueMicrotask(()=>{focusWithin=stage.contains(document.activeElement);scheduleAutoplay();}));
-$('#hero-toggle').addEventListener('click',()=>{manualPaused=!manualPaused;$('#hero-toggle').setAttribute('aria-pressed',String(manualPaused));$('#hero-toggle').setAttribute('aria-label',t(manualPaused?'playSlideshow':'pauseSlideshow'));scheduleAutoplay();});
+$('#hero-toggle').addEventListener('click',()=>{manualPaused=!manualPaused;if(!manualPaused){hovering=false;focusWithin=false;}$('#hero-toggle').setAttribute('aria-pressed',String(manualPaused));$('#hero-toggle').setAttribute('aria-label',t(manualPaused?'playSlideshow':'pauseSlideshow'));scheduleAutoplay();});
 document.addEventListener('visibilitychange',scheduleAutoplay);matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',scheduleAutoplay);
 new IntersectionObserver(([entry])=>{heroVisible=entry.isIntersecting;scheduleAutoplay();},{threshold:.1}).observe(stage);
 window.addEventListener('resize',() => positionTrack(-heroPosition*stage.clientWidth));

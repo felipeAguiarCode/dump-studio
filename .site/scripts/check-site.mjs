@@ -33,6 +33,7 @@ await wait('document.getElementById("download-button").getAttribute("aria-disabl
 await wait('document.getElementById("hero-counter").textContent==="2 / 8"');
 assert.equal(await js('Array.from(document.querySelectorAll(".dump-dot")).findIndex(b=>b.getAttribute("aria-pressed")==="true")'),1,'Automatic slideshow and white dots must advance together');
 await js('document.getElementById("hero-toggle").click()');const pausedCounter=await js('document.getElementById("hero-counter").textContent');await pause(4100);assert.equal(await js('document.getElementById("hero-counter").textContent'),pausedCounter,'Pause stops automatic photos');
+await js('document.getElementById("hero-toggle").focus();document.getElementById("hero-toggle").click()');await wait('document.getElementById("hero-counter").textContent!=='+JSON.stringify(pausedCounter));await js('document.getElementById("hero-toggle").click()');
 await js('document.querySelectorAll(".dump-dot")[2].click()');assert.equal(await js('document.getElementById("hero-counter").textContent'),'3 / 8','Dots navigate directly to their photos');
 await js('document.getElementById("hero-next").click()');await pause(550);const firstX=await js('getComputedStyle(document.getElementById("dump-track")).transform');
 const stage=await js('(()=>{const r=document.getElementById("dump-stage").getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height}})()');
