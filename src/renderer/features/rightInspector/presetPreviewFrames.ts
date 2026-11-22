@@ -33,10 +33,14 @@ export interface PresetFrame {
   page: DumpItem
 }
 
-export function buildPresetFrames(page: DumpItem, image: Layer, look: PhotoLook): PresetFrame[] {
-  // The real preset path defines the final look and FX placement. These are detached render inputs.
+/** Render the same look as Apply against a detached copy of the page. */
+export function previewPresetPage(page: DumpItem, image: Layer, look: PhotoLook): DumpItem {
   const editable: DumpItem = { ...page, layers: page.layers.map((layer) => layer.id === image.id ? { ...layer, locked: false } : layer) }
-  const after = applyPhotoLook(editable, image.id, look, look.fx.map((_, index) => `preview-fx-${index}`), image.updatedAt)
+  return applyPhotoLook(editable, image.id, look, look.fx.map((_, index) => `preview-fx-${index}`), image.updatedAt)
+}
+
+export function buildPresetFrames(page: DumpItem, image: Layer, look: PhotoLook): PresetFrame[] {
+  const after = previewPresetPage(page, image, look)
   const finalImage = after.layers.find((layer) => layer.id === image.id)!
   const originalData = image.data as ImageLayerData
   const finalData = finalImage.data as ImageLayerData

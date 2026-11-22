@@ -1,6 +1,7 @@
 import { useState, type DragEvent } from 'react'
 import { ImagePlus, Plus, MousePointerClick } from 'lucide-react'
 import { useEditorStore, selectActiveDumpItem } from '../../stores/editorStore'
+import { useUiStore } from '../../stores/uiStore'
 import { projectActions } from '../../services/projectActions'
 import { useT } from '@renderer/i18n'
 import { useElementSize } from '../../hooks/useElementSize'
@@ -23,6 +24,7 @@ export function CanvasRegion(): JSX.Element {
   const project = useEditorStore((s) => s.project)
   const activeItem = useEditorStore(selectActiveDumpItem)
   const selectedIds = useEditorStore((s) => s.ui?.selectedLayerIds ?? [])
+  const hoverPreview = useUiStore((s) => s.presetHoverPreview)
   const zoom = useEditorStore((s) => s.ui?.canvasZoom ?? 1)
   const panX = useEditorStore((s) => s.ui?.canvasPanX ?? 0)
   const panY = useEditorStore((s) => s.ui?.canvasPanY ?? 0)
@@ -33,6 +35,7 @@ export function CanvasRegion(): JSX.Element {
   const noPages = (project?.dumpItems.length ?? 0) === 0
   const selectedLayers = activeItem ? activeItem.layers.filter((l) => selectedIds.includes(l.id)) : []
   const view = activeItem ? computeView(size, activeItem.canvas, zoom, panX, panY) : null
+  const showPresetPreview = hoverPreview?.page === activeItem && !!hoverPreview && selectedIds.includes(hoverPreview.imageId)
   const pageEmpty = !!activeItem && activeItem.layers.every((l) => l.type === 'background')
 
   const onAssetDragOver = (e: DragEvent): void => {
@@ -98,6 +101,20 @@ export function CanvasRegion(): JSX.Element {
         activeItem && <CanvasStage item={activeItem} width={size.width} height={size.height} />
       )}
 
+      {showPresetPreview && view && activeItem && (
+        <div
+          className="pointer-events-none absolute bg-noir-canvas"
+          style={{ left: view.offsetX, top: view.offsetY, width: activeItem.canvas.width * view.scale, height: activeItem.canvas.height * view.scale }}
+          data-testid="preset-hover-preview"
+          aria-hidden="true"
+        >
+          <img src={hoverPreview.src} alt="" className="h-full w-full" />
+          <span className="absolute bottom-3 left-3 max-w-[calc(100%-24px)] truncate rounded-lg bg-noir-elevated/95 px-3 py-1.5 text-xs font-medium text-noir-text shadow-bubble">
+            {t('presetPreview.hoverLabel', { name: hoverPreview.name })}
+          </span>
+        </div>
+      )}
+
       {!noPages && pageEmpty && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="flex flex-col items-center gap-2 text-noir-disabled">
@@ -113,7 +130,7 @@ export function CanvasRegion(): JSX.Element {
         <>
           <QuickActivationMenu />
           <CanvasToolbar />
-          {activeItem && view && selectedLayers.length > 0 && (
+          {activeItem && view && selectedLayers.length > 0 && !showPresetPreview && (
             <SelectionBubble
               layers={selectedLayers}
               canvas={activeItem.canvas}

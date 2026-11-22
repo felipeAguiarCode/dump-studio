@@ -39,6 +39,8 @@ export const en = {
 
   presetLibrary: {
     library: 'Preset library',
+    collection: 'Library', ungrouped: 'Ungrouped', emptyFolder: 'No presets in this folder.',
+    clearSearch: 'Clear search',
     favorites: 'Favorites', saveFavorite: 'Add to favorites',
     addFavorite: 'Add {name} to favorites', removeFavorite: 'Remove {name} from favorites',
     favoritesEmpty: 'Your favorite looks live here', favoritesHint: 'Star a preset or choose to add it to favorites when saving.',
@@ -72,6 +74,7 @@ export const en = {
 
   presetPreview: {
     title: 'Preset preview', open: 'Preview {name}', close: 'Close preset preview',
+    hoverLabel: 'Preview · {name}',
     before: 'Before', after: 'After', showcase: 'Showcase', apply: 'Apply preset',
     filter: 'Filter', adjustments: 'Camera and adjustments', textures: 'Textures', finish: 'Border and opacity', fx: 'FX',
     sample: 'Sample photo', loading: 'Rendering preview…', failed: 'Could not render this preview.',

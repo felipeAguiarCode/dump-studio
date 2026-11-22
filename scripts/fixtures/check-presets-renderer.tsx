@@ -80,6 +80,14 @@ async function run(): Promise<void> {
   let preset = usePresetLibraryStore.getState().presets.find((p) => p.name === 'Look de teste UI')!
   check(preset && preset.folderId === folder.id && preset.look.fx.length === 2, 'Save form lost settings, folder or FX')
   check(preset.favorite, 'Favorite was not persisted when saving')
+  const parentGroup = document.querySelector<HTMLButtonElement>('button[aria-expanded][title="Favoritos UI"]')!
+  const previewAction = (name: string): HTMLButtonElement | null =>
+    [...document.querySelectorAll<HTMLButtonElement>('[data-testid="preset-row"] button')].find((button) => button.getAttribute('aria-label') === `Prévia de ${name}`) ?? null
+  check(parentGroup?.getAttribute('aria-expanded') === 'true' && previewAction('Look de teste UI'), 'Nested presets should appear directly under their expanded folders')
+  parentGroup.click()
+  await wait(() => parentGroup.getAttribute('aria-expanded') === 'false' && !previewAction('Look de teste UI'))
+  parentGroup.click()
+  await wait(() => parentGroup.getAttribute('aria-expanded') === 'true' && !!previewAction('Look de teste UI'))
   await aria('Remover Look de teste UI dos favoritos'); await wait(() => !usePresetLibraryStore.getState().presets.find((p) => p.id === preset.id)!.favorite)
   await aria('Adicionar Look de teste UI aos favoritos'); await wait(() => usePresetLibraryStore.getState().presets.find((p) => p.id === preset.id)!.favorite)
   const favoritesButton = [...document.querySelectorAll<HTMLButtonElement>('button')].find((button) => button.textContent?.startsWith('Favoritos'))!
@@ -107,6 +115,14 @@ async function run(): Promise<void> {
   await persistedExposure(-35)
   const previewImage = (): string | undefined => document.querySelector<HTMLImageElement>('[data-testid="preset-preview"] img')?.src
   const previewedProject = JSON.stringify(useEditorStore.getState().project)
+  const row = previewAction('Cinema pessoal')!.closest('[data-testid="preset-row"]')!
+  row.dispatchEvent(new PointerEvent('pointerover', { bubbles: true, pointerType: 'mouse' }))
+  await wait(() => !!document.querySelector<HTMLImageElement>('[data-testid="preset-hover-preview"] img')?.naturalWidth)
+  check(previewedProject === JSON.stringify(useEditorStore.getState().project), 'Hover preview modified the project')
+  check(useHistoryStore.getState().past.length === steps, 'Hover preview added undo entries')
+  await ipcRenderer.invoke('preset-check:capture', 'preset-hover-preview')
+  row.dispatchEvent(new PointerEvent('pointerout', { bubbles: true, pointerType: 'mouse', relatedTarget: document.body }))
+  await wait(() => !document.querySelector('[data-testid="preset-hover-preview"]'))
   await aria('Prévia de Cinema pessoal')
   await wait(() => !!previewImage())
   const after = previewImage()
@@ -169,10 +185,8 @@ async function run(): Promise<void> {
   await click('Excluir'); await wait(() => !usePresetLibraryStore.getState().folders.some((f) => f.id === folder.id))
   await autosaveClient.drain()
   usePresetLibraryStore.getState().setFolder(null)
-  // Clear transient test feedback and collapse the folder tree for a clean library preview.
+  // Clear transient feedback before capturing the grouped library.
   useUiStore.setState({ toasts: [] })
-  const foldersButton = [...document.querySelectorAll<HTMLButtonElement>('button')].find((b) => b.getAttribute('aria-expanded') === 'true' && b.textContent?.includes('Pastas'))
-  foldersButton?.click()
   await pause(1000)
   const panel = document.querySelector<HTMLElement>('[data-testid="preset-panel"]')!
   check(panel.scrollWidth <= panel.clientWidth + 1, 'Preset panel overflows horizontally')
@@ -183,6 +197,6 @@ async function run(): Promise<void> {
   await pause(250)
   await ipcRenderer.invoke('preset-check:capture', 'presets-noir')
   await usePreferencesStore.getState().patch({ appearance: { ...prefs.appearance, theme: 'instagram_light' } })
-  ipcRenderer.send('preset-check:result', { ok: true, message: 'PASS: real Presets UI, before/after pixels, cumulative Showcase, non-mutating previews, sample photo, one-step apply/undo, favorite presets, folders and JSON exchange.' })
+  ipcRenderer.send('preset-check:result', { ok: true, message: 'PASS: grouped Presets library, nested folder disclosure, non-mutating canvas hover and dialog previews, cumulative Showcase, sample photo, one-step apply/undo, favorites and JSON exchange.' })
 }
 void run().catch((error) => ipcRenderer.send('preset-check:result', { ok: false, message: String(error.stack ?? error) }))

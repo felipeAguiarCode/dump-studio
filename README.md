@@ -45,7 +45,7 @@ Salve ajustes, filtros, câmera, texturas e FX como um preset. Organize seus loo
 
 **Salvar preset**, **Importar JSON** e **Exportar JSON** ficam acessíveis nos painéis de edição. Para repetir um visual rapidamente, use **Copiar look** e **Colar look**.
 
-No menu **Presets**, abra a prévia pelo ícone de olho. Alterne entre **Antes** e **Depois** ou veja o **Showcase**, que reproduz as etapas do look. Você pode comparar usando a foto do projeto ou explorar os presets com uma foto de exemplo.
+No menu **Presets**, expanda as pastas na biblioteca ou filtre pelos favoritos. Passe o mouse sobre um preset para ver o look na foto selecionada e clique no olho para abrir o **Antes/Depois** ou o **Showcase**. A prévia usa a foto do projeto ou uma foto de exemplo quando não há seleção.
 
 ![Editor com os atalhos de salvar presets, importar e exportar JSON](assets/previews/presets-quick-actions.png)
 

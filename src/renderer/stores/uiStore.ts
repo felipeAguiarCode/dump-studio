@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import type { DumpItem } from '@shared/types'
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error'
 export type CanvasTool =
@@ -28,6 +29,13 @@ export interface ConfirmRequest {
 
 export type AppView = 'home' | 'editor'
 
+interface PresetHoverPreview {
+  page: DumpItem
+  imageId: string
+  name: string
+  src: string
+}
+
 interface UiState {
   view: AppView
   tool: CanvasTool
@@ -35,6 +43,7 @@ interface UiState {
   formatChanging: boolean
   applyingPreset: boolean
   presetSaveRequested: boolean
+  presetHoverPreview: PresetHoverPreview | null
   lastSavedAt: string | null
   toasts: Toast[]
   activeDialog: DialogKind
@@ -46,6 +55,7 @@ interface UiState {
   setFormatChanging: (changing: boolean) => void
   setApplyingPreset: (applying: boolean) => void
   setPresetSaveRequested: (requested: boolean) => void
+  setPresetHoverPreview: (preview: PresetHoverPreview | null) => void
   setTool: (tool: CanvasTool) => void
   setRotationHint: (hint: UiState['rotationHint']) => void
   requestConfirm: (req: ConfirmRequest) => void
@@ -66,6 +76,7 @@ export const useUiStore = create<UiState>((set) => ({
   formatChanging: false,
   applyingPreset: false,
   presetSaveRequested: false,
+  presetHoverPreview: null,
   lastSavedAt: null,
   toasts: [],
   activeDialog: null,
@@ -76,6 +87,7 @@ export const useUiStore = create<UiState>((set) => ({
   setFormatChanging: (formatChanging) => set({ formatChanging }),
   setApplyingPreset: (applyingPreset) => set({ applyingPreset }),
   setPresetSaveRequested: (presetSaveRequested) => set({ presetSaveRequested }),
+  setPresetHoverPreview: (presetHoverPreview) => set({ presetHoverPreview }),
   setTool: (tool) => set({ tool }),
   setRotationHint: (rotationHint) => set({ rotationHint }),
   requestConfirm: (confirm) => set({ confirm }),

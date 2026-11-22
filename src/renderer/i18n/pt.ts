@@ -33,6 +33,8 @@ export const pt: Dictionary = {
 
   presetLibrary: {
     library: 'Biblioteca de presets',
+    collection: 'Biblioteca', ungrouped: 'Sem pasta', emptyFolder: 'Nenhum preset nesta pasta.',
+    clearSearch: 'Limpar busca',
     favorites: 'Favoritos', saveFavorite: 'Adicionar aos favoritos',
     addFavorite: 'Adicionar {name} aos favoritos', removeFavorite: 'Remover {name} dos favoritos',
     favoritesEmpty: 'Seus looks favoritos ficam aqui', favoritesHint: 'Marque a estrela de um preset ou escolha adicionar aos favoritos ao salvar.',
@@ -66,6 +68,7 @@ export const pt: Dictionary = {
 
   presetPreview: {
     title: 'Prévia do preset', open: 'Prévia de {name}', close: 'Fechar prévia do preset',
+    hoverLabel: 'Prévia · {name}',
     before: 'Antes', after: 'Depois', showcase: 'Showcase', apply: 'Aplicar preset',
     filter: 'Filtro', adjustments: 'Câmera e ajustes', textures: 'Texturas', finish: 'Borda e opacidade', fx: 'FX',
     sample: 'Foto de exemplo', loading: 'Renderizando prévia…', failed: 'Não foi possível renderizar esta prévia.',
