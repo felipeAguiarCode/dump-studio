@@ -1,7 +1,7 @@
 <p align="center"><a href="./README.md">English</a> · <strong>Português (Brasil)</strong></p>
 
 <p align="center">
-  <img src="src/renderer/assets/branding/studio-icon.png" width="80" height="80" alt="Câmera My Dump Studio">
+  <img src="src/renderer/assets/branding/studio-icon.png" width="80" height="80" alt="MD. — My Dump Studio">
 </p>
 
 <h1 align="center">My Dump Studio</h1>
@@ -10,8 +10,6 @@
 <p align="center">Transforme fotos soltas em uma história sua.<br>Um editor desktop para criar photo dumps, encontrar seu look e montar carrosséis.</p>
 
 [![Prévia animada do My Dump Studio mostrando filtros, texturas e layouts](assets/readme/demo-preview.webp)](.demo/videos/my-dump-studio-demo-youtube.mp4)
-
-[**Assista à demonstração completa em 50 segundos**](.demo/videos/my-dump-studio-demo-youtube.mp4) · [Versão vertical para Reels](.demo/videos/my-dump-studio-demo-instagram.mp4) · [Créditos](.demo/CREDITOS.md)
 
 <p align="center"><strong>1.0.0 · Cherry Pie Version</strong><br>Windows · Português e inglês · Projetos locais · Sem prazo de expiração</p>
 

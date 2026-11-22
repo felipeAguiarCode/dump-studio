@@ -1,7 +1,7 @@
 <p align="center"><strong>English</strong> · <a href="./README.pt-BR.md">Português (Brasil)</a></p>
 
 <p align="center">
-  <img src="src/renderer/assets/branding/studio-icon.png" width="80" height="80" alt="My Dump Studio camera icon">
+  <img src="src/renderer/assets/branding/studio-icon.png" width="80" height="80" alt="MD. — My Dump Studio">
 </p>
 
 <h1 align="center">My Dump Studio</h1>
@@ -10,8 +10,6 @@
 <p align="center">Turn everyday photos into a story of your own.<br>A desktop editor for creating photo dumps, finding your look, and building carousels.</p>
 
 [![Animated My Dump Studio demo showing filters, textures, and layouts](assets/readme/demo-preview.webp)](.demo/videos/my-dump-studio-demo-youtube.mp4)
-
-[**Watch the full 50-second demo**](.demo/videos/my-dump-studio-demo-youtube.mp4) · [Vertical version for Reels](.demo/videos/my-dump-studio-demo-instagram.mp4) · [Credits](.demo/CREDITOS.md)
 
 <p align="center"><strong>1.0.0 · Cherry Pie Version</strong><br>Windows · English and Brazilian Portuguese · Local projects · Full access with no expiration</p>
 

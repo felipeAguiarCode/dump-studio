@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-O `postinstall` prepara `better-sqlite3` e `sharp` para o Electron. O desenvolvimento e o build geram os recursos de branding a partir de `assets/branding/`.
+O `postinstall` prepara `better-sqlite3` e `sharp` para o Electron. O build usa a marca `MD.` de `.site/assets/mark.svg` para gerar os ícones do app e usa a arte de `assets/branding/` para a splash e o instalador.
 
 Se a compilação dos módulos nativos falhar no Windows, instale o Visual Studio Build Tools com o workload **Desktop development with C++** e execute `npm run rebuild`. Não use um rebuild voltado ao Node para rodar módulos nativos dentro do Electron.
 

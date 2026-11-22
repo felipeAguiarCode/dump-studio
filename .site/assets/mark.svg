@@ -1,1 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#763cce"/><stop offset=".52" stop-color="#e13485"/><stop offset="1" stop-color="#ff8d43"/></linearGradient></defs><rect x="4" y="4" width="88" height="88" rx="23" fill="url(#g)"/><rect x="49" y="18" width="27" height="33" rx="5" transform="rotate(12 49 18)" fill="#fff" opacity=".75"/><path d="M22 35h12l5-8h17l5 8h12c5 0 8 4 8 8v27c0 5-3 8-8 8H22c-5 0-8-3-8-8V43c0-4 3-8 8-8Z" fill="#fff"/><circle cx="47" cy="55" r="15" fill="url(#g)"/><circle cx="47" cy="55" r="10" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/><circle cx="69" cy="44" r="3" fill="#ad459f"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">MD. — My Dump Studio</title>
+  <defs>
+    <path id="tile" d="M190 43h132c49 0 77 1 99 17 31 21 48 50 48 128v136c0 78-17 107-48 128-22 16-50 17-99 17H190c-49 0-77-1-99-17-31-21-48-50-48-128V188c0-78 17-107 48-128 22-16 50-17 99-17Z"/>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#4a2470"/>
+      <stop offset=".39" stop-color="#241338"/>
+      <stop offset=".7" stop-color="#281534"/>
+      <stop offset="1" stop-color="#632040"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".95" cy="1" r=".78">
+      <stop stop-color="#e65375" stop-opacity=".68"/>
+      <stop offset=".62" stop-color="#802756" stop-opacity=".23"/>
+      <stop offset="1" stop-color="#802756" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rim" x1=".08" y1="0" x2=".93" y2="1">
+      <stop stop-color="#d59bff" stop-opacity=".92"/>
+      <stop offset=".48" stop-color="#b071d4" stop-opacity=".17"/>
+      <stop offset="1" stop-color="#ffa98a" stop-opacity=".72"/>
+    </linearGradient>
+    <linearGradient id="letters" x1="0" y1="0" x2=".9" y2="1">
+      <stop stop-color="#fff9ff"/>
+      <stop offset="1" stop-color="#f8d6ee"/>
+    </linearGradient>
+    <linearGradient id="period" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffb791"/>
+      <stop offset="1" stop-color="#ff7b9c"/>
+    </linearGradient>
+  </defs>
+  <use href="#tile" transform="translate(0 7)" fill="#1a0c25" opacity=".25"/>
+  <use href="#tile" fill="url(#base)"/>
+  <use href="#tile" fill="url(#glow)" stroke="url(#rim)" stroke-width="3"/>
+  <g fill="url(#letters)">
+    <path d="M108 324V187h34l29 57 29-57h34v137h-32v-79l-20 39h-22l-20-39v79Z"/>
+    <path fill-rule="evenodd" d="M252 187h44c44 0 72 25 72 68s-28 69-72 69h-44Zm33 30v77h11c25 0 39-14 39-39s-14-38-39-38Z"/>
+  </g>
+  <circle cx="391" cy="307" r="17" fill="url(#period)"/>
+</svg>

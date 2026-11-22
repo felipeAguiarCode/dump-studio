@@ -3,7 +3,8 @@ import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 
 const root = new URL('../', import.meta.url)
-const source = fileURLToPath(new URL('assets/branding/my-dump-studio-icon.png', root))
+const mark = fileURLToPath(new URL('.site/assets/mark.svg', root))
+const source = await sharp(mark).png().toBuffer()
 const splash = fileURLToPath(new URL('assets/branding/splash-art.png', root))
 const build = new URL('build/', root)
 const iconFolder = new URL('icons/', build)
@@ -40,7 +41,8 @@ async function writeBitmap(image, target) {
 const headerIcon = await sharp(source).resize(46, 46).png().toBuffer()
 const headerArt = await sharp(splash).resize(150, 57).composite([{ input: headerIcon, gravity: 'centre' }]).png().toBuffer()
 await Promise.all([
-  sharp(source).resize(1024, 1024).png().toFile(fileURLToPath(new URL('icon.png', build))),
+  writeFile(new URL('icon.png', build), source),
+  writeFile(new URL('assets/branding/my-dump-studio-icon.png', root), source),
   sharp(source).resize(256, 256).png().toFile(fileURLToPath(new URL('studio-icon.png', renderer))),
   sharp(splash).resize({ width: 1024, withoutEnlargement: true })
     .webp({ quality: 88 })
