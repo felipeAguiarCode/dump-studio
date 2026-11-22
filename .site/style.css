@@ -149,3 +149,87 @@ body{padding-top:var(--nav-height)}
 @media(max-width:1050px){.feature-details{gap:16px}.feature-details .detail-card{padding:19px 18px 24px}.detail-card h3{font-size:21px}.detail-art{height:164px}.detail-card p{font-size:14px}}
 @media(max-width:740px){.feature-details{gap:18px;margin-top:26px}.feature-details .detail-card{width:100%;max-width:420px;margin-inline:auto;padding:22px;text-align:center}.detail-card h3{font-size:23px;min-height:0;margin-bottom:13px}.detail-card p{font-size:14px;max-width:315px;margin-inline:auto}.detail-art{height:174px;margin-bottom:24px}}
 .feature-details .detail-card{transition:opacity .85s cubic-bezier(.2,.65,.25,1),transform .35s,box-shadow .25s,border-color .25s}
+
+/* The dividers mark the two ways to get started without mixing their instructions. */
+.path-divider {
+  display: grid;
+  grid-template-columns: minmax(0, 210px) auto minmax(0, 210px);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(12px, 3vw, 26px);
+  margin-block: 0 34px;
+}
+.path-divider::before,.path-divider::after {
+  content: '';
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e3c0d8);
+}
+.path-divider::after { transform: scaleX(-1); }
+.path-divider img { width: 64px; height: 64px; }
+.download-section { overflow: hidden; }
+.install-steps {
+  padding-left: 22px;
+  margin: 28px 0 0;
+  color: #f7e8f4;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.install-steps li { padding-left: 4px; }
+.install-steps li + li { margin-top: 7px; }
+.install-steps li::marker { color: #f6a4d3; font-weight: 600; }
+.source-section {
+  padding-block: clamp(36px, 6vw, 80px) clamp(48px, 6vw, 84px);
+  text-align: center;
+  scroll-snap-align: start;
+  border-bottom: 1px solid var(--line);
+}
+.source-section .path-divider { margin-bottom: 28px; }
+.source-section h2 { font-size: clamp(34px, 4vw, 58px); line-height: 1.08; }
+.source-heading>p:not(.section-kicker) { max-width: 420px; margin: 14px auto 0; color: var(--muted); }
+.source-console {
+  max-width: 640px;
+  margin: 26px auto 17px;
+  overflow: hidden;
+  border-radius: 14px;
+  text-align: left;
+  color: #f8eaf7;
+  background: #21152e;
+  box-shadow: 0 14px 36px #4e224a20;
+}
+.source-console-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ffffff22;
+  color: #eccce4;
+  font-size: 14px;
+}
+.source-console-bar button {
+  min-height: 36px;
+  padding: 5px 12px;
+  border: 1px solid #f6a4d37a;
+  border-radius: 7px;
+  color: #ffe6fa;
+  background: #ffffff0a;
+}
+.source-console-bar button:hover { background: #db5bb32c; }
+.source-console-bar button:focus-visible,.source-console pre:focus-visible { outline-color: #ffa7d7; outline-offset: -3px; }
+.source-console pre {
+  margin: 0;
+  padding: 18px 19px 20px;
+  overflow-x: auto;
+  font: 14px/1.85 Consolas, ui-monospace, monospace;
+  scrollbar-color: #bc73a7 #392742;
+}
+.source-console code { font: inherit; }
+.source-guide { color: var(--pink); font-size: 15px; font-weight: 500; }
+@media (max-width: 740px) {
+  .path-divider { margin-bottom: 25px; }
+  .path-divider img { width: 53px; height: 53px; }
+  .install-steps { width: fit-content; margin-inline: auto; text-align: left; font-size: 14px; }
+  .source-heading>p:not(.section-kicker) { font-size: 15px; }
+  .source-console pre { font-size: 13px; }
+  .footer>div { flex-wrap: wrap; row-gap: 12px; }
+}

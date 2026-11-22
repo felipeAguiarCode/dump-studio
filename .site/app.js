@@ -20,6 +20,28 @@ Object.assign(dictionaries.pt, {navPlay:'Mood',mobileLooks:'Looks',mobileAdjust:
 Object.assign(dictionaries.en, {navPlay:'Mood',mobileLooks:'Looks',mobileAdjust:'Adjust',mobileFormat:'Format',headlineVariants:['Your rules.','Your style.','Your vibe.','Your personality.','Your point of view.']});
 Object.assign(dictionaries.pt,{cardLooks:'Meus looks',cardEffect:'Efeito',cardText:'Texto',cardPhoto:'Foto',cardLocal:'Projeto local'});
 Object.assign(dictionaries.en,{cardLooks:'My looks',cardEffect:'Effect',cardText:'Text',cardPhoto:'Photo',cardLocal:'Local project'});
+Object.assign(dictionaries.pt,{
+  downloadKicker:'Instalar no Windows',
+  downloadDesc:'Baixe o instalador no seu computador e comece a editar. Seus projetos ficam salvos localmente.',
+  installStepDownload:'Baixe o instalador .exe.',
+  installStepRun:'Abra o arquivo e siga as etapas da instalação.',
+  installStepOpen:'Abra o My Dump Studio pelo menu Iniciar.',
+  sourceKicker:'Para desenvolvedores', sourceTitle:'Rode o código-fonte.',
+  sourceDesc:'Use o Git e o Node.js com npm no Windows para abrir o editor em modo de desenvolvimento.',
+  sourceCopy:'Copiar comandos', sourceCopied:'Comandos copiados.', sourceCopyError:'Selecione os comandos e copie manualmente.',
+  sourceGuide:'Guia de desenvolvimento', sourceFooter:'Para devs'
+});
+Object.assign(dictionaries.en,{
+  downloadKicker:'Install on Windows',
+  downloadDesc:'Download the installer and start editing. Your projects are saved on your computer.',
+  installStepDownload:'Download the .exe installer.',
+  installStepRun:'Open the file and follow the installation steps.',
+  installStepOpen:'Open My Dump Studio from the Start menu.',
+  sourceKicker:'For developers', sourceTitle:'Run from source.',
+  sourceDesc:'Use Git and Node.js with npm on Windows to launch the editor in development mode.',
+  sourceCopy:'Copy commands', sourceCopied:'Commands copied.', sourceCopyError:'Select and copy the commands manually.',
+  sourceGuide:'Development guide', sourceFooter:'For developers'
+});
 let lang = 'pt';
 try { lang = new URLSearchParams(location.search).get('lang') || localStorage.getItem('my-dump-site-lang') || 'pt'; } catch {}
 if (!dictionaries[lang]) lang = 'pt';
@@ -191,6 +213,14 @@ function renderReleaseState() {
   else {label.textContent=t('comingSoon');button.href=`https://github.com/${RELEASE_REPO}/releases/latest`;button.setAttribute('aria-disabled','true');note.textContent=t('releasePending');}
 }
 $('#download-button').addEventListener('click',(event) => {if(event.currentTarget.getAttribute('aria-disabled')==='true'){event.preventDefault();toast(t('releasePending'));}});
+$('#source-copy').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText($('#source-commands').textContent.trim());
+    toast(t('sourceCopied'));
+  } catch {
+    toast(t('sourceCopyError'));
+  }
+});
 async function checkRelease() {
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
   try {const response=await fetch(`https://api.github.com/repos/${RELEASE_REPO}/releases/latest`,{headers:{Accept:'application/vnd.github+json'},credentials:'omit',signal:controller.signal});
@@ -207,7 +237,7 @@ async function checkRelease() {
 
 function setupScrollReveal() {
   if(reducedMotion || !('IntersectionObserver' in window))return;
-  const targets=$$('.section-heading, .playground, .collage-studio, .comparison, .compare-caption, .feature-layout > article, .feature-details > article, .app-gallery > h2, .app-gallery > p, .app-shots > figure, .download-inner > div, .faq > h2, .faq details, .footer');
+  const targets=$$('.section-heading, .playground, .collage-studio, .comparison, .compare-caption, .feature-layout > article, .feature-details > article, .app-gallery > h2, .app-gallery > p, .app-shots > figure, .path-divider, .download-inner > div, .source-heading, .source-console, .faq > h2, .faq details, .footer');
   const observer=new IntersectionObserver((entries)=>{
     for(const entry of entries)if(entry.isIntersecting){entry.target.classList.add('is-revealed');observer.unobserve(entry.target);}
   },{threshold:.08,rootMargin:'0px 0px -35px 0px'});

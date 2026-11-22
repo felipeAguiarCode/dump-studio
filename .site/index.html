@@ -11,8 +11,8 @@
   <title>My Dump Studio — Seu dump. Suas regras.</title>
   <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
   <link rel="preload" href="./assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./style.css?v=hero-filter-pull-2">
-  <script type="module" src="./app.js?v=hero-filter-pull-2"></script>
+  <link rel="stylesheet" href="./style.css?v=install-source-1">
+  <script type="module" src="./app.js?v=install-source-1"></script>
 </head>
 <body>
   <a class="skip" href="#main" data-i18n="skip">Pular para o conteúdo</a>
@@ -75,10 +75,49 @@
       </div>
     </section>
     <section class="app-gallery shell" aria-labelledby="app-title"><h2 id="app-title" data-i18n="appTitle">Por dentro do studio.</h2><p data-i18n="appDesc">Capturas reais do editor desktop. Seu espaço para ir além da demonstração.</p><div class="app-shots"><figure><a href="./assets/screenshots/editor-filters.webp" target="_blank" rel="noopener noreferrer"><img src="./assets/screenshots/editor-filters.webp" width="1899" height="1073" alt="Editor desktop com filtros e uma foto de exemplo" loading="lazy"></a><figcaption data-i18n="appFilters">Filtros e ajustes na foto selecionada.</figcaption></figure><figure><a href="./assets/screenshots/editor-layouts.webp" target="_blank" rel="noopener noreferrer"><img src="./assets/screenshots/editor-layouts.webp" width="1899" height="1073" alt="Editor desktop com opções de layout e camadas" loading="lazy"></a><figcaption data-i18n="appLayouts">Layouts, composição e edição por camadas.</figcaption></figure></div></section>
-    <section class="download-section" id="download" aria-labelledby="download-title"><div class="shell download-inner"><div><p class="section-kicker" data-i18n="downloadKicker">My Dump Studio para Windows</p><h2 id="download-title" data-i18n="downloadTitle">Seu próximo dump<br>começa aqui.</h2><p data-i18n="downloadDesc">Leve o studio para o seu computador. Sem prazo de expiração. Sem interromper suas ideias.</p><div class="download-actions"><a id="download-button" class="button button-cta" aria-disabled="true" href="https://github.com/felipeAguiarCode/dump-studio/releases/latest"><span id="download-label" data-i18n="comingSoon">Primeira release em breve</span><span class="cta-icon" aria-hidden="true">↓</span></a><a class="repo-link" href="https://github.com/felipeAguiarCode/dump-studio" target="_blank" rel="noopener noreferrer" data-i18n="seeGithub">Conhecer no GitHub</a></div><p id="release-status" class="download-note" role="status" data-i18n="releasePending">O download será ativado quando o instalador estiver disponível em uma release pública.</p></div><div class="download-art"><div class="download-photo" id="download-photo"></div><div class="cherry-sticker"><span class="release-brand">MY DUMP STUDIO</span><img src="./assets/cherry-pie.svg" width="80" height="80" alt=""><strong>Cherry Pie</strong><span class="release-version">VERSION 1.0.0</span></div></div></div></section>
+    <div class="path-divider shell" aria-hidden="true"><img src="./assets/divider-install.svg" width="72" height="72" alt=""></div>
+    <section class="download-section" id="download" aria-labelledby="download-title">
+      <div class="shell download-inner">
+        <div>
+          <p class="section-kicker" data-i18n="downloadKicker">Instalar no Windows</p>
+          <h2 id="download-title" data-i18n="downloadTitle">Seu próximo dump<br>começa aqui.</h2>
+          <p data-i18n="downloadDesc">Baixe o instalador no seu computador e comece a editar. Seus projetos ficam salvos localmente.</p>
+          <div class="download-actions">
+            <a id="download-button" class="button button-cta" aria-disabled="true" href="https://github.com/felipeAguiarCode/dump-studio/releases/latest"><span id="download-label" data-i18n="comingSoon">Primeira release em breve</span><span class="cta-icon" aria-hidden="true">↓</span></a>
+            <a class="repo-link" href="https://github.com/felipeAguiarCode/dump-studio/releases" target="_blank" rel="noopener noreferrer" data-i18n="seeReleases">Ver releases</a>
+          </div>
+          <p id="release-status" class="download-note" role="status" data-i18n="releasePending">O download será ativado quando o instalador estiver disponível em uma release pública.</p>
+          <ol class="install-steps">
+            <li data-i18n="installStepDownload">Baixe o instalador .exe.</li>
+            <li data-i18n="installStepRun">Abra o arquivo e siga as etapas da instalação.</li>
+            <li data-i18n="installStepOpen">Abra o My Dump Studio pelo menu Iniciar.</li>
+          </ol>
+        </div>
+        <div class="download-art">
+          <div class="download-photo" id="download-photo"></div>
+          <div class="cherry-sticker"><span class="release-brand">MY DUMP STUDIO</span><img src="./assets/cherry-pie.svg" width="80" height="80" alt=""><strong>Cherry Pie</strong><span class="release-version">VERSION 1.0.0</span></div>
+        </div>
+      </div>
+    </section>
+    <section class="source-section shell" id="source" aria-labelledby="source-title">
+      <div class="path-divider" aria-hidden="true"><img src="./assets/divider-source.svg" width="72" height="72" alt=""></div>
+      <div class="source-heading">
+        <p class="section-kicker" data-i18n="sourceKicker">Para desenvolvedores</p>
+        <h2 id="source-title" data-i18n="sourceTitle">Rode o código-fonte.</h2>
+        <p data-i18n="sourceDesc">Use o Git e o Node.js com npm no Windows para abrir o editor em modo de desenvolvimento.</p>
+      </div>
+      <div class="source-console">
+        <div class="source-console-bar"><span>PowerShell</span><button type="button" id="source-copy" data-i18n="sourceCopy">Copiar comandos</button></div>
+        <pre tabindex="0" aria-label="PowerShell"><code id="source-commands">git clone https://github.com/felipeAguiarCode/dump-studio.git
+cd dump-studio
+npm install
+npm run dev</code></pre>
+      </div>
+      <a class="source-guide" href="https://github.com/felipeAguiarCode/dump-studio/blob/main/docs/DEVELOPMENT.md" data-i18n="sourceGuide">Guia de desenvolvimento</a>
+    </section>
     <section class="faq shell"><h2 data-i18n="faqTitle">Só mais uma coisa.</h2><div><details><summary data-i18n="faq1q">Preciso criar uma conta?</summary><p data-i18n="faq1a">Não. O aplicativo trabalha localmente no seu computador. A demonstração desta página também funciona sem conta.</p></details><details><summary data-i18n="faq2q">Funciona no Mac ou no celular?</summary><p data-i18n="faq2a">O instalador disponível é para Windows. Você pode experimentar esta página no celular, mas o editor completo é um aplicativo desktop.</p></details><details><summary data-i18n="faq3q">As fotos do exemplo são minhas para usar?</summary><p><span data-i18n="faq3a">As imagens de demonstração vêm de bancos com licença de reutilização. Os autores e as fontes estão na página de créditos.</span> <a href="./credits.html" data-i18n="photoCredits">Créditos das fotos</a>.</p></details><details><summary data-i18n="faq4q">Onde encontro a versão mais recente?</summary><p data-i18n="faq4a">O botão de download consulta o último release público do GitHub e seleciona o instalador para Windows. Se a consulta estiver indisponível, você pode conferir os releases no GitHub.</p><a href="https://github.com/felipeAguiarCode/dump-studio/releases" target="_blank" rel="noopener noreferrer" data-i18n="seeReleases">Ver releases</a></details></div></section>
   </main>
-  <footer class="footer shell"><a class="brand" href="#"><img src="./assets/mark.svg" alt="" width="32" height="32"><span>my dump<span class="brand-second">studio</span></span></a><p>Created by <strong>Felipe Aguiar</strong></p><div><a href="https://github.com/felipeAguiarCode" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://www.linkedin.com/in/felipeaguiar-exe/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="./credits.html" data-i18n="credits">Créditos</a></div></footer>
+  <footer class="footer shell"><a class="brand" href="#"><img src="./assets/mark.svg" alt="" width="32" height="32"><span>my dump<span class="brand-second">studio</span></span></a><p>Created by <strong>Felipe Aguiar</strong></p><div><a href="#source" data-i18n="sourceFooter">Para devs</a><a href="https://github.com/felipeAguiarCode" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://www.linkedin.com/in/felipeaguiar-exe/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="./credits.html" data-i18n="credits">Créditos</a></div></footer>
   <div id="toast" class="toast" role="status"></div>
 </body>
 </html>

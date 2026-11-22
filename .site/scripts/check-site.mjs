@@ -8,6 +8,7 @@ import { spawn } from 'node:child_process'
 
 const site=fileURLToPath(new URL('../',import.meta.url)),root=resolve(site,'..')
 const heroOnly=process.argv.includes('--hero')
+const setupOnly=process.argv.includes('--setup-paths')
 const scratch=await mkdtemp(join(tmpdir(),'my-dump-site-check-'))
 const cache=join(root,'node_modules/.cache/my-dump-site-check');await mkdir(cache,{recursive:true})
 await mkdir(join(site,'previews'),{recursive:true})
@@ -28,6 +29,41 @@ win=new BrowserWindow({width:1440,height:1000,useContentSize:true,show:false,web
 win.webContents.setFrameRate(12);
 win.webContents.on('console-message',(_e,level,message)=>{if(level>=3){errors.push(message);console.error('[renderer] '+message)}});
 await win.loadURL(${JSON.stringify(origin)});await wait('document.querySelectorAll(".dump-card").length===8');await js('document.fonts.ready.then(()=>true)');
+if(${setupOnly}){
+  win.webContents.debugger.attach('1.3');
+  await win.webContents.debugger.sendCommand('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
+  const capture=async (name,id)=>{
+    await js('document.getElementById('+JSON.stringify(id)+').scrollIntoView({behavior:"instant"})');
+    await wait('(()=>{const b=document.getElementById('+JSON.stringify(id)+').getBoundingClientRect();return b.top>=0&&b.top<innerHeight/2})()');
+    await pause(1000);
+    await fs.writeFile(${JSON.stringify(scratch)}+'/'+name+'.png',(await win.webContents.capturePage()).toPNG());
+  };
+  assert.equal(await js('document.querySelectorAll("#download .install-steps li").length'),3);
+  assert.equal(await js('document.getElementById("source-commands").closest("section").id'),'source');
+  assert.equal(await js('document.querySelector("#download #source-commands")===null'),true);
+  assert.equal(await js('document.getElementById("download-button").getAttribute("aria-disabled")'),'true');
+  await capture('desktop-install','download');
+  await js('document.getElementById("source").scrollIntoView({behavior:"instant"})');
+  await wait('Array.from(document.querySelectorAll(".path-divider img")).every(img=>img.complete && img.naturalWidth>0)');
+  const dividerIsCentered='(()=>{const p=document.querySelector("#source .path-divider"),b=p.querySelector("img").getBoundingClientRect(),r=p.getBoundingClientRect();return Math.abs(b.left+b.width/2-r.left-r.width/2)<2})()';
+  assert.equal(await js(dividerIsCentered),true,'The developer divider is centered on desktop');
+  await capture('desktop-source','source');
+  await js('Object.defineProperty(navigator,"clipboard",{configurable:true,value:{writeText:async(value)=>{window.copiedSource=value}}});document.getElementById("source-copy").click()');
+  await wait('window.copiedSource===document.getElementById("source-commands").textContent.trim()');
+  await js('document.getElementById("language").click()');
+  assert.equal(await js('document.getElementById("source-title").textContent'),'Run from source.');
+  assert.equal(await js('document.querySelector("#download .section-kicker").textContent'),'Install on Windows');
+  win.setContentSize(390,844);await win.loadURL(${JSON.stringify(origin+'/?release=ready&lang=pt#download')});
+  await wait('document.getElementById("download-button").href.endsWith("-setup.exe")');
+  await capture('mobile-install','download');
+  await js('document.getElementById("source").scrollIntoView({behavior:"instant"})');
+  assert.equal(await js('document.documentElement.scrollWidth<=innerWidth'),true,'Developer commands scroll inside their own panel');
+  assert.equal(await js(dividerIsCentered),true,'The developer divider is centered on mobile');
+  await capture('mobile-source','source');
+  assert.deepEqual(errors,[]);
+  console.log('PASS: separate install and developer sections, centered dividers, copy action, translation, responsive layout and installer release link.');
+  app.exit(0);return;
+}
 if(${heroOnly}){
   const hero=()=>js('(()=>{const s=document.getElementById("dump-stage"),card=document.querySelector(".dump-card.is-current"),base=card.querySelector(".hero-photo"),layer=card.querySelector(".hero-filter-layer");return {photo:document.getElementById("hero-counter").textContent,look:s.dataset.look,incoming:s.dataset.incomingLook,transition:s.dataset.filterTransition,baseLook:base.dataset.look,src:base.src,layerHidden:layer.hidden,clip:getComputedStyle(layer).clipPath,dividerHidden:card.querySelector(".hero-filter-divider").hidden,playing:s.classList.contains("is-playing")}})()');
   await wait('document.getElementById("dump-stage").dataset.look==="vint_seventies" && document.getElementById("dump-stage").dataset.filterTransition==="idle"');
@@ -118,4 +154,4 @@ const env={...process.env};delete env.ELECTRON_RUN_AS_NODE
 const child=spawn(join(root,'node_modules/electron/dist/electron.exe'),[join(cache,'main.cjs')],{env,cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe']})
 let output='';for(const stream of [child.stdout,child.stderr])stream.on('data',chunk=>output+=chunk.toString())
 const code=await new Promise((resolveExit,reject)=>{const timer=setTimeout(()=>{output+='\nSite verification timed out.\n';child.kill();resolveExit(-1)},180000);child.once('error',error=>{clearTimeout(timer);reject(error)});child.once('exit',code=>{clearTimeout(timer);resolveExit(code)})}).finally(()=>server.close())
-console.log(output.trim());assert.equal(code,0,`Site verification failed; ${scratch}`);assert.deepEqual(missing,[],'All requested local assets must load');console.log('Screenshots: .site/previews/');
+console.log(output.trim());assert.equal(code,0,`Site verification failed; ${scratch}`);assert.deepEqual(missing,[],'All requested local assets must load');console.log('Screenshots: '+(setupOnly?scratch:'.site/previews/'));
