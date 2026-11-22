@@ -1,11 +1,15 @@
 <p align="center">
-  <img src=".site/assets/mark.svg" width="80" height="80" alt="Câmera My Dump Studio">
+  <img src="src/renderer/assets/branding/studio-icon.png" width="80" height="80" alt="Câmera My Dump Studio">
 </p>
 
 <h1 align="center">My Dump Studio</h1>
 
 <p align="center"><strong>Seu dump. Seu estilo. Seu olhar.</strong></p>
 <p align="center">Transforme fotos soltas em uma história sua.<br>Um editor desktop para criar photo dumps, encontrar seu look e montar carrosséis.</p>
+
+[![Prévia animada do My Dump Studio mostrando filtros, texturas e layouts](assets/readme/demo-preview.webp)](.demo/videos/my-dump-studio-demo-youtube.mp4)
+
+[**Assista à demonstração completa em 50 segundos**](.demo/videos/my-dump-studio-demo-youtube.mp4) · [Versão vertical para Reels](.demo/videos/my-dump-studio-demo-instagram.mp4) · [Créditos](.demo/CREDITOS.md)
 
 <p align="center"><strong>1.0.0 · Cherry Pie Version</strong><br>Windows · Português e inglês · Projetos locais · Sem prazo de expiração</p>
 
@@ -41,6 +45,8 @@ Salve ajustes, filtros, câmera, texturas e FX como um preset. Organize seus loo
 
 **Salvar preset**, **Importar JSON** e **Exportar JSON** ficam acessíveis nos painéis de edição. Para repetir um visual rapidamente, use **Copiar look** e **Colar look**.
 
+No menu **Presets**, abra a prévia pelo ícone de olho. Alterne entre **Antes** e **Depois** ou veja o **Showcase**, que reproduz as etapas do look. Você pode comparar usando a foto do projeto ou explorar os presets com uma foto de exemplo.
+
 ![Editor com os atalhos de salvar presets, importar e exportar JSON](assets/previews/presets-quick-actions.png)
 
 ## Cada clique encontra seu lugar
@@ -67,7 +73,7 @@ No [site do My Dump Studio](https://felipeaguiarcode.github.io/dump-studio/), vo
 
 O aplicativo desktop é para **Windows**. Quando disponível, baixe e execute o instalador `.exe` na [aba Releases](https://github.com/felipeAguiarCode/dump-studio/releases).
 
-O executável e o instalador desta edição ainda usam o nome **Noir Dump Studio**.
+O instalador desta edição se chama **My-Dump-Studio-1.0.0-Cherry-Pie-Version-setup.exe**. Ele cria o atalho **My Dump Studio** no Windows e abre o editor pela nova splash da Cherry Pie Version.
 
 Para rodar a partir do código-fonte, com Node.js e npm instalados:
 

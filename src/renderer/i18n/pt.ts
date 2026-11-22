@@ -3,7 +3,7 @@ import type { Dictionary } from './en'
 /** Dicionário português. Mesma estrutura de `en` (garantido pelo tipo `Dictionary`). */
 export const pt: Dictionary = {
   about: {
-    title: 'Sobre o Noir Dump Studio',
+    title: 'Sobre o My Dump Studio',
     version: 'Versão'
   },
   common: {
@@ -53,7 +53,7 @@ export const pt: Dictionary = {
     previous: 'Preset anterior', next: 'Próximo preset', oneClick: 'Um clique para aplicar',
     selectHint: 'Selecione uma foto para salvar ou aplicar um look. Sua biblioteca está sempre disponível.',
     lockedHint: 'Desbloqueie a foto selecionada para aplicar um preset.',
-    preserveHint: 'Um clique aplica o look completo. Recorte, posição e layout são preservados. Ctrl+Z desfaz.',
+    preserveHint: 'Use o olho para ver a prévia. Aplique com a marca de seleção e desfaça com Ctrl+Z.',
     includes: 'Inclui todos os ajustes, curvas, gradação de cor, HSL, filtro, câmera, texturas, borda da foto e opacidade.',
     includeFx: 'FX para incluir', fxHint: 'Os FX vinculados já estão marcados. Você pode incluir FX independentes da página; a posição se adapta à foto de destino.',
     noFx: 'Nenhum FX disponível nesta página.', applying: 'Atualizando sua edição…',
@@ -62,6 +62,17 @@ export const pt: Dictionary = {
     failed: 'Não foi possível concluir. Verifique se a foto e seus FX estão desbloqueados e tente novamente.',
     invalidJson: 'Não foi possível importar este JSON. Use um arquivo válido de presets do Noir (até 10 MB).',
     invalidClipboard: 'Copie um preset do Noir antes de colar um look.'
+  },
+
+  presetPreview: {
+    title: 'Prévia do preset', open: 'Prévia de {name}', close: 'Fechar prévia do preset',
+    before: 'Antes', after: 'Depois', showcase: 'Showcase', apply: 'Aplicar preset',
+    filter: 'Filtro', adjustments: 'Câmera e ajustes', textures: 'Texturas', finish: 'Borda e opacidade', fx: 'FX',
+    sample: 'Foto de exemplo', loading: 'Renderizando prévia…', failed: 'Não foi possível renderizar esta prévia.',
+    steps: 'Etapas do Showcase', previous: 'Etapa anterior', next: 'Próxima etapa', pause: 'Pausar Showcase', play: 'Reproduzir Showcase',
+    selectToApply: 'Selecione uma foto no projeto para aplicar este preset.',
+    applyHint: 'Aplica o visual completo à foto selecionada.',
+    exportOne: 'Exportar preset', exportFolder: 'Exporta a pasta selecionada e suas subpastas.', exportLibrary: 'Exporta toda a biblioteca de presets.'
   },
 
   fxPanel: {

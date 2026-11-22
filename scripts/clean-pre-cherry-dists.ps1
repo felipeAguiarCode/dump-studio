@@ -16,7 +16,7 @@ if (-not $cherryDistRoot.StartsWith($cherryWorkspace + '\', [StringComparison]::
 if ((Get-Item -LiteralPath $cherryDistRoot).Attributes -band [IO.FileAttributes]::ReparsePoint) {
     throw 'Distribution folder cannot be a link.'
 }
-if (-not (Test-Path -LiteralPath (Join-Path $cherryKeeper 'Noir Dump Studio-1.0.0-Cherry-Pie-Version-setup.exe') -PathType Leaf)) {
+if (-not (Test-Path -LiteralPath (Join-Path $cherryKeeper 'My-Dump-Studio-1.0.0-Cherry-Pie-Version-setup.exe') -PathType Leaf)) {
     throw 'The Cherry Pie installer must exist before cleaning old distributions.'
 }
 

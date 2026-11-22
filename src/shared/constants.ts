@@ -3,7 +3,7 @@
  * (Sem dependências de electron/node/DOM — `shared/` é neutro.)
  */
 
-export const APP_NAME = 'Noir Dump Studio'
+export const APP_NAME = 'My Dump Studio'
 
 export type InstagramFormat =
   | 'portrait_post_3_4'

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { Bookmark, Star, Plus, Copy, ClipboardPaste, Download, Upload, FolderPlus, Folder, FolderOpen, Search, MoreHorizontal, Pencil, Trash2, ChevronDown, ChevronRight, ArrowLeft, ArrowRight, SlidersHorizontal, Check, Loader2 } from 'lucide-react'
+import { Bookmark, Star, Plus, Copy, ClipboardPaste, Download, Upload, FolderPlus, Folder, FolderOpen, Search, MoreHorizontal, Pencil, Trash2, ChevronDown, ChevronRight, ArrowLeft, ArrowRight, SlidersHorizontal, Check, Loader2, Eye } from 'lucide-react'
 import type { OverlayLayerData, PresetFolder, UserPreset } from '@shared/types'
 import { linkedPresetFx } from '@shared/photoPresets'
 import { useT } from '../../i18n'
@@ -11,6 +11,7 @@ import { useEditorStore, selectActiveDumpItem } from '../../stores/editorStore'
 import { useUiStore } from '../../stores/uiStore'
 import { Button } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
+import { PresetPreview } from './PresetPreview'
 
 const inputClass = 'w-full rounded-lg border border-noir-border bg-noir-panel px-3 py-2 text-xs text-noir-text outline-none focus:border-noir-border-active'
 
@@ -38,6 +39,7 @@ export function PresetsPanel(): JSX.Element {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
   const [foldersOpen, setFoldersOpen] = useState(false)
   const [menu, setMenu] = useState<string | null>(null)
+  const [preview, setPreview] = useState<{ preset: UserPreset; target: ReturnType<typeof presetTarget> } | null>(null)
   const [modal, setModal] = useState<'save' | 'folder' | 'edit' | null>(null)
   const [editingId, setEditingId] = useState<string | undefined>()
   const [name, setName] = useState('')
@@ -111,6 +113,20 @@ export function PresetsPanel(): JSX.Element {
     })
   }
   const apply = (preset: UserPreset): void => { if (canApply) { setMenu(null); void presetActions.apply(preset.look, preset.id) } }
+  const openPreview = (preset: UserPreset): void => {
+    const layer = item?.layers.find((layer) => layer.id === editor.ui?.selectedLayerId)
+    const hasSelectedPhoto = layer?.type === 'image' || (
+      layer?.type === 'overlay' && (layer.data as OverlayLayerData).imageLayerId === target?.image.id
+    )
+    setMenu(null)
+    setPreview({ preset, target: hasSelectedPhoto ? target : null })
+  }
+  const applyPreview = async (): Promise<void> => {
+    if (!preview?.target) return
+    const { preset, target } = preview
+    const applied = await presetActions.apply(preset.look, preset.id, { itemId: target.item.id, layerId: target.image.id })
+    if (applied) setPreview(null)
+  }
   const folderRows = (parentId: string | null, depth = 0): JSX.Element[] => library.folders.filter((f) => f.parentId === parentId).flatMap((folder) => {
     const children = library.folders.some((f) => f.parentId === folder.id)
     const isClosed = collapsed.has(folder.id), isSelected = library.folderId === folder.id
@@ -156,6 +172,7 @@ export function PresetsPanel(): JSX.Element {
       </div>
       {selectedFolder && <div className="flex min-w-0 items-center gap-1 border-t border-noir-border/60 pt-2"><span className="min-w-0 flex-1 truncate text-2xs text-noir-muted" title={folderPath(library.folders, selectedFolder.id)}>{folderPath(library.folders, selectedFolder.id)}</span><button title={t('presetLibrary.editFolder')} aria-label={t('presetLibrary.editFolder')} disabled={busy} onClick={() => editFolder(selectedFolder)} className="rounded p-1 text-noir-muted hover:bg-noir-hover"><Pencil size={12} /></button><button title={t('presetLibrary.deleteFolder')} aria-label={t('presetLibrary.deleteFolder')} disabled={busy} onClick={() => remove()} className="rounded p-1 text-noir-danger hover:bg-noir-hover"><Trash2 size={12} /></button></div>}
       <div className="grid grid-cols-2 gap-2"><Button size="sm" icon={<Upload size={12} />} disabled={busy} onClick={() => importJson()}>{t('presetLibrary.import')}</Button><Button size="sm" icon={<Download size={12} />} disabled={busy || library.presets.length + library.folders.length === 0} onClick={() => exportJson()}>{t('presetLibrary.export')}</Button></div>
+      <p className="text-2xs text-noir-muted">{t(selectedFolder ? 'presetPreview.exportFolder' : 'presetPreview.exportLibrary')}</p>
       <button disabled={busy} onClick={() => importJson(true)} className="w-full text-center text-2xs text-noir-muted underline decoration-noir-border underline-offset-4 hover:text-noir-text">{t('presetLibrary.importClipboard')}</button>
     </div>
     <div className="min-h-24 flex-1 space-y-2 overflow-y-auto px-3 py-3" data-testid="preset-list">
@@ -164,23 +181,26 @@ export function PresetsPanel(): JSX.Element {
       {!library.loading && !library.error && visible.length === 0 && <div className="rounded-xl border border-dashed border-noir-border px-4 py-6 text-center"><Bookmark size={24} className="mx-auto mb-3 text-noir-disabled" /><p className="text-xs font-medium">{t(query ? 'presetLibrary.noResults' : favoritesOnly ? 'presetLibrary.favoritesEmpty' : 'presetLibrary.empty')}</p><p className="mt-2 text-2xs leading-relaxed text-noir-muted">{t(query ? 'presetLibrary.trySearch' : favoritesOnly ? 'presetLibrary.favoritesHint' : 'presetLibrary.emptyHint')}</p></div>}
       {visible.map((preset) => <div key={preset.id} className={cn('overflow-hidden rounded-xl border', library.activeId === preset.id ? 'border-noir-border-active/60 bg-noir-selection' : 'border-noir-border bg-noir-panel')}>
         <div className="flex items-stretch">
-          <button disabled={!canApply} onClick={() => apply(preset)} aria-label={t('presetLibrary.applyNamed', { name: preset.name })} className="flex min-w-0 flex-1 items-center gap-2.5 p-2.5 text-left disabled:cursor-default">
+          <button disabled={busy} onClick={() => openPreview(preset)} className="flex min-w-0 flex-1 items-center gap-2.5 p-2.5 text-left hover:bg-noir-hover disabled:cursor-default">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-noir-hover text-brand-accent">{library.activeId === preset.id ? <Check size={17} /> : <SlidersHorizontal size={17} />}</span>
             <span className="min-w-0"><span className="block truncate text-xs font-medium" title={preset.name}>{preset.name}</span><span className="mt-1 block truncate text-[10px] text-noir-muted">{folderPath(library.folders, preset.folderId) || t('presetLibrary.root')}{preset.look.fx.length > 0 ? ` · ${preset.look.fx.length} FX` : ''}</span></span>
           </button>
+          <button type="button" aria-label={t('presetPreview.open', { name: preset.name })} title={t('presetPreview.title')} disabled={busy} onClick={() => openPreview(preset)} className="shrink-0 px-1.5 text-noir-muted hover:bg-noir-hover hover:text-noir-text"><Eye size={15} /></button>
+          <button type="button" aria-label={t('presetLibrary.applyNamed', { name: preset.name })} title={t('presetLibrary.applyNamed', { name: preset.name })} disabled={!canApply} onClick={() => apply(preset)} className="shrink-0 px-1.5 text-noir-muted hover:bg-noir-hover hover:text-brand-accent disabled:opacity-40"><Check size={15} /></button>
           <button type="button" aria-label={t(preset.favorite ? 'presetLibrary.removeFavorite' : 'presetLibrary.addFavorite', { name: preset.name })} aria-pressed={preset.favorite} disabled={busy} onClick={() => toggleFavorite(preset)} className={cn('shrink-0 px-2 hover:bg-noir-hover', preset.favorite ? 'text-brand-accent' : 'text-noir-muted')}><Star size={14} fill={preset.favorite ? 'currentColor' : 'none'} /></button>
           <button aria-label={t('presetLibrary.actions', { name: preset.name })} aria-expanded={menu === preset.id} disabled={busy} onClick={() => setMenu(menu === preset.id ? null : preset.id)} className="shrink-0 px-2 text-noir-muted hover:bg-noir-hover"><MoreHorizontal size={16} /></button>
         </div>
         {menu === preset.id && <div className="grid grid-cols-2 gap-1 border-t border-noir-border/60 px-2 py-2">
           <Button size="sm" variant="subtle" icon={<Pencil size={11} />} disabled={busy} onClick={() => editPreset(preset)}>{t('presetLibrary.edit')}</Button>
           <Button size="sm" variant="subtle" icon={<Copy size={11} />} disabled={busy} onClick={() => void presetActions.copy(preset.name, preset.look)}>{t('presetLibrary.copy')}</Button>
-          <Button size="sm" variant="subtle" icon={<Download size={11} />} disabled={busy} onClick={() => exportJson(preset.id)}>JSON</Button>
+          <Button size="sm" variant="subtle" icon={<Download size={11} />} disabled={busy} onClick={() => exportJson(preset.id)}>{t('presetPreview.exportOne')}</Button>
           <Button size="sm" variant="danger" icon={<Trash2 size={11} />} disabled={busy} onClick={() => remove(preset)}>{t('common.delete')}</Button>
         </div>}
       </div>)}
-      {visible.length > 0 && <div className="flex items-center gap-2 pt-2"><Button size="sm" aria-label={t('presetLibrary.previous')} title={t('presetLibrary.previous')} disabled={!canApply || activeIndex <= 0} onClick={() => apply(visible[activeIndex - 1])}><ArrowLeft size={13} /></Button><span className="min-w-0 flex-1 truncate text-center text-[10px] text-noir-muted" title={active?.name}>{active?.name ?? t('presetLibrary.oneClick')}</span><Button size="sm" aria-label={t('presetLibrary.next')} title={t('presetLibrary.next')} disabled={!canApply || activeIndex >= visible.length - 1} onClick={() => apply(visible[activeIndex + 1])}><ArrowRight size={13} /></Button></div>}
+      {visible.length > 0 && <div className="flex items-center gap-2 pt-2"><Button size="sm" aria-label={t('presetLibrary.previous')} title={t('presetLibrary.previous')} disabled={busy || activeIndex <= 0} onClick={() => openPreview(visible[activeIndex - 1])}><ArrowLeft size={13} /></Button><span className="min-w-0 flex-1 truncate text-center text-[10px] text-noir-muted" title={active?.name}>{active?.name ?? t('presetPreview.title')}</span><Button size="sm" aria-label={t('presetLibrary.next')} title={t('presetLibrary.next')} disabled={busy || activeIndex >= visible.length - 1} onClick={() => openPreview(visible[activeIndex + 1])}><ArrowRight size={13} /></Button></div>}
       <p className="px-1 pt-2 text-[10px] leading-relaxed text-noir-muted">{t(!target ? 'presetLibrary.selectHint' : target.image.locked ? 'presetLibrary.lockedHint' : 'presetLibrary.preserveHint')}</p>
     </div>
+    {preview && <PresetPreview preset={preview.preset} target={preview.target} busy={busy} onApply={applyPreview} onClose={() => setPreview(null)} />}
     {modal && <div onKeyDown={(event) => { event.stopPropagation(); if (event.key === 'Escape' && !busy) setModal(null) }}>
       <Modal width={480} title={t(modal === 'save' ? 'presetLibrary.saveLook' : modal === 'edit' ? 'presetLibrary.edit' : editingId ? 'presetLibrary.editFolder' : 'presetLibrary.newFolder')} onClose={() => { if (!busy) setModal(null) }}>
         <form onSubmit={submit} className="space-y-4" data-testid="preset-form">

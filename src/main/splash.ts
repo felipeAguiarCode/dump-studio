@@ -2,6 +2,7 @@ import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { app, BrowserWindow } from 'electron'
 import { is } from '@electron-toolkit/utils'
+import { APP_NAME } from '@shared/constants'
 import type { AppTheme } from '@shared/types'
 import { windowBackground } from './theme'
 import { openCreatorLink } from './creatorLinks'
@@ -13,8 +14,8 @@ export interface StartupSplash {
 
 export async function createStartupSplash(icon: string, theme: AppTheme): Promise<StartupSplash> {
   const window = new BrowserWindow({
-    width: 940,
-    height: 580,
+    width: 900,
+    height: 510,
     frame: false,
     resizable: false,
     maximizable: false,
@@ -22,7 +23,7 @@ export async function createStartupSplash(icon: string, theme: AppTheme): Promis
     show: false,
     skipTaskbar: true,
     backgroundColor: windowBackground(theme),
-    title: 'Noir Dump Studio',
+    title: APP_NAME,
     icon,
     webPreferences: {
       sandbox: true,

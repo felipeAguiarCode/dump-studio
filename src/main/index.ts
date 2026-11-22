@@ -1,6 +1,7 @@
 import { join } from 'node:path'
 import { app, BrowserWindow, dialog } from 'electron'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { APP_NAME } from '@shared/constants'
 import { initDatabase, closeDatabase } from './db/connection'
 import { registerIpcHandlers } from './ipc/registerHandlers'
 import { registerAssetScheme, handleAssetProtocol } from './fs/assetProtocol'
@@ -9,6 +10,7 @@ import { createStartupSplash, type StartupSplash } from './splash'
 import { preferencesService } from './services/preferencesService'
 import { applyNativeTheme, windowBackground } from './theme'
 import { openCreatorLink } from './creatorLinks'
+import { configureUserData } from './userData'
 
 // Deve ser registrado antes do app ficar pronto.
 registerAssetScheme()
@@ -16,7 +18,7 @@ registerAssetScheme()
 let startupSplash: StartupSplash | undefined
 const iconPath = is.dev
   ? join(__dirname, '../../build/icon.png')
-  : join(process.resourcesPath, 'icon.png')
+  : join(process.resourcesPath, 'my-dump-studio.png')
 
 function createWindow(splash?: StartupSplash): void {
   const theme = preferencesService.get().appearance.theme
@@ -28,7 +30,7 @@ function createWindow(splash?: StartupSplash): void {
     show: false,
     backgroundColor: windowBackground(theme),
     autoHideMenuBar: true,
-    title: 'Noir Dump Studio',
+    title: APP_NAME,
     icon: iconPath,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -71,7 +73,9 @@ function createWindow(splash?: StartupSplash): void {
   }
 }
 
+app.setName(APP_NAME)
 app.whenReady().then(async () => {
+  configureUserData()
   electronApp.setAppUserModelId('me.dio.noirdumpstudio')
 
   app.on('browser-window-created', (_, window) => {
@@ -101,7 +105,7 @@ app.whenReady().then(async () => {
 }).catch((error: unknown) => {
   console.error('[startup] falha ao iniciar:', error)
   startupSplash?.close()
-  dialog.showErrorBox('Noir Dump Studio', `Unable to start the studio.\n\n${error instanceof Error ? error.message : String(error)}`)
+  dialog.showErrorBox(APP_NAME, `Unable to start the studio.\n\n${error instanceof Error ? error.message : String(error)}`)
   app.exit(1)
 })
 

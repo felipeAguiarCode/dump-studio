@@ -11,7 +11,8 @@ import { formatRelativeDate } from '../../lib/format'
 import { cn } from '../../lib/cn'
 import { EmptyState } from '../shell/EmptyState'
 import { FormatGlyph } from '../../components/FormatGlyph'
-import appIcon from '../../assets/branding/noir-icon.png'
+import appIcon from '../../assets/branding/studio-icon.png'
+import { APP_NAME } from '@shared/constants'
 import { ThemeToggle } from '../../components/ui/ThemeToggle'
 import { IconButton } from '../../components/ui/IconButton'
 
@@ -81,7 +82,7 @@ export function RecentProjectsScreen(): JSX.Element {
         <header className="flex items-center gap-3">
           <img src={appIcon} alt="" className="h-12 w-12 shrink-0 object-contain" />
           <div>
-            <h1 className="text-xl font-medium tracking-tight">Noir Dump Studio</h1>
+            <h1 className="text-xl font-medium tracking-tight">{APP_NAME}</h1>
             <p className="text-xs text-noir-muted">{t('home.subtitle')}</p>
           </div>
           <div className="ml-auto flex items-center gap-2">

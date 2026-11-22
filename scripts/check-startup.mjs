@@ -5,7 +5,7 @@ import { dirname, join, resolve } from 'node:path'
 import { seedTheme } from './lib/theme-fixture.mjs'
 
 // Exercise the actual Windows executable with a fresh database, never the user's projects.
-const executable = resolve(process.argv[2] ?? 'dist/1.0.0 - Cherry Pie Version/win-unpacked/Noir Dump Studio.exe')
+const executable = resolve(process.argv[2] ?? 'dist/1.0.0 - Cherry Pie Version/win-unpacked/My Dump Studio.exe')
 if (!existsSync(executable)) throw new Error(`Executable not found: ${executable}`)
 
 for (const nativeModule of [

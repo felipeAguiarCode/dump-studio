@@ -8,7 +8,8 @@ import { migration002 } from '../../src/main/db/migrations/002_color_grading'
 import { migration003 } from '../../src/main/db/migrations/003_tone_curves'
 import { migration004 } from '../../src/main/db/migrations/004_photo_presets'
 import { migration005 } from '../../src/main/db/migrations/005_preset_favorites'
-import { initDatabase, closeDatabase } from '../../src/main/db/connection'
+import { initDatabase, closeDatabase, DATABASE_FILENAME } from '../../src/main/db/connection'
+import { configureUserData } from '../../src/main/userData'
 import { projectService } from '../../src/main/services/projectService'
 import { editService } from '../../src/main/services/editService'
 import { assetService } from '../../src/main/services/assetService'
@@ -25,7 +26,9 @@ import { parsePresetDocument } from '../../src/shared/presetValidation'
 import type { ImageLayerData, Layer, OverlayLayerData } from '../../src/shared/types'
 
 const scratch = process.env.NOIR_PRESETS_TEST_DIR!
-app.setPath('userData', join(scratch, 'user-data'))
+const legacyProfile = join(scratch, 'Noir Dump Studio')
+app.setPath('appData', scratch)
+app.setPath('userData', join(scratch, 'My Dump Studio'))
 registerAssetScheme()
 // The test uses the real IPC endpoints but isolates the user's system clipboard and file pickers.
 let clipboardText = ''
@@ -179,8 +182,8 @@ app.whenReady().then(async () => {
   assert.deepEqual(previousLibrary.prepare('SELECT name, look_json, favorite FROM photo_presets WHERE id = ?').get('existing-preset'), { name: 'Existing preset', look_json: '{"preserved":true}', favorite: 0 })
   previousLibrary.close()
   console.log('PASS: upgrading a populated v4 preset library preserves its presets and initializes favorites.')
-  await mkdir(app.getPath('userData'), { recursive: true })
-  const legacy = new Database(join(app.getPath('userData'), 'noir-dump-studio.db'))
+  await mkdir(legacyProfile, { recursive: true })
+  const legacy = new Database(join(legacyProfile, DATABASE_FILENAME))
   legacy.exec('CREATE TABLE schema_version (version INTEGER PRIMARY KEY, name TEXT NOT NULL, applied_at TEXT NOT NULL)')
   const now = new Date().toISOString()
   for (const migration of [migration001, migration002, migration003]) {
@@ -190,6 +193,8 @@ app.whenReady().then(async () => {
   legacy.prepare('INSERT INTO projects (id, name, format, created_at, updated_at) VALUES (?, ?, ?, ?, ?)').run('legacy-project', 'Existing project preserved', 'feed_4_5', now, now)
   legacy.prepare('INSERT INTO app_preferences (id, key, value_json, created_at, updated_at) VALUES (?, ?, ?, ?, ?)').run('legacy-preferences', 'fixture-marker', '{"preserved":true}', now, now)
   legacy.close()
+  configureUserData()
+  assert.equal(app.getPath('userData'), legacyProfile, 'Rebranded app must reopen the existing profile')
   const upgraded = initDatabase()
   assert.equal(projectService.open('legacy-project').name, 'Existing project preserved')
   assert.equal((upgraded.prepare('SELECT value_json FROM app_preferences WHERE id = ?').get('legacy-preferences') as { value_json: string }).value_json, '{"preserved":true}')

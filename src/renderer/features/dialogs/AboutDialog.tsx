@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Github, Linkedin, ArrowUpRight } from 'lucide-react'
 import { APP_CREATOR, APP_RELEASE } from '@shared/appInfo'
+import { APP_NAME } from '@shared/constants'
 import { ipc } from '../../services/ipcClient'
 import { useT } from '../../i18n'
 import { useUiStore } from '../../stores/uiStore'
 import { Modal } from '../../components/ui/Modal'
-import appIcon from '../../assets/branding/noir-icon.png'
+import appIcon from '../../assets/branding/studio-icon.png'
 
 export function AboutContent(): JSX.Element {
   const t = useT()
@@ -18,7 +19,7 @@ export function AboutContent(): JSX.Element {
   return <section data-testid="about-content">
     <div className="flex items-center gap-4">
       <img src={appIcon} width={72} height={72} alt="" className="h-[72px] w-[72px] shrink-0 object-contain" />
-      <div><h2 className="text-lg font-medium tracking-tight">Noir Dump Studio</h2><p className="mt-1 text-xs text-noir-muted">{t('about.version')} {version || '…'} — {APP_RELEASE.name}</p></div>
+      <div><h2 className="text-lg font-medium tracking-tight">{APP_NAME}</h2><p className="mt-1 text-xs text-noir-muted">{t('about.version')} {version || '…'} — {APP_RELEASE.name}</p></div>
     </div>
     <p className="mt-5 text-xs leading-relaxed text-noir-muted">{t('home.subtitle')}</p>
     <div className="mt-6 border-t border-noir-border pt-5">

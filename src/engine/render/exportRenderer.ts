@@ -34,17 +34,24 @@ function loadImage(src: string): Promise<HTMLImageElement> {
  */
 export async function composeDumpItem(
   item: DumpItem,
-  opts: { format: 'jpg' | 'png'; quality: number }
+  opts: {
+    format: 'jpg' | 'png'
+    quality: number
+    maxSide?: number
+    resolveAssetUrl?: (assetId: string) => string
+    requiredImageId?: string
+  }
 ): Promise<string> {
   const { width, height } = item.canvas
+  const scale = opts.maxSide ? Math.min(1, opts.maxSide / Math.max(width, height)) : 1
   // Garante que as fontes das camadas de texto estejam carregadas antes de desenhar (WYSIWYG).
   const textFamilies = item.layers
     .filter((l) => l.visible && l.type === 'text')
     .map((l) => (l.data as TextLayerData).fontFamily)
   if (textFamilies.length) await ensureFontsLoaded(textFamilies)
   const container = document.createElement('div')
-  const stage = new Konva.Stage({ container, width, height })
-  const layer = new Konva.Layer()
+  const stage = new Konva.Stage({ container, width: Math.max(1, Math.round(width * scale)), height: Math.max(1, Math.round(height * scale)) })
+  const layer = new Konva.Layer({ scaleX: scale, scaleY: scale })
   stage.add(layer)
 
   const sorted = [...item.layers].sort((a, b) => a.orderIndex - b.orderIndex)
@@ -67,9 +74,9 @@ export async function composeDumpItem(
       const geo = slotGeo ?? { x: t.x, y: t.y, width: t.width, height: t.height }
       const rot = slotGeo ? slotGeo.rotation : t.rotation
       try {
-        const img = await loadImage(assetUrl(data.assetId))
-        const w = Math.max(1, Math.round(geo.width))
-        const h = Math.max(1, Math.round(geo.height))
+        const img = await loadImage((opts.resolveAssetUrl ?? assetUrl)(data.assetId))
+        const w = Math.max(1, Math.round(geo.width * scale))
+        const h = Math.max(1, Math.round(geo.height * scale))
         const out = document.createElement('canvas')
         const uniforms = buildUniforms(l.adjustments ?? DEFAULT_ADJUSTMENTS, l.filter, width, 0, l.crop, data.shaders)
         getGLContext().process(data.assetId, img, uniforms, out, w, h)
@@ -105,7 +112,11 @@ export async function composeDumpItem(
           )
         }
         layer.add(group)
-      } catch {
+      } catch (error) {
+        if (l.id === opts.requiredImageId) {
+          stage.destroy()
+          throw error
+        }
         /* pula imagem que falhar */
       }
     } else if (l.type === 'text') {

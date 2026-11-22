@@ -4,20 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self';" />
-    <title>Noir Dump Studio</title>
+    <title>My Dump Studio</title>
   </head>
   <body>
-    <main class="splash" aria-label="Noir Dump Studio">
+    <main class="splash" aria-label="My Dump Studio">
       <div class="artwork" aria-hidden="true">
         <img src="./assets/branding/splash-art.webp" alt="" />
       </div>
-      <div class="shade" aria-hidden="true"></div>
       <section class="identity">
-        <img class="app-icon" src="./assets/branding/noir-icon.png" alt="Noir Dump Studio" width="76" height="76" />
+        <div class="edition"><span id="edition-name">CHERRY PIE VERSION</span><span id="version"></span></div>
+        <img class="app-icon" src="./assets/branding/studio-icon.png" alt="" width="72" height="72" />
         <div class="product">
-          <p class="eyebrow">BLACK &amp; WHITE, BY DESIGN.</p>
-          <h1>Noir<br /><span>Dump Studio</span></h1>
-          <p class="description" id="description">A studio for your<br />light and shadow.</p>
+          <h1>My Dump<br /><span>Studio</span></h1>
+          <p class="description" id="description">Your photos, your style.</p>
           <div class="creator">
             <p>Created by <strong id="creator-name">Felipe Aguiar</strong></p>
             <nav aria-label="Creator profiles">
@@ -33,10 +32,8 @@
             <span id="status">Starting your studio…</span>
           </div>
           <div class="loading-track" aria-hidden="true"><span></span></div>
-          <div class="edition"><span id="edition-name">CHERRY PIE VERSION</span><span id="version"></span></div>
         </footer>
       </section>
-      <div class="art-caption" aria-hidden="true"><span>LIGHT / SHADOW</span><span>001</span></div>
     </main>
     <script type="module" src="./splash.ts"></script>
   </body>

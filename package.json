@@ -1,8 +1,8 @@
 {
-  "name": "noir-dump-studio",
+  "name": "my-dump-studio",
   "version": "1.0.0",
-  "description": "Noir Dump Studio — editor desktop minimalista de photo dumps P&B para Instagram",
-  "productName": "Noir Dump Studio",
+  "description": "My Dump Studio — editor desktop de fotos, colagens e carrosséis",
+  "productName": "My Dump Studio",
   "author": "Felipe Aguiar",
   "license": "MIT",
   "main": "./out/main/index.js",

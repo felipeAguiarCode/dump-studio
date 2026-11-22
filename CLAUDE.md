@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Noir Dump Studio is a local-first **Electron desktop app** for creating black-and-white ("noir") Instagram photo dumps: import photos, edit each one non-destructively (iPhone-style adjustments, B&W filters, crop, film/texture effects), compose multi-photo pages, and export at exact Instagram resolutions. UI labels are end-user-facing in **English + Portuguese** (i18n). The full product spec lives in `prompt.md`; `README.md` has the dev quickstart.
+My Dump Studio is a local-first **Electron desktop app** for creating Instagram photo dumps: import photos, edit each one non-destructively (adjustments, filters, crop, film/texture effects), compose multi-photo pages, and export at exact Instagram resolutions. UI labels are end-user-facing in **English + Portuguese** (i18n). The original spec lives in `prompt.md`; `README.md` has the dev quickstart.
 
 ## Commands
 

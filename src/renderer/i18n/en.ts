@@ -8,7 +8,7 @@
  */
 export const en = {
   about: {
-    title: 'About Noir Dump Studio',
+    title: 'About My Dump Studio',
     version: 'Version'
   },
   common: {
@@ -59,7 +59,7 @@ export const en = {
     previous: 'Previous preset', next: 'Next preset', oneClick: 'One click to apply',
     selectHint: 'Select a photo to save or apply a look. Your library is always available.',
     lockedHint: 'Unlock the selected photo to apply a preset.',
-    preserveHint: 'One click applies the complete look. Crop, placement and layout stay as they are. Ctrl+Z undoes it.',
+    preserveHint: 'Use the eye to preview the look. Apply it with the check mark and undo with Ctrl+Z.',
     includes: 'Includes all adjustments, curves, color grading, HSL, filter, camera, textures, photo border and opacity.',
     includeFx: 'FX to include', fxHint: 'Linked FX are selected. You can include independent page FX here; their position adapts to the destination photo.',
     noFx: 'No available FX on this page.', applying: 'Updating your edit…',
@@ -68,6 +68,17 @@ export const en = {
     failed: 'Could not complete this action. Check that the photo and its FX are unlocked and try again.',
     invalidJson: 'Could not import this JSON. Use a valid Noir preset file (up to 10 MB).',
     invalidClipboard: 'Copy one Noir preset before pasting a look.'
+  },
+
+  presetPreview: {
+    title: 'Preset preview', open: 'Preview {name}', close: 'Close preset preview',
+    before: 'Before', after: 'After', showcase: 'Showcase', apply: 'Apply preset',
+    filter: 'Filter', adjustments: 'Camera and adjustments', textures: 'Textures', finish: 'Border and opacity', fx: 'FX',
+    sample: 'Sample photo', loading: 'Rendering preview…', failed: 'Could not render this preview.',
+    steps: 'Showcase steps', previous: 'Previous step', next: 'Next step', pause: 'Pause showcase', play: 'Play showcase',
+    selectToApply: 'Select a photo in your project to apply this preset.',
+    applyHint: 'Applies the complete look to the selected photo.',
+    exportOne: 'Export preset', exportFolder: 'Exports the selected folder and its subfolders.', exportLibrary: 'Exports the entire preset library.'
   },
 
   fxPanel: {

@@ -3,18 +3,52 @@ import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 
 const root = new URL('../', import.meta.url)
-const source = fileURLToPath(new URL('assets/branding/noir-icon.png', root))
+const source = fileURLToPath(new URL('assets/branding/my-dump-studio-icon.png', root))
+const splash = fileURLToPath(new URL('assets/branding/splash-art.png', root))
 const build = new URL('build/', root)
+const iconFolder = new URL('icons/', build)
 const renderer = new URL('src/renderer/assets/branding/', root)
-await mkdir(build, { recursive: true })
+await mkdir(iconFolder, { recursive: true })
 await mkdir(renderer, { recursive: true })
 
+// NSIS requires uncompressed 24-bit BMPs with padded, bottom-up rows.
+async function writeBitmap(image, target) {
+  const { data, info: { width, height } } = await image.removeAlpha().toColourspace('srgb').raw().toBuffer({ resolveWithObject: true })
+  const stride = Math.ceil(width * 3 / 4) * 4
+  const bmp = Buffer.alloc(54 + stride * height)
+  bmp.write('BM')
+  bmp.writeUInt32LE(bmp.length, 2)
+  bmp.writeUInt32LE(54, 10)
+  bmp.writeUInt32LE(40, 14)
+  bmp.writeInt32LE(width, 18)
+  bmp.writeInt32LE(height, 22)
+  bmp.writeUInt16LE(1, 26)
+  bmp.writeUInt16LE(24, 28)
+  bmp.writeUInt32LE(stride * height, 34)
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const from = (y * width + x) * 3
+      const to = 54 + (height - y - 1) * stride + x * 3
+      bmp[to] = data[from + 2]
+      bmp[to + 1] = data[from + 1]
+      bmp[to + 2] = data[from]
+    }
+  }
+  await writeFile(target, bmp)
+}
+
+const headerIcon = await sharp(source).resize(46, 46).png().toBuffer()
+const headerArt = await sharp(splash).resize(150, 57).composite([{ input: headerIcon, gravity: 'centre' }]).png().toBuffer()
 await Promise.all([
   sharp(source).resize(1024, 1024).png().toFile(fileURLToPath(new URL('icon.png', build))),
-  sharp(source).resize(256, 256).png().toFile(fileURLToPath(new URL('noir-icon.png', renderer))),
-  sharp(fileURLToPath(new URL('assets/branding/splash-art.png', root)))
+  sharp(source).resize(256, 256).png().toFile(fileURLToPath(new URL('studio-icon.png', renderer))),
+  sharp(splash).resize({ width: 1024, withoutEnlargement: true })
     .webp({ quality: 88 })
-    .toFile(fileURLToPath(new URL('splash-art.webp', renderer)))
+    .toFile(fileURLToPath(new URL('splash-art.webp', renderer))),
+  writeBitmap(sharp(splash).resize(164, 314), new URL('installerSidebar.bmp', build)),
+  writeBitmap(sharp(headerArt), new URL('installerHeader.bmp', build)),
+  ...[16, 32, 48, 64, 128, 256, 512, 1024].map((size) => sharp(source).resize(size, size)
+    .png().toFile(fileURLToPath(new URL(`my-dump-studio-${size}.png`, iconFolder))))
 ])
 
 // PNG-backed ICO entries retain alpha and stay sharp at every Windows scaling level.
@@ -35,4 +69,4 @@ for (let index = 0; index < images.length; index++) {
   offset += images[index].length
 }
 await writeFile(new URL('icon.ico', build), Buffer.concat([header, ...images]))
-console.log('Branding built: Windows ICO, application PNG, renderer icon and splash artwork.')
+console.log('Branding built: application icons, splash artwork and Windows installer graphics.')

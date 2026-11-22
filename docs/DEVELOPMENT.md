@@ -1,6 +1,6 @@
 # Desenvolvimento do My Dump Studio
 
-Execute os comandos na raiz do repositório. A base desktop e o executável ainda usam o nome Noir Dump Studio; a edição atual é **1.0.0 — Cherry Pie Version**.
+Execute os comandos na raiz do repositório. A edição atual do My Dump Studio é **1.0.0 — Cherry Pie Version**.
 
 ## Preparar o ambiente
 
@@ -36,7 +36,9 @@ Os testes de integração usam dados temporários, sem modificar os projetos rea
 
 ## Distribuição
 
-O instalador é gerado em `dist/1.0.0 - Cherry Pie Version/`. Distribua o instalador ou a pasta `win-unpacked` inteira: o executável isolado depende dos recursos e módulos em `resources/app.asar.unpacked`.
+O instalador `My-Dump-Studio-1.0.0-Cherry-Pie-Version-setup.exe` é gerado em `dist/1.0.0 - Cherry Pie Version/`. Para rodar sem instalação, mantenha `My Dump Studio.exe` junto da pasta `win-unpacked` completa.
+
+O build gera os PNGs de 16 a 1024 px em `build/icons/`, o ICO do Windows e a arte do assistente. O ID do instalador permanece estável para upgrades. Se existir um banco do antigo Noir Dump Studio e ainda não existir um banco do My Dump Studio, o app usa o perfil anterior no mesmo local para preservar as referências às fotos.
 
 Dependências, builds, instaladores, certificados e bancos locais ficam fora do Git. Publique os instaladores como assets de uma release; eles não são armazenados na árvore de código-fonte.
 

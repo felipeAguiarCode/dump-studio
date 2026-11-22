@@ -1,5 +1,6 @@
+# Keep the existing Windows installer identity so upgrades find previous installs.
 appId: me.dio.noirdumpstudio
-productName: Noir Dump Studio
+productName: My Dump Studio
 directories:
   buildResources: build
   output: "dist/1.0.0 - Cherry Pie Version"
@@ -10,16 +11,26 @@ files:
   - package.json
 extraResources:
   - from: build/icon.png
-    to: icon.png
+    to: my-dump-studio.png
 asarUnpack:
   - "**/*.node"
   - resources/**
 win:
   icon: build/icon.ico
+  executableName: My Dump Studio
   target:
     - nsis
-  artifactName: ${productName}-${version}-Cherry-Pie-Version-setup.${ext}
+  artifactName: My-Dump-Studio-${version}-Cherry-Pie-Version-setup.${ext}
 nsis:
+  include: assets/branding/installer.nsh
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerHeader: build/installerHeader.bmp
+  installerSidebar: build/installerSidebar.bmp
+  installerLanguages: [en_US, pt_BR]
+  shortcutName: My Dump Studio
+  uninstallDisplayName: My Dump Studio ${version}
   oneClick: false
   perMachine: false
   allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false

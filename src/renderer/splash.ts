@@ -14,6 +14,6 @@ document.getElementById('creator-name')!.textContent = APP_CREATOR.name
 ;(document.getElementById('creator-github') as HTMLAnchorElement).href = APP_CREATOR.github
 ;(document.getElementById('creator-linkedin') as HTMLAnchorElement).href = APP_CREATOR.linkedin
 if (portuguese) {
-  document.getElementById('description')!.innerHTML = 'Um estúdio para sua<br />luz e sua sombra.'
+  document.getElementById('description')!.textContent = 'Suas fotos, seu estilo.'
   document.getElementById('status')!.textContent = 'Iniciando seu estúdio…'
 }

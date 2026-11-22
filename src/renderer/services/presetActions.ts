@@ -55,10 +55,13 @@ export const presetActions = {
       return true
     }) ?? false
   },
-  async apply(look: PhotoLook, presetId?: string): Promise<boolean> {
+  async apply(look: PhotoLook, presetId?: string, expected?: { itemId: string; layerId: string }): Promise<boolean> {
     return await editing(async () => {
       const target = presetTarget()
       if (!target) throw new Error('No photo selected')
+      if (expected && (target.item.id !== expected.itemId || target.image.id !== expected.layerId)) {
+        throw new Error('The preview target changed')
+      }
       const item = await ipc('presets:apply', { dumpItemId: target.item.id, layerId: target.image.id, look })
       const editor = useEditorStore.getState()
       editor.captureHistory()
