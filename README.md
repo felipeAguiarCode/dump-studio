@@ -1,62 +1,64 @@
+<p align="center"><strong>English</strong> · <a href="./README.pt-BR.md">Português (Brasil)</a></p>
+
 <p align="center">
-  <img src="src/renderer/assets/branding/studio-icon.png" width="80" height="80" alt="Câmera My Dump Studio">
+  <img src="src/renderer/assets/branding/studio-icon.png" width="80" height="80" alt="My Dump Studio camera icon">
 </p>
 
 <h1 align="center">My Dump Studio</h1>
 
-<p align="center"><strong>Seu dump. Seu estilo. Seu olhar.</strong></p>
-<p align="center">Transforme fotos soltas em uma história sua.<br>Um editor desktop para criar photo dumps, encontrar seu look e montar carrosséis.</p>
+<p align="center"><strong>Your dump. Your style. Your point of view.</strong></p>
+<p align="center">Turn everyday photos into a story of your own.<br>A desktop editor for creating photo dumps, finding your look, and building carousels.</p>
 
-[![Prévia animada do My Dump Studio mostrando filtros, texturas e layouts](assets/readme/demo-preview.webp)](.demo/videos/my-dump-studio-demo-youtube.mp4)
+[![Animated My Dump Studio demo showing filters, textures, and layouts](assets/readme/demo-preview.webp)](.demo/videos/my-dump-studio-demo-youtube.mp4)
 
-[**Assista à demonstração completa em 50 segundos**](.demo/videos/my-dump-studio-demo-youtube.mp4) · [Versão vertical para Reels](.demo/videos/my-dump-studio-demo-instagram.mp4) · [Créditos](.demo/CREDITOS.md)
+[**Watch the full 50-second demo**](.demo/videos/my-dump-studio-demo-youtube.mp4) · [Vertical version for Reels](.demo/videos/my-dump-studio-demo-instagram.mp4) · [Credits](.demo/CREDITOS.md)
 
-<p align="center"><strong>1.0.0 · Cherry Pie Version</strong><br>Windows · Português e inglês · Projetos locais · Sem prazo de expiração</p>
+<p align="center"><strong>1.0.0 · Cherry Pie Version</strong><br>Windows · English and Brazilian Portuguese · Local projects · Full access with no expiration</p>
 
 <p align="center">
-  <a href="https://github.com/felipeAguiarCode/dump-studio/releases"><img src="assets/readme/releases-button.svg" width="340" height="76" alt="Ver releases — instalador Windows e novidades"></a>
+  <a href="https://github.com/felipeAguiarCode/dump-studio/releases"><img src="assets/readme/releases-button-en.svg" width="340" height="76" alt="View releases for the Windows installer and updates"></a>
 </p>
-<p align="center"><a href="https://felipeaguiarcode.github.io/dump-studio/">Experimente a demo no navegador</a> · <a href="https://github.com/felipeAguiarCode/dump-studio/issues">Reporte um problema</a></p>
+<p align="center"><a href="https://felipeaguiarcode.github.io/dump-studio/?lang=en">Try the browser demo</a> · <a href="https://github.com/felipeAguiarCode/dump-studio/issues">Report an issue</a></p>
 
-> O instalador será disponibilizado na aba **Releases**. Enquanto a primeira release pública não estiver disponível, você pode experimentar a demo ou executar o projeto a partir do código-fonte.
+> The Windows installer will be available under **Releases**. In the meantime, try the browser demo or run the app from source.
 
-## Um studio para o seu próximo dump
+## A studio for your next dump
 
-Um date. Um café. Um look que deu certo. Junte os cliques, escolha a composição e dê às suas fotos um tratamento com a sua cara.
+A date. A coffee. An outfit that came together. Gather your photos, choose a layout, and give them a look of your own.
 
-![Editor do My Dump Studio com filtros, camadas e fotos de exemplo](.site/assets/screenshots/editor-filters.webp)
+![My Dump Studio editor with filters, layers, and sample photos](.site/assets/screenshots/editor-filters.webp)
 
-## O que você pode criar
+## What you can create
 
-| Seu processo | No studio |
+| What you want to do | Tools in the studio |
 | --- | --- |
-| **Monte a história** | Colagens, grades, Polaroids, Stories e carrosséis contínuos. |
-| **Encontre seu tom** | 44 filtros, simulações de câmera, curvas, ajustes de cor, texturas e FX. |
-| **Guarde o seu look** | Presets compartilhados entre projetos, pastas, subpastas, favoritos e importação/exportação em JSON. |
-| **Edite com liberdade** | Fotos, textos, formas, bordas e efeitos em camadas, com desfazer e refazer. |
-| **Troque o formato** | Quadrado, retrato, horizontal, feed e Stories, preservando as proporções do conteúdo. |
-| **Exporte para o feed** | Páginas em JPG ou PNG, nas dimensões do projeto. |
+| **Build a story** | Collages, grids, Polaroids, Stories, and seamless carousels. |
+| **Find your look** | 44 filters, camera simulations, curves, color adjustments, textures, and FX. |
+| **Keep your favorite looks** | A preset library shared across projects, with folders, subfolders, favorites, and JSON import and export. |
+| **Edit in layers** | Photos, text, shapes, borders, and effects, with undo and redo. |
+| **Switch formats** | Square, portrait, landscape, feed, and Stories formats that preserve the proportions of your content. |
+| **Export for your feed** | JPG or PNG pages at your project's dimensions. |
 
-Os ajustes de imagem são aplicados à foto selecionada. Você mantém o controle de cada camada e pode voltar atrás sem alterar o arquivo original.
+Image adjustments apply to the selected photo. Edit each layer independently and undo changes while keeping the original photo intact.
 
-## Encontrou seu tom? Guarda.
+## Found your look? Save it.
 
-Salve ajustes, filtros, câmera, texturas e FX como um preset. Organize seus looks em pastas, marque os favoritos e leve um preset ou uma coleção inteira para outra instalação em JSON.
+Save adjustments, filters, camera settings, textures, and FX as a preset. Organize your looks in folders, star your favorites, and transfer a preset or an entire collection to another installation as JSON.
 
-**Salvar preset**, **Importar JSON** e **Exportar JSON** ficam acessíveis nos painéis de edição. Para repetir um visual rapidamente, use **Copiar look** e **Colar look**.
+Use **Save preset**, **Import JSON**, and **Export JSON** in the editor. To reuse a look quickly, choose **Copy look** and **Paste look**.
 
-No menu **Presets**, expanda as pastas na biblioteca ou filtre pelos favoritos. Passe o mouse sobre um preset para ver o look na foto selecionada e clique no olho para abrir o **Antes/Depois** ou o **Showcase**. A prévia usa a foto do projeto ou uma foto de exemplo quando não há seleção.
+Open **Presets** to browse folders or filter by favorites. Hover over a preset to see it on the selected photo, or click the eye icon for **Before**, **After**, and **Showcase**. The preview uses your selected photo or a sample if nothing is selected.
 
-![Editor com os atalhos de salvar presets, importar e exportar JSON](assets/previews/presets-quick-actions.png)
+![Editor shortcuts for saving presets and importing or exporting JSON](assets/previews/presets-quick-actions.png)
 
-### Experimente o preset images (4)
+### Try the `images (4)` preset
 
-Este exemplo combina o filtro **Champagne** com contraste, cor, vinheta, grão e textura de concreto.
+This example combines the **Champagne** filter with contrast, color adjustments, a vignette, grain, and a concrete texture.
 
-[Baixe o preset em JSON](examples/presets/images-4.json) e, no editor, abra **Presets → Importar JSON**. Você também pode copiar o bloco abaixo e adicioná-lo pela opção de importar da área de transferência.
+[Download the JSON preset](examples/presets/images-4.json) and open **Presets → Import JSON** in the editor. You can also copy the code below and choose **Add JSON from clipboard to library**.
 
 <details>
-<summary>Ver JSON completo do preset</summary>
+<summary>View the full preset JSON</summary>
 
 ```json
 {
@@ -279,33 +281,33 @@ Este exemplo combina o filtro **Champagne** com contraste, cor, vinheta, grão e
 
 </details>
 
-## Cada clique encontra seu lugar
+## Find a place for every shot
 
-Escolha um layout, adicione suas fotos e ajuste cada elemento. O controle **Formato**, no topo do editor, atualiza todas as páginas do projeto e preserva as proporções do conteúdo, usando o fundo nas margens quando necessário.
+Choose a layout, add your photos, and adjust each element. The format control at the top of the editor updates every page in the project and preserves your content's proportions, letting the background show at the edges if needed.
 
-![Catálogo de layouts e composição por camadas no editor](.site/assets/screenshots/editor-layouts.webp)
+![Layout catalog and a layered composition in the My Dump Studio editor](.site/assets/screenshots/editor-layouts.webp)
 
-## O seu processo é seu
+## Make it your own
 
-- **Edição local:** projetos salvos no computador, com salvamento automático.
-- **Sem conta:** abra o aplicativo e comece a criar.
-- **Sem licença de 60 dias:** esta edição não tem prazo de expiração.
-- **White ou Noir:** interface clara por padrão e tema escuro nas preferências.
-- **Português e inglês:** escolha o idioma da interface.
+- **Local editing.** Projects stay on your computer and save automatically.
+- **No account required.** Open the app and start creating.
+- **Full access.** This edition has no expiration date.
+- **White or Noir.** Start with the light interface or switch to the dark theme in preferences.
+- **English and Brazilian Portuguese.** Switch the interface language in preferences.
 
-## Experimente antes de instalar
+## Try it before installing
 
-No [site do My Dump Studio](https://felipeaguiarcode.github.io/dump-studio/), você pode experimentar fotos de exemplo, trocar looks e intensidade, comparar antes e depois, explorar layouts e baixar uma prévia em PNG. A demo usa o motor real de filtros e a geometria de layouts do aplicativo.
+The browser demo uses the app's filter engine and layout geometry. Edit sample photos, switch looks and adjust their intensity, compare before and after, explore layouts, and download a PNG preview. [Try My Dump Studio in your browser](https://felipeaguiarcode.github.io/dump-studio/?lang=en).
 
-[![Site do My Dump Studio com a prévia de dump e a headline](.site/previews/desktop-hero.png)](https://felipeaguiarcode.github.io/dump-studio/)
+[![My Dump Studio website with a photo dump preview](.site/previews/desktop-hero.png)](https://felipeaguiarcode.github.io/dump-studio/?lang=en)
 
-## Instalação e código-fonte
+## Installation and source code
 
-O aplicativo desktop é para **Windows**. Quando disponível, baixe e execute o instalador `.exe` na [aba Releases](https://github.com/felipeAguiarCode/dump-studio/releases).
+The desktop app runs on **Windows**. Once published, download and run the `.exe` installer from [GitHub Releases](https://github.com/felipeAguiarCode/dump-studio/releases).
 
-O instalador desta edição se chama **My-Dump-Studio-1.0.0-Cherry-Pie-Version-setup.exe**. Ele cria o atalho **My Dump Studio** no Windows e abre o editor pela nova splash da Cherry Pie Version.
+This edition's installer is named **My-Dump-Studio-1.0.0-Cherry-Pie-Version-setup.exe**. It creates the **My Dump Studio** shortcut on Windows and opens the editor with the Cherry Pie Version splash screen.
 
-Para rodar a partir do código-fonte, com Node.js e npm instalados:
+With Node.js and npm installed, run the following commands to start the app from source.
 
 ```powershell
 git clone https://github.com/felipeAguiarCode/dump-studio.git
@@ -314,18 +316,18 @@ npm install
 npm run dev
 ```
 
-Para servir apenas o site localmente:
+To serve the website locally, run the following command.
 
 ```powershell
 npm run site
 ```
 
-Abra **http://127.0.0.1:4173/**. A demo precisa de um servidor HTTP; abrir o HTML por duplo clique não carrega os módulos corretamente.
+Open **http://127.0.0.1:4173/?lang=en** in your browser. The demo loads its modules over HTTP.
 
-Consulte o [guia de desenvolvimento](docs/DEVELOPMENT.md) para build, testes, módulos nativos e arquitetura, ou o [guia do site](.site/README.md) para a demonstração e publicação no GitHub Pages.
+The development guide covers builds, tests, native modules, and architecture. The site guide covers the demo and GitHub Pages deployment. [Development guide (Portuguese)](docs/DEVELOPMENT.md) · [Site guide (Portuguese)](.site/README.md)
 
-## Criado por Felipe Aguiar
+## Created by Felipe Aguiar
 
 [GitHub](https://github.com/felipeAguiarCode) · [LinkedIn](https://www.linkedin.com/in/felipeaguiar-exe/)
 
-As capturas usam projetos temporários e fotos de exemplo. Autores, fontes e licenças estão nos [créditos das fotografias](.site/assets/photo-credits.json). As pessoas retratadas não representam depoimentos ou endosso ao aplicativo.
+The screenshots show sample projects and photos. See the credits for photographers, sources, and licenses. The people pictured appear as examples only. [Photo credits](.site/assets/photo-credits.json)
