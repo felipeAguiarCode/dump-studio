@@ -49,6 +49,236 @@ No menu **Presets**, expanda as pastas na biblioteca ou filtre pelos favoritos. 
 
 ![Editor com os atalhos de salvar presets, importar e exportar JSON](assets/previews/presets-quick-actions.png)
 
+### Experimente o preset images (4)
+
+Este exemplo combina o filtro **Champagne** com contraste, cor, vinheta, grão e textura de concreto.
+
+[Baixe o preset em JSON](examples/presets/images-4.json) e, no editor, abra **Presets → Importar JSON**. Você também pode copiar o bloco abaixo e adicioná-lo pela opção de importar da área de transferência.
+
+<details>
+<summary>Ver JSON completo do preset</summary>
+
+```json
+{
+  "format": "noir-photo-presets",
+  "version": 1,
+  "folders": [],
+  "presets": [
+    {
+      "id": "clipboard",
+      "name": "images (4)",
+      "folderId": null,
+      "look": {
+        "adjustments": {
+          "exposure": 0,
+          "brilliance": 0,
+          "highlights": 0,
+          "shadows": 0,
+          "contrast": 24,
+          "brightness": 0,
+          "blackPoint": 0,
+          "saturation": 30,
+          "vibrance": 12,
+          "temperature": -8,
+          "tint": 18,
+          "bwIntensity": 0,
+          "tonalSeparation": 0,
+          "blackDepth": 0,
+          "whiteBoost": 0,
+          "fade": 0,
+          "noirCurve": "classic",
+          "clarity": 0,
+          "texture": 0,
+          "sharpness": 0,
+          "definition": 0,
+          "noiseReduction": 0,
+          "grain": 0,
+          "grainSize": 3,
+          "grainRoughness": 30,
+          "isoSimulation": "100",
+          "grainType": "film35mm",
+          "vignette": 22,
+          "vignetteSoftness": 50,
+          "vignetteIntensity": 50,
+          "vignetteCenterX": 0.5,
+          "vignetteCenterY": 0.5,
+          "distortion": 0,
+          "colorGrading": {
+            "shadows": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "midtones": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "highlights": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "global": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            }
+          },
+          "hslMixer": {
+            "red": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "orange": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "yellow": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "green": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "aqua": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "blue": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "purple": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            },
+            "magenta": {
+              "hue": 0,
+              "saturation": 0,
+              "luminance": 0
+            }
+          },
+          "toneCurves": {
+            "rgb": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              }
+            ],
+            "red": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              }
+            ],
+            "green": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              }
+            ],
+            "blue": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 1,
+                "y": 1
+              }
+            ],
+            "parametric": {
+              "highlights": 0,
+              "lights": 0,
+              "darks": 0,
+              "shadows": 0
+            }
+          }
+        },
+        "filter": {
+          "name": "edit_champagne",
+          "intensity": 100
+        },
+        "shaders": {
+          "crt": 0,
+          "burn": 0,
+          "worn": 0,
+          "halation": 0,
+          "vhs": 0,
+          "signalLoss": 0,
+          "interference": 0,
+          "scanlines": 0,
+          "filmGrain": 8,
+          "darkGrainy": 0,
+          "concrete": 73,
+          "grunge": 0,
+          "glitch": 0,
+          "dustVintage": 0,
+          "lightLeak": 0,
+          "leakStreak": 0,
+          "leakRainbow": 0,
+          "leakEdge": 0,
+          "leakSpot": 0,
+          "filmBloom": 0,
+          "anamorphic": 0,
+          "personaRed": 0,
+          "personaBlue": 0,
+          "darkKnight": 0,
+          "cyberNeon": 0,
+          "inkToon": 0,
+          "dreadFog": 0,
+          "pixelArt": 0,
+          "gameboy": 0,
+          "thermal": 0,
+          "vaporwave": 0,
+          "fisheye": 0,
+          "antiFisheye": 0
+        },
+        "border": {
+          "width": 0,
+          "color": "#FFFFFF",
+          "radius": {
+            "tl": 0,
+            "tr": 0,
+            "br": 0,
+            "bl": 0
+          }
+        },
+        "opacity": 1,
+        "referenceSize": {
+          "width": 1080,
+          "height": 1440
+        },
+        "fx": []
+      }
+    }
+  ]
+}
+```
+
+</details>
+
 ## Cada clique encontra seu lugar
 
 Escolha um layout, adicione suas fotos e ajuste cada elemento. O controle **Formato**, no topo do editor, atualiza todas as páginas do projeto e preserva as proporções do conteúdo, usando o fundo nas margens quando necessário.
