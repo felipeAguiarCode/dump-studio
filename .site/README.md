@@ -30,9 +30,7 @@ e usa seu `browser_download_url`. Não contém token nem credenciais.
 
 O instalador é publicado separadamente do site. Nenhum release foi criado por este trabalho.
 
-A página separa **Instalar no Windows** (`#download`) de **Rodar o código-fonte**
-(`#source`). A primeira seção mostra as etapas do instalador. A segunda oferece
-comandos copiáveis e um link para o guia de desenvolvimento.
+A seção **Instalar no Windows** (`#download`) mostra as etapas do instalador.
 
 ## GitHub Pages
 

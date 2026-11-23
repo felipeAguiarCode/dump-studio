@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#fcfcfd">
   <meta name="description" content="Seu dump, do seu jeito. Monte carrosséis, experimente filtros e transforme seu rolo de câmera com o My Dump Studio.">
-  <meta property="og:title" content="My Dump Studio — Seu dump. Suas regras.">
+  <meta property="og:title" content="My Dump Studio | Seu dump. Suas regras.">
   <meta property="og:description" content="Fotos soltas. Uma história só sua. Experimente looks e monte seu próximo photo dump.">
   <meta property="og:type" content="website">
-  <title>My Dump Studio — Seu dump. Suas regras.</title>
-  <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
+  <title>My Dump Studio | Seu dump. Suas regras.</title>
+  <link rel="icon" href="./assets/mark.svg?v=camera" type="image/svg+xml">
   <link rel="preload" href="./assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./style.css?v=install-source-1">
-  <script type="module" src="./app.js?v=install-source-1"></script>
+  <link rel="stylesheet" href="./style.css?v=install-2">
+  <script type="module" src="./app.js?v=install-2"></script>
 </head>
 <body>
   <a class="skip" href="#main" data-i18n="skip">Pular para o conteúdo</a>
   <header class="nav shell">
-    <a class="brand" href="#" aria-label="My Dump Studio"><img src="./assets/mark.svg" width="38" height="38" alt=""><span>my dump<span class="brand-second">studio</span></span></a>
+    <a class="brand" href="#" aria-label="My Dump Studio"><img src="./assets/mark.svg?v=camera" width="38" height="38" alt=""><span>my dump<span class="brand-second">studio</span></span></a>
     <nav aria-label="Principal"><a href="#play" data-i18n="navPlay">Mood</a><a href="#collages" data-i18n="navCollages">Colagens</a><a href="#download" data-i18n="navDownload">Download</a></nav>
     <div class="nav-actions"><button id="language" class="language" aria-label="Switch to English">EN</button><a class="button button-small button-cta" href="#download"><span data-i18n="getApp">Quero o app</span><span class="cta-icon" aria-hidden="true">↗</span></a></div>
   </header>
@@ -74,7 +74,16 @@
         <article class="detail-card card-local"><div class="detail-art art-local" aria-hidden="true"><span class="mini-local-label" data-i18n="cardLocal">Projeto local</span><div class="mini-local-folder"></div><span class="mini-local-check"><svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="mini-export-types"><span>JPG</span><span>PNG</span></div></div><h3 data-i18n="offlineTitle">O seu processo é seu.</h3><p data-i18n="offlineDesc">Edite no computador, com projetos locais e salvamento automático. Exporte suas páginas em JPG ou PNG.</p></article>
       </div>
     </section>
-    <section class="app-gallery shell" aria-labelledby="app-title"><h2 id="app-title" data-i18n="appTitle">Por dentro do studio.</h2><p data-i18n="appDesc">Capturas reais do editor desktop. Seu espaço para ir além da demonstração.</p><div class="app-shots"><figure><a href="./assets/screenshots/editor-filters.webp" target="_blank" rel="noopener noreferrer"><img src="./assets/screenshots/editor-filters.webp" width="1899" height="1073" alt="Editor desktop com filtros e uma foto de exemplo" loading="lazy"></a><figcaption data-i18n="appFilters">Filtros e ajustes na foto selecionada.</figcaption></figure><figure><a href="./assets/screenshots/editor-layouts.webp" target="_blank" rel="noopener noreferrer"><img src="./assets/screenshots/editor-layouts.webp" width="1899" height="1073" alt="Editor desktop com opções de layout e camadas" loading="lazy"></a><figcaption data-i18n="appLayouts">Layouts, composição e edição por camadas.</figcaption></figure></div></section>
+    <section class="app-gallery shell" aria-labelledby="app-title">
+      <h2 id="app-title" data-i18n="appTitle">Por dentro do studio.</h2>
+      <p data-i18n="appDesc">Capturas reais do editor desktop. Seu espaço para ir além da demonstração.</p>
+      <div class="app-shots">
+        <figure><a href="./assets/screenshots/editor-filters.webp" target="_blank" rel="noopener noreferrer"><img src="./assets/screenshots/editor-filters.webp" width="1899" height="1073" alt="Editor desktop com filtros e uma foto de exemplo" loading="lazy"></a><figcaption data-i18n="appFilters">Filtros e ajustes na foto selecionada.</figcaption></figure>
+        <figure><a href="./assets/screenshots/editor-layouts.webp" target="_blank" rel="noopener noreferrer"><img src="./assets/screenshots/editor-layouts.webp" width="1899" height="1073" alt="Editor desktop com opções de layout e camadas" loading="lazy"></a><figcaption data-i18n="appLayouts">Layouts, composição e edição por camadas.</figcaption></figure>
+        <figure><a href="./assets/screenshots/editor-cameras.webp" target="_blank" rel="noopener noreferrer"><img src="./assets/screenshots/editor-cameras.webp" width="1920" height="1080" alt="Retrato com uma simulação de câmera analógica" loading="lazy"></a><figcaption data-i18n="appCameras">Simulações de câmeras analógicas em um retrato.</figcaption></figure>
+        <figure><a href="./assets/screenshots/editor-typography.webp" target="_blank" rel="noopener noreferrer"><img src="./assets/screenshots/editor-typography.webp" width="1920" height="1080" alt="Composição de Lisboa com o título selecionado" loading="lazy"></a><figcaption data-i18n="appTypography">Tipografia em camadas sobre uma composição de Lisboa.</figcaption></figure>
+      </div>
+    </section>
     <div class="path-divider shell" aria-hidden="true"><img src="./assets/divider-install.svg" width="72" height="72" alt=""></div>
     <section class="download-section" id="download" aria-labelledby="download-title">
       <div class="shell download-inner">
@@ -99,25 +108,9 @@
         </div>
       </div>
     </section>
-    <section class="source-section shell" id="source" aria-labelledby="source-title">
-      <div class="path-divider" aria-hidden="true"><img src="./assets/divider-source.svg" width="72" height="72" alt=""></div>
-      <div class="source-heading">
-        <p class="section-kicker" data-i18n="sourceKicker">Para desenvolvedores</p>
-        <h2 id="source-title" data-i18n="sourceTitle">Rode o código-fonte.</h2>
-        <p data-i18n="sourceDesc">Use o Git e o Node.js com npm no Windows para abrir o editor em modo de desenvolvimento.</p>
-      </div>
-      <div class="source-console">
-        <div class="source-console-bar"><span>PowerShell</span><button type="button" id="source-copy" data-i18n="sourceCopy">Copiar comandos</button></div>
-        <pre tabindex="0" aria-label="PowerShell"><code id="source-commands">git clone https://github.com/felipeAguiarCode/dump-studio.git
-cd dump-studio
-npm install
-npm run dev</code></pre>
-      </div>
-      <a class="source-guide" href="https://github.com/felipeAguiarCode/dump-studio/blob/main/docs/DEVELOPMENT.md" data-i18n="sourceGuide">Guia de desenvolvimento</a>
-    </section>
     <section class="faq shell"><h2 data-i18n="faqTitle">Só mais uma coisa.</h2><div><details><summary data-i18n="faq1q">Preciso criar uma conta?</summary><p data-i18n="faq1a">Não. O aplicativo trabalha localmente no seu computador. A demonstração desta página também funciona sem conta.</p></details><details><summary data-i18n="faq2q">Funciona no Mac ou no celular?</summary><p data-i18n="faq2a">O instalador disponível é para Windows. Você pode experimentar esta página no celular, mas o editor completo é um aplicativo desktop.</p></details><details><summary data-i18n="faq3q">As fotos do exemplo são minhas para usar?</summary><p><span data-i18n="faq3a">As imagens de demonstração vêm de bancos com licença de reutilização. Os autores e as fontes estão na página de créditos.</span> <a href="./credits.html" data-i18n="photoCredits">Créditos das fotos</a>.</p></details><details><summary data-i18n="faq4q">Onde encontro a versão mais recente?</summary><p data-i18n="faq4a">O botão de download consulta o último release público do GitHub e seleciona o instalador para Windows. Se a consulta estiver indisponível, você pode conferir os releases no GitHub.</p><a href="https://github.com/felipeAguiarCode/dump-studio/releases" target="_blank" rel="noopener noreferrer" data-i18n="seeReleases">Ver releases</a></details></div></section>
   </main>
-  <footer class="footer shell"><a class="brand" href="#"><img src="./assets/mark.svg" alt="" width="32" height="32"><span>my dump<span class="brand-second">studio</span></span></a><p>Created by <strong>Felipe Aguiar</strong></p><div><a href="#source" data-i18n="sourceFooter">Para devs</a><a href="https://github.com/felipeAguiarCode" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://www.linkedin.com/in/felipeaguiar-exe/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="./credits.html" data-i18n="credits">Créditos</a></div></footer>
+  <footer class="footer shell"><a class="brand" href="#"><img src="./assets/mark.svg?v=camera" alt="" width="32" height="32"><span>my dump<span class="brand-second">studio</span></span></a><p>Created by <strong>Felipe Aguiar</strong></p><div><a href="https://github.com/felipeAguiarCode" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://www.linkedin.com/in/felipeaguiar-exe/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="./credits.html" data-i18n="credits">Créditos</a></div></footer>
   <div id="toast" class="toast" role="status"></div>
 </body>
 </html>

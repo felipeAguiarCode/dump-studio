@@ -8,8 +8,10 @@ const source = await sharp(mark).png().toBuffer()
 const splash = fileURLToPath(new URL('assets/branding/splash-art.png', root))
 const build = new URL('build/', root)
 const iconFolder = new URL('icons/', build)
+const storeIcons = new URL('.store/icons/', root)
 const renderer = new URL('src/renderer/assets/branding/', root)
 await mkdir(iconFolder, { recursive: true })
+await mkdir(storeIcons, { recursive: true })
 await mkdir(renderer, { recursive: true })
 
 // NSIS requires uncompressed 24-bit BMPs with padded, bottom-up rows.
@@ -50,7 +52,9 @@ await Promise.all([
   writeBitmap(sharp(splash).resize(164, 314), new URL('installerSidebar.bmp', build)),
   writeBitmap(sharp(headerArt), new URL('installerHeader.bmp', build)),
   ...[16, 32, 48, 64, 128, 256, 512, 1024].map((size) => sharp(source).resize(size, size)
-    .png().toFile(fileURLToPath(new URL(`my-dump-studio-${size}.png`, iconFolder))))
+    .png().toFile(fileURLToPath(new URL(`my-dump-studio-${size}.png`, iconFolder)))),
+  ...[16, 32, 48, 64, 96, 128, 180, 192, 256, 512, 1024].map((size) => sharp(source).resize(size, size)
+    .png().toFile(fileURLToPath(new URL(`icon-${size}.png`, storeIcons))))
 ])
 
 // PNG-backed ICO entries retain alpha and stay sharp at every Windows scaling level.
@@ -71,4 +75,4 @@ for (let index = 0; index < images.length; index++) {
   offset += images[index].length
 }
 await writeFile(new URL('icon.ico', build), Buffer.concat([header, ...images]))
-console.log('Branding built: application icons, splash artwork and Windows installer graphics.')
+console.log('Branding built: application and store icons, splash artwork and Windows installer graphics.')

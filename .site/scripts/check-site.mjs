@@ -39,29 +39,19 @@ if(${setupOnly}){
     await fs.writeFile(${JSON.stringify(scratch)}+'/'+name+'.png',(await win.webContents.capturePage()).toPNG());
   };
   assert.equal(await js('document.querySelectorAll("#download .install-steps li").length'),3);
-  assert.equal(await js('document.getElementById("source-commands").closest("section").id'),'source');
-  assert.equal(await js('document.querySelector("#download #source-commands")===null'),true);
+  assert.equal(await js('!document.getElementById("source") && !Array.from(document.links).some(link=>link.hash==="#source")'),true);
+  assert.equal(await js('document.title'),'My Dump Studio | Seu dump. Suas regras.');
   assert.equal(await js('document.getElementById("download-button").getAttribute("aria-disabled")'),'true');
   await capture('desktop-install','download');
-  await js('document.getElementById("source").scrollIntoView({behavior:"instant"})');
-  await wait('Array.from(document.querySelectorAll(".path-divider img")).every(img=>img.complete && img.naturalWidth>0)');
-  const dividerIsCentered='(()=>{const p=document.querySelector("#source .path-divider"),b=p.querySelector("img").getBoundingClientRect(),r=p.getBoundingClientRect();return Math.abs(b.left+b.width/2-r.left-r.width/2)<2})()';
-  assert.equal(await js(dividerIsCentered),true,'The developer divider is centered on desktop');
-  await capture('desktop-source','source');
-  await js('Object.defineProperty(navigator,"clipboard",{configurable:true,value:{writeText:async(value)=>{window.copiedSource=value}}});document.getElementById("source-copy").click()');
-  await wait('window.copiedSource===document.getElementById("source-commands").textContent.trim()');
   await js('document.getElementById("language").click()');
-  assert.equal(await js('document.getElementById("source-title").textContent'),'Run from source.');
+  assert.equal(await js('document.title'),'My Dump Studio | Your dump. Your rules.');
   assert.equal(await js('document.querySelector("#download .section-kicker").textContent'),'Install on Windows');
   win.setContentSize(390,844);await win.loadURL(${JSON.stringify(origin+'/?release=ready&lang=pt#download')});
   await wait('document.getElementById("download-button").href.endsWith("-setup.exe")');
   await capture('mobile-install','download');
-  await js('document.getElementById("source").scrollIntoView({behavior:"instant"})');
-  assert.equal(await js('document.documentElement.scrollWidth<=innerWidth'),true,'Developer commands scroll inside their own panel');
-  assert.equal(await js(dividerIsCentered),true,'The developer divider is centered on mobile');
-  await capture('mobile-source','source');
+  assert.equal(await js('document.documentElement.scrollWidth<=innerWidth'),true);
   assert.deepEqual(errors,[]);
-  console.log('PASS: separate install and developer sections, centered dividers, copy action, translation, responsive layout and installer release link.');
+  console.log('PASS: Windows installation steps, translation, page title, responsive layout and installer release link.');
   app.exit(0);return;
 }
 if(${heroOnly}){

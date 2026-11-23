@@ -1,7 +1,7 @@
 <p align="center"><a href="./README.md">English</a> · <strong>Português (Brasil)</strong></p>
 
 <p align="center">
-  <img src="src/renderer/assets/branding/studio-icon.png" width="80" height="80" alt="MD. — My Dump Studio">
+  <img src="src/renderer/assets/branding/studio-icon.png" width="80" height="80" alt="My Dump Studio">
 </p>
 
 <h1 align="center">My Dump Studio</h1>
