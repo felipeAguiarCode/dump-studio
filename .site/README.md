@@ -20,17 +20,7 @@ Se a porta estiver ocupada, use `npm run site -- --port 4174`.
 
 ## Download
 
-`config.js` define o repositório `felipeAguiarCode/dump-studio`. O site consulta a API
-pública de releases do GitHub, seleciona um asset `*setup*.exe` do último release estável
-e usa seu `browser_download_url`. Não contém token nem credenciais.
-
-- Sem release ou instalador: informa **Primeira release em breve** e impede um download quebrado.
-- Com instalador publicado: ativa o download automaticamente, sem versão fixa no código.
-- Falha de rede ou limite da API: oferece a página de releases como alternativa.
-
-O instalador é publicado separadamente do site. Nenhum release foi criado por este trabalho.
-
-A seção **Instalar no Windows** (`#download`) mostra as etapas do instalador.
+O botão **Baixar pelo GitHub** abre as [Releases do My Dump Studio](https://github.com/felipeAguiarCode/dump-studio/releases), onde fica o instalador do Windows. A seção **Instalar no Windows** (`#download`) mostra as etapas da instalação.
 
 ## GitHub Pages
 
@@ -87,8 +77,8 @@ Para verificar apenas o ciclo e o deslize de filtros da hero, os cards e movimen
 node .site/scripts/check-site.mjs --hero
 ```
 
-Ela usa Chromium/Electron em um perfil temporário, testa o PNG exportado e simula os
-estados da API de releases. Não altera projetos do usuário nem publica arquivos.
+A verificação usa Chromium/Electron em um perfil temporário, testa o PNG exportado
+e confere o destino do botão de download.
 
 A demo usa o mesmo shader, uniforms, defaults, catálogo de layouts e geometria do editor
 desktop. Após mudar essas fontes, no checkout de desenvolvimento atualizado do aplicativo,

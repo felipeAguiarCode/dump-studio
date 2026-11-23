@@ -18,8 +18,6 @@
 </p>
 <p align="center"><a href="https://felipeaguiarcode.github.io/dump-studio/?lang=en">Try the browser demo</a> · <a href="https://github.com/felipeAguiarCode/dump-studio/issues">Report an issue</a></p>
 
-> The Windows installer will be available under **Releases**. In the meantime, try the browser demo or run the app from source.
-
 ## A studio for your next dump
 
 A date. A coffee. An outfit that came together. Gather your photos, choose a layout, and give them a look of your own.
@@ -301,7 +299,7 @@ The browser demo uses the app's filter engine and layout geometry. Edit sample p
 
 ## Installation and source code
 
-The desktop app runs on **Windows**. Once published, download and run the `.exe` installer from [GitHub Releases](https://github.com/felipeAguiarCode/dump-studio/releases).
+The desktop app runs on **Windows**. Download and run the `.exe` installer from [GitHub Releases](https://github.com/felipeAguiarCode/dump-studio/releases).
 
 This edition's installer is named **My-Dump-Studio-1.0.0-Cherry-Pie-Version-setup.exe**. It creates the **My Dump Studio** shortcut on Windows and opens the editor with the Cherry Pie Version splash screen.
 

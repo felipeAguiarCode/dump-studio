@@ -29,7 +29,7 @@ Se a compilação dos módulos nativos falhar no Windows, instale o Visual Studi
 | `npm run check:filters` | Shader e filtros em WebGL real. |
 | `npm run check:themes` | Temas e preferências após build. |
 | `npm run check:presets` | Biblioteca, favoritos, pastas, JSON, FX, copiar/colar e undo após build. |
-| `node .site/scripts/check-site.mjs` | Demo desktop/mobile, controles, colagens, PNG e estados de release. |
+| `node .site/scripts/check-site.mjs` | Demo desktop/mobile, controles, colagens, PNG e link de download. |
 | `node .site/scripts/check-site.mjs --hero` | Três filtros por foto, transições, navegação, cards e movimento reduzido. |
 
 Os testes de integração usam dados temporários, sem modificar os projetos reais. Os testes do aplicativo que dependem de `out/` devem ser executados depois de `npm run build`. Em um clone limpo, execute `npm run build:branding` antes do typecheck para preparar os recursos gerados.
@@ -89,6 +89,6 @@ Use sempre um `--user-data-dir` temporário ao verificar migrações, semear dad
 
 ## Site
 
-O [guia do site](../.site/README.md) descreve os recursos da demo, a atualização do motor e o deploy. O workflow `.github/workflows/site.yml` publica `.site/` no GitHub Pages. O site consulta o último release público estável e ativa o download quando encontra um instalador `*setup*.exe`.
+O [guia do site](../.site/README.md) descreve os recursos da demo, a atualização do motor e o deploy. O workflow `.github/workflows/site.yml` publica `.site/` no GitHub Pages. O botão de download abre a página de releases do repositório.
 
 A publicação do site e a publicação de um instalador são operações separadas.

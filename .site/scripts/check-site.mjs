@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { createSiteServer } from './serve.mjs'
-import { readFile, writeFile, mkdir, mkdtemp } from 'node:fs/promises'
+import { writeFile, mkdir, mkdtemp } from 'node:fs/promises'
 import { resolve, join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
@@ -15,40 +15,47 @@ await mkdir(join(site,'previews'),{recursive:true})
 const missing=[]
 const server=createSiteServer({onMissing:url=>missing.push(url)})
 await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin=`http://127.0.0.1:${server.address().port}`
-await writeFile(join(scratch,'preload.cjs'),`const nativeFetch=window.fetch.bind(window);window.fetch=async(input,options)=>{if(String(input).startsWith('https://api.github.com/repos/')){const mode=new URL(location.href).searchParams.get('release');if(mode==='ready')return new Response(JSON.stringify({tag_name:'v2.3.4',draft:false,prerelease:false,assets:[{name:'My-Dump-Studio-2.3.4-setup.exe',state:'uploaded',size:123456789,browser_download_url:'https://github.com/felipeAguiarCode/dump-studio/releases/download/v2.3.4/My-Dump-Studio-2.3.4-setup.exe'}]}),{status:200,headers:{'Content-Type':'application/json'}});if(mode==='error')throw new TypeError('Fixture network unavailable');return new Response('{}',{status:404});}return nativeFetch(input,options)};`)
 await writeFile(join(cache,'main.cjs'),`
 const assert=require('node:assert/strict'),fs=require('node:fs/promises');
-const {app,BrowserWindow,session}=require('electron');
+const {app,BrowserWindow}=require('electron');
 app.setPath('userData',${JSON.stringify(join(scratch,'user-data'))});
 const pause=(ms)=>new Promise(r=>setTimeout(r,ms));
 let win;const errors=[];const js=(source)=>win.webContents.executeJavaScript(source,true).catch(error=>{throw Error(source+': '+error.message)});
 async function wait(expression){for(let i=0;i<375;i++){if(await js(expression))return;await pause(40)}throw Error('Timed out: '+expression)}
+async function checkDownloadLink(label){
+  const link=await js('(()=>{const button=document.getElementById("download-button");return {href:button.href,label:button.querySelector("span").textContent,disabled:button.getAttribute("aria-disabled")}})()');
+  assert.deepEqual(link,{href:'https://github.com/felipeAguiarCode/dump-studio/releases',label,disabled:null});
+}
 async function shot(name){await pause(1050);await fs.writeFile(${JSON.stringify(join(site,'previews'))}+'/'+name+'.png',(await win.webContents.capturePage()).toPNG())}
 app.whenReady().then(async()=>{
-win=new BrowserWindow({width:1440,height:1000,useContentSize:true,show:false,webPreferences:{offscreen:true,backgroundThrottling:false,contextIsolation:false,nodeIntegration:false,sandbox:false,preload:${JSON.stringify(join(scratch,'preload.cjs'))}}});
+win=new BrowserWindow({width:1440,height:1000,useContentSize:true,show:false,webPreferences:{offscreen:true,backgroundThrottling:false}});
 win.webContents.setFrameRate(12);
 win.webContents.on('console-message',(_e,level,message)=>{if(level>=3){errors.push(message);console.error('[renderer] '+message)}});
 await win.loadURL(${JSON.stringify(origin)});await wait('document.querySelectorAll(".dump-card").length===8');await js('document.fonts.ready.then(()=>true)');
 if(${setupOnly}){
   win.webContents.debugger.attach('1.3');
   await win.webContents.debugger.sendCommand('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
-  const capture=async (name,id)=>{
-    await js('document.getElementById('+JSON.stringify(id)+').scrollIntoView({behavior:"instant"})');
-    await wait('(()=>{const b=document.getElementById('+JSON.stringify(id)+').getBoundingClientRect();return b.top>=0&&b.top<innerHeight/2})()');
-    await pause(1000);
-    await fs.writeFile(${JSON.stringify(scratch)}+'/'+name+'.png',(await win.webContents.capturePage()).toPNG());
+  const capture=async (name)=>{
+    await js('document.getElementById("download").scrollIntoView({behavior:"instant"})');
+    await wait('(()=>{const b=document.getElementById("download").getBoundingClientRect();return b.top>=0&&b.top<innerHeight/2})()');
+    await wait('document.querySelector("#download-photo img")?.naturalWidth>0');
+    await js('document.querySelector("#download-photo img").decode().then(()=>true)');
+    await pause(300);
+    const {data}=await win.webContents.debugger.sendCommand('Page.captureScreenshot',{format:'png',fromSurface:true});
+    await fs.writeFile(${JSON.stringify(scratch)}+'/'+name+'.png',Buffer.from(data,'base64'));
   };
   assert.equal(await js('document.querySelectorAll("#download .install-steps li").length'),3);
   assert.equal(await js('!document.getElementById("source") && !Array.from(document.links).some(link=>link.hash==="#source")'),true);
   assert.equal(await js('document.title'),'My Dump Studio | Seu dump. Suas regras.');
-  assert.equal(await js('document.getElementById("download-button").getAttribute("aria-disabled")'),'true');
-  await capture('desktop-install','download');
+  await checkDownloadLink('Baixar pelo GitHub');
+  await capture('desktop-install');
   await js('document.getElementById("language").click()');
   assert.equal(await js('document.title'),'My Dump Studio | Your dump. Your rules.');
   assert.equal(await js('document.querySelector("#download .section-kicker").textContent'),'Install on Windows');
-  win.setContentSize(390,844);await win.loadURL(${JSON.stringify(origin+'/?release=ready&lang=pt#download')});
-  await wait('document.getElementById("download-button").href.endsWith("-setup.exe")');
-  await capture('mobile-install','download');
+  await checkDownloadLink('Download from GitHub');
+  win.setContentSize(390,844);await win.loadURL(${JSON.stringify(origin+'/?lang=pt#download')});
+  await checkDownloadLink('Baixar pelo GitHub');
+  await capture('mobile-install');
   assert.equal(await js('document.documentElement.scrollWidth<=innerWidth'),true);
   assert.deepEqual(errors,[]);
   console.log('PASS: Windows installation steps, translation, page title, responsive layout and installer release link.');
@@ -73,7 +80,7 @@ if(${heroOnly}){
 const initialHeadline=await js('document.getElementById("hero-headline-word").textContent');
 assert.equal(await js('document.documentElement.lang'),'pt-BR');
 assert.equal(await js('document.documentElement.scrollWidth<=innerWidth'),true);
-await wait('document.getElementById("download-button").getAttribute("aria-disabled")==="true"');
+await checkDownloadLink('Baixar pelo GitHub');
 await wait('document.getElementById("dump-stage").dataset.look==="vint_seventies"');const heroFilm=await js('document.querySelector(".dump-card img").src');
 await wait('document.getElementById("dump-stage").dataset.look==="edit_satin"');assert.equal(await js('document.getElementById("hero-counter").textContent'),'1 / 8');assert.notEqual(await js('document.querySelector(".dump-card img").src'),heroFilm,'Hero must render another real look on the same photo');
 await wait('document.getElementById("dump-stage").dataset.look==="noir"');assert.equal(await js('document.getElementById("hero-counter").textContent'),'1 / 8');
@@ -119,9 +126,8 @@ await js('document.getElementById("comparison").scrollIntoView({behavior:"instan
 await js('document.getElementById("compare-range").value="28";document.getElementById("compare-range").dispatchEvent(new Event("input",{bubbles:true}))');assert.equal(await js('document.getElementById("comparison").style.getPropertyValue("--split")'),'28%');await shot('desktop-compare');
 await js('document.querySelector(".ribbon-pink").scrollIntoView({behavior:"instant"})');await shot('desktop-ribbon');
 await js('document.getElementById("language").click()');assert.equal(await js('document.documentElement.lang'),'en');assert.equal(await js('document.querySelector("[data-i18n=savePreview]").textContent'),'Save my preview · PNG');
-await win.loadURL(${JSON.stringify(origin+'/?release=ready')});await wait('document.getElementById("download-button").textContent.includes("v2.3.4")');assert.equal(await js('document.getElementById("download-button").href'),'https://github.com/felipeAguiarCode/dump-studio/releases/download/v2.3.4/My-Dump-Studio-2.3.4-setup.exe');
+await checkDownloadLink('Download from GitHub');
 await js('document.getElementById("download").scrollIntoView({behavior:"instant"})');await shot('desktop-download');
-await win.loadURL(${JSON.stringify(origin+'/?release=error')});await wait('document.getElementById("download-button").href.endsWith("/releases")');assert.equal(await js('document.getElementById("download-button").hasAttribute("aria-disabled")'),false);
 win.setContentSize(390,844);await win.loadURL(${JSON.stringify(origin+'/?lang=pt')});await wait('document.querySelectorAll(".dump-card").length===8');await js('document.fonts.ready.then(()=>true)');await pause(350);assert.equal(await js('document.documentElement.scrollWidth<=innerWidth'),true,'No mobile horizontal overflow');await shot('mobile-hero');
 await js('document.getElementById("play").scrollIntoView({behavior:"instant"})');await wait('document.getElementById("editor-canvas").dataset.ready==="true"');await shot('mobile-editor');
 await js('document.querySelector("[data-editor-tab=adjust]").click()');assert.equal(await js('getComputedStyle(document.getElementById("look-picker")).display'),'none');assert.notEqual(await js('getComputedStyle(document.getElementById("intensity-control")).display'),'none');
@@ -137,7 +143,7 @@ win.setContentSize(390,844);
 win.webContents.debugger.attach('1.3');await win.webContents.debugger.sendCommand('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
 await win.loadURL(${JSON.stringify(origin+'/?lang=pt')});await wait('document.querySelectorAll(".dump-dot").length===8');assert.equal(await js('document.getElementById("hero-toggle").getAttribute("aria-pressed")'),'true');assert.equal(await js('getComputedStyle(document.documentElement).scrollSnapType'),'none');assert.equal(await js('getComputedStyle(document.querySelector(".manifesto-line")).opacity'),'1');win.webContents.debugger.detach();
 await win.loadURL(${JSON.stringify(origin+'/credits.html')});await wait('document.querySelectorAll(".credit-photo").length===12');assert.equal(await js('document.documentElement.scrollWidth<=innerWidth'),true);
-assert.deepEqual(errors,[]);console.log('PASS: desktop/mobile layout, fixed navigation, three real hero looks, Stories autoplay/pause/swipe, scroll manifesto, interactive app collages and PNG export, real WebGL looks/intensity/grain/formats, downloaded 1080×1920 PNG, before/after slider, PT/EN, release pending/ready/network fallback, and 12 photo credits.');app.exit(0)
+assert.deepEqual(errors,[]);console.log('PASS: desktop/mobile layout, fixed navigation, three real hero looks, Stories autoplay/pause/swipe, scroll manifesto, interactive app collages and PNG export, real WebGL looks/intensity/grain/formats, downloaded 1080×1920 PNG, before/after slider, PT/EN, GitHub Releases link, and 12 photo credits.');app.exit(0)
 }).catch(error=>{console.error(error);app.exit(1)});
 `)
 const env={...process.env};delete env.ELECTRON_RUN_AS_NODE

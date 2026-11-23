@@ -18,8 +18,6 @@
 </p>
 <p align="center"><a href="https://felipeaguiarcode.github.io/dump-studio/">Experimente a demo no navegador</a> · <a href="https://github.com/felipeAguiarCode/dump-studio/issues">Reporte um problema</a></p>
 
-> O instalador será disponibilizado na aba **Releases**. Enquanto a primeira release pública não estiver disponível, você pode experimentar a demo ou executar o projeto a partir do código-fonte.
-
 ## Um studio para o seu próximo dump
 
 Um date. Um café. Um look que deu certo. Junte os cliques, escolha a composição e dê às suas fotos um tratamento com a sua cara.
@@ -301,7 +299,7 @@ No [site do My Dump Studio](https://felipeaguiarcode.github.io/dump-studio/), vo
 
 ## Instalação e código-fonte
 
-O aplicativo desktop é para **Windows**. Quando disponível, baixe e execute o instalador `.exe` na [aba Releases](https://github.com/felipeAguiarCode/dump-studio/releases).
+O aplicativo desktop é para **Windows**. Baixe e execute o instalador `.exe` na [aba Releases](https://github.com/felipeAguiarCode/dump-studio/releases).
 
 O instalador desta edição se chama **My-Dump-Studio-1.0.0-Cherry-Pie-Version-setup.exe**. Ele cria o atalho **My Dump Studio** no Windows e abre o editor pela nova splash da Cherry Pie Version.
 
