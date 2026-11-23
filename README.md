@@ -9,7 +9,7 @@
 <p align="center"><strong>Your dump. Your style. Your point of view.</strong></p>
 <p align="center">Turn everyday photos into a story of your own.<br>A desktop editor for creating photo dumps, finding your look, and building carousels.</p>
 
-[![Animated My Dump Studio demo showing filters, textures, and layouts](assets/readme/demo-preview.webp)](.demo/videos/my-dump-studio-demo-youtube.mp4)
+[![Animated preview of My Dump Studio showing photo editing and collage layouts](assets/readme/demo-preview.webp)](.store/videos/my-dump-studio-demo-pt-br.mp4)
 
 <p align="center"><strong>1.0.0 · Cherry Pie Version</strong><br>Windows · English and Brazilian Portuguese · Local projects · Full access with no expiration</p>
 
